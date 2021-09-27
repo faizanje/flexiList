@@ -40,6 +40,7 @@ dependencies:
   currency_picker: ^2.0.5
   flutter_zoom_drawer: ^2.1.1
   get: ^4.3.8
+  grouped_list: ^4.1.0
 
 
 dev_dependencies:
