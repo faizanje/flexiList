@@ -1,10 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/sidebar/controller/sidebar_controller.dart';
 
-// class SideBar extends StatelessWidget {
-//   AnimationController _animationController;
-//   bool isSlideBarOpen = false;
-//   final _animationDuration = const Duration(milliseconds: 500);
+class SideBar extends StatelessWidget {
+  const SideBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final _animationDuration = const Duration(milliseconds: 300);
+    final sidebarController = Get.put(SidebarController());
+
+    return Obx(
+      () => AnimatedPositioned(
+        duration: _animationDuration,
+        top: 0,
+        bottom: 0,
+        left: sidebarController.isSlideBarOpen.value ? 0 : 0,
+        right: sidebarController.isSlideBarOpen.value ? 0 : screenWidth - 45,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Flexible(
+              flex: 2,
+              child: GestureDetector(
+                onTap: () {
+                  print('Tapped');
+                  sidebarController.randomizeColor();
+                },
+                child: Container(
+                  color: sidebarController.color.value,
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 5,
+              child: Container(
+                width: 45,
+                height: 110,
+                alignment: Alignment.centerLeft,
+                color: Colors.orangeAccent,
+                child: IconButton(
+                  onPressed: () {
+                    sidebarController.isSlideBarOpen.toggle();
+                    // setState(() {
+                    //   this.isSlideBarOpen = !this.isSlideBarOpen;
+                    // });
+                    print('clicked animated button');
+                  },
+                  icon: Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// class SideBar extends StatefulWidget {
+//   @override
+//   _SideBarState createState() => _SideBarState();
+// }
+//
+// class _SideBarState extends State<SideBar> {
+//   final _animationDuration = const Duration(milliseconds: 300);
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//   }
+//
+//   @override
+//   void dispose() {
+//     // TODO: implement dispose
+//
+//     super.dispose();
+//   }
 //
 //   @override
 //   Widget build(BuildContext context) {
@@ -14,31 +91,35 @@ import 'package:noteapp/constant/constant.dart';
 //       top: 0,
 //       bottom: 0,
 //       left: isSlideBarOpen ? 0 : 0,
-//       right: isSlideBarOpen ? 0 : screenWidth - 55,
+//       right: isSlideBarOpen ? 0 : screenWidth - 45,
 //       child: Row(
 //         crossAxisAlignment: CrossAxisAlignment.center,
 //         children: <Widget>[
-//           // ConstrainedBox(
-//           //   child: Container(color: Colors.red),
-//           //   constraints: BoxConstraints(
-//           //     minWidth: 50,
-//           //     maxWidth: 100,
-//           //   ),
-//           // ),
-//           Expanded(
+//           Flexible(
+//             flex: 2,
 //             child: Container(
-//               color: kNavbarColor,
+//               color: Colors.red,
 //             ),
 //           ),
-//           Container(
-//             width: 45,
-//             height: 110,
-//             alignment: AlignmentDirectional.center,
-//             color: Colors.orangeAccent,
-//             child: AnimatedIcon(
-//               progress: _animationController!.view,
-//               icon: AnimatedIcons.menu_close,
-//               color: Colors.white,
+//           Flexible(
+//             flex: 5,
+//             child: Container(
+//               width: 45,
+//               height: 110,
+//               alignment: Alignment.centerLeft,
+//               color: Colors.orangeAccent,
+//               child: IconButton(
+//                 onPressed: () {
+//                   setState(() {
+//                     this.isSlideBarOpen = !this.isSlideBarOpen;
+//                   });
+//                   print('clicked animated button');
+//                 },
+//                 icon: Icon(
+//                   Icons.menu,
+//                   color: Colors.white,
+//                 ),
+//               ),
 //             ),
 //           ),
 //         ],
@@ -46,70 +127,3 @@ import 'package:noteapp/constant/constant.dart';
 //     );
 //   }
 // }
-
-class SideBar extends StatefulWidget {
-  @override
-  _SideBarState createState() => _SideBarState();
-}
-
-class _SideBarState extends State<SideBar> {
-  // AnimationController _animationController;
-  bool isSlideBarOpen = false;
-  final _animationDuration = const Duration(milliseconds: 500);
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   _animationController =
-  //       AnimationController(vsync: this, duration: _animationDuration);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //
-  //   super.dispose();
-  //   _animationController!.dispose();
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    return AnimatedPositioned(
-      duration: _animationDuration,
-      top: 0,
-      bottom: 0,
-      left: isSlideBarOpen ? 0 : 0,
-      right: isSlideBarOpen ? 0 : 0,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          // ConstrainedBox(
-          //   child: Container(color: Colors.red),
-          //   constraints: BoxConstraints(
-          //     minWidth: 50,
-          //     maxWidth: 100,
-          //   ),
-          // ),
-          Expanded(
-            child: Container(
-              color: kNavbarColor,
-            ),
-          ),
-          Container(
-            width: 45,
-            height: 110,
-            alignment: AlignmentDirectional.center,
-            color: Colors.orangeAccent,
-            // child: AnimatedIcon(
-            //   progress: _animationController!.view,
-            //   icon: AnimatedIcons.menu_close,
-            //   color: Colors.white,
-            // ),
-          ),
-        ],
-      ),
-    );
-  }
-}
