@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/menu_screen/add_task_screen.dart';
 import 'package:noteapp/pages/onboarding_pages.dart';
+import 'package:noteapp/sidebar/sidebar_layout.dart';
 import 'constant/constant.dart';
 
 void main() {
@@ -33,7 +34,7 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: kNavbarColor,
           ),
           // body: OnboardingPages(),
-          body: AddTaskScreen(),
+          body: SideBarLayout(),
         ),
       ),
     );
