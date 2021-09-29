@@ -5,16 +5,18 @@ import 'package:noteapp/models/taskItem.dart';
 class AddTaskController extends GetxController {
   RxList<TaskItem> toDoTasksList = RxList([]);
 
-  setChecked(TaskItem taskItem, bool? value) {
-    taskItem.isChecked = value;
-    update();
-  }
-
   addTask(TaskItem taskItem) {
     toDoTasksList.add(taskItem);
+    update();
   }
 
   removeTask(TaskItem taskItem) {
     toDoTasksList.remove(taskItem);
+    update();
+  }
+
+  setChecked(TaskItem item, bool? newValue) {
+    item.isChecked = newValue;
+    update();
   }
 }

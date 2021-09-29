@@ -9,9 +9,16 @@ import 'package:noteapp/controllers/task_item_controller.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/taskItem.dart';
 
-class AddTaskScreen extends StatelessWidget {
+class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({Key? key}) : super(key: key);
 
+  @override
+  _AddTaskScreenState createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  List<TaskItem> taskItems = [];
+  TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -57,9 +64,7 @@ class AddTaskScreen extends StatelessWidget {
                 height: size.height * 0.02,
               ),
               TextField(
-                onChanged: (newValue) {
-                  title = newValue;
-                },
+                controller: _controller,
                 decoration: InputDecoration(
                   hintText: 'Title Here',
                   contentPadding: EdgeInsets.symmetric(vertical: 5),
@@ -74,9 +79,13 @@ class AddTaskScreen extends StatelessWidget {
                   TaskItem taskItem = TaskItem(
                     taskStatus: TASK_STATUS.TODO,
                     isChecked: false,
-                    taskName: title,
+                    taskName: _controller.text,
                   );
-                  addTaskController.addTask(taskItem);
+                  setState(() {
+                    taskItems.add(taskItem);
+                    _controller.clear();
+                  });
+                  // addTaskController.addTask(taskItem);
                 },
                 icon: Icon(Icons.add),
                 label: Text('Add Item'),
@@ -97,98 +106,82 @@ class AddTaskScreen extends StatelessWidget {
               //     onDeleteClicked: () {},
               //   );
               // }),
-              Expanded(
-                child: Obx(
-                  () => ListView.builder(
-                    itemBuilder: (context, index) {
-                      return GetBuilder<AddTaskController>(
-                          builder: (controller) {
-                        return TaskCheckItem(
-                          value: controller.toDoTasksList[index].isChecked,
-                          title: controller.toDoTasksList[index].taskName,
-                          onChanged: (newValue) {
-                            print(newValue);
-                            controller.setChecked(
-                                controller.toDoTasksList[index], newValue);
-                          },
-                          onDownloadClicked: () {},
-                          onDeleteClicked: () {
-                            controller
-                                .removeTask(controller.toDoTasksList[index]);
-                          },
-                        );
-                      });
-                    },
-                    itemCount: addTaskController.toDoTasksList.length,
-                  ),
-                ), // () => GroupedListView<dynamic, String>(
-                //   elements: addTaskController.toDoTasksList,
-                //   groupBy: (element) => element.taskStatus.toString(),
-                //   itemBuilder: (context, element) {
-                //     return TaskCheckItem(
-                //       value: element.isChecked,
-                //       title: element.taskName,
-                //       onChanged: (newValue) {
-                //         print(newValue);
-                //         element.isChecked = newValue;
-                //       },
-                //       onDownloadClicked: () {},
-                //       onDeleteClicked: () {},
-                //     );
-                //   },
-                //   groupSeparatorBuilder: (String value) => Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Text(
-                //       value,
-                //       textAlign: TextAlign.left,
-                //       style: TextStyle(
-                //           fontSize: 18, fontWeight: FontWeight.bold),
-                //     ),
-                //   ),
-                // ),
-                // ),
-              ),
-              // TaskCheckItem(
-              //   value: true,
-              //   title: 'Item 1',
-              //   onChanged: (newValue) {},
-              //   onDownloadClicked: () {},
-              //   onDeleteClicked: () {},
-              // ),
-              // Divider(),
-              // ElevatedButton(
-              //   onPressed: () {},
-              //   child: Text('Done'),
-              //   style: ElevatedButton.styleFrom(
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(12),
-              //     ),
-              //   ),
-              // ),
-              // TaskCheckItem(
-              //   value: checkBoxValue,
-              //   title: 'Item 2',
-              //   onChanged: (newValue) {
-              //     setState(() {
-              //       checkBoxValue = newValue;
-              //     });
-              //     print(newValue);
-              //   },
-              //   onDownloadClicked: () {},
-              //   onDeleteClicked: () {},
-              // ),
-              Divider(),
               SizedBox(
                 height: size.height * 0.02,
               ),
+              Expanded(
+                child: GroupedListView<TaskItem, String>(
+                  elements: taskItems,
+                  groupBy: (element) => element.taskStatusStr,
+                  groupSeparatorBuilder: (String groupByValue) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 10),
+                            child: Text(
+                              groupByValue,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                  indexedItemBuilder: (context, element, index) {
+                    return TaskCheckItem(
+                      value: element.isChecked,
+                      title: element.taskName,
+                      onChanged: (newValue) {
+                        print(newValue);
+                        setState(
+                          () {
+                            element.isChecked = newValue;
+                            switch (newValue) {
+                              case null:
+                                element.taskStatus = TASK_STATUS.LATER;
+                                break;
+                              case true:
+                                element.taskStatus = TASK_STATUS.DONE;
+                                break;
+                              case false:
+                                element.taskStatus = TASK_STATUS.TODO;
+                                break;
+                            }
+                          },
+                        );
+                      },
+                      onDownloadClicked: () {},
+                      onDeleteClicked: () {
+                        this.taskItems.remove(element);
+                      },
+                    );
+                  },
+                ),
+              ),
+              Divider(),
               Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text('ADD TASK'),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text('ADD TASK'),
+                    style: ElevatedButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
                   ),
                 ),
@@ -200,130 +193,6 @@ class AddTaskScreen extends StatelessWidget {
     );
   }
 }
-
-// class AddTaskScreen extends StatefulWidget {
-//   const AddTaskScreen({Key? key}) : super(key: key);
-//
-//   @override
-//   _AddTaskScreenState createState() => _AddTaskScreenState();
-// }
-//
-// class _AddTaskScreenState extends State<AddTaskScreen> {
-//   bool? checkBoxValue = false;
-//   @override
-//   Widget build(BuildContext context) {
-//     final size = MediaQuery.of(context).size;
-//     return SafeArea(
-//       child: Scaffold(
-//         backgroundColor: Colors.white,
-//         appBar: AppBar(
-//           elevation: 0.0,
-//           backgroundColor: Colors.white,
-//           leading: IconButton(
-//             onPressed: () {},
-//             icon: SvgPicture.asset(
-//               'assets/icons/bck btn.svg',
-//             ),
-//           ),
-//           actions: [
-//             IconButton(
-//               onPressed: () {},
-//               icon: SvgPicture.asset(
-//                 'assets/icons/Vector.svg',
-//               ),
-//             ),
-//             IconButton(
-//               onPressed: () {},
-//               icon: SvgPicture.asset(
-//                 'assets/icons/Vector-1.svg',
-//               ),
-//             ),
-//           ],
-//         ),
-//         body: Container(
-//           margin: EdgeInsets.symmetric(horizontal: size.width * 0.04),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text(
-//                 'Title',
-//                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-//               ),
-//               SizedBox(
-//                 height: size.height * 0.02,
-//               ),
-//               TextField(
-//                 decoration: InputDecoration(
-//                   hintText: 'Title Here',
-//                   contentPadding: EdgeInsets.symmetric(vertical: 5),
-//                   isDense: true,
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: size.height * 0.02,
-//               ),
-//               ElevatedButton.icon(
-//                 onPressed: () {},
-//                 icon: Icon(Icons.add),
-//                 label: Text('Add Item'),
-//                 style: ElevatedButton.styleFrom(
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(12),
-//                   ),
-//                 ),
-//               ),
-//               TaskCheckItem(
-//                 value: true,
-//                 title: 'Item 1',
-//                 onChanged: (newValue) {},
-//                 onDownloadClicked: () {},
-//                 onDeleteClicked: () {},
-//               ),
-//               Divider(),
-//               ElevatedButton(
-//                 onPressed: () {},
-//                 child: Text('Done'),
-//                 style: ElevatedButton.styleFrom(
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(12),
-//                   ),
-//                 ),
-//               ),
-//               TaskCheckItem(
-//                 value: checkBoxValue,
-//                 title: 'Item 2',
-//                 onChanged: (newValue) {
-//                   setState(() {
-//                     checkBoxValue = newValue;
-//                   });
-//                   print(newValue);
-//                 },
-//                 onDownloadClicked: () {},
-//                 onDeleteClicked: () {},
-//               ),
-//               Divider(),
-//               SizedBox(
-//                 height: size.height * 0.02,
-//               ),
-//               Center(
-//                 child: ElevatedButton(
-//                   onPressed: () {},
-//                   child: Text('ADD TASK'),
-//                   style: ElevatedButton.styleFrom(
-//                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(30),
-//                     ),
-//                   ),
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class TaskCheckItem extends StatelessWidget {
   final bool? value;
