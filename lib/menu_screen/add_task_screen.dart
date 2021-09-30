@@ -10,16 +10,19 @@ import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/taskItem.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({Key? key}) : super(key: key);
+  Color hColor;
+
+  AddTaskScreen(this.hColor);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final addTaskController = Get.put(AddTaskController());
+    Color changeColor = Colors.white;
     String title = "";
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: changeColor,
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.white,
@@ -37,7 +40,10 @@ class AddTaskScreen extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                changeColor = addTaskController.color.value;
+                print("tapedddd!");
+              },
               icon: SvgPicture.asset(
                 'assets/icons/Vector-1.svg',
               ),
@@ -183,7 +189,10 @@ class AddTaskScreen extends StatelessWidget {
               ),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    changeColor = addTaskController.changePrimaryColor();
+                    print("tapedddd!");
+                  },
                   child: Text('ADD TASK'),
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
