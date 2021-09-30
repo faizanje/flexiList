@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:noteapp/menu_screen/add_task_screen.dart';
-import 'package:noteapp/pages/addTaskPage.dart';
 import 'package:noteapp/sidebar/sidebar.dart';
 //
 // class SideBarLayout extends StatefulWidget {
@@ -19,7 +17,7 @@ class SideBarLayout extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          AddTaskScreen(),
+          AddTaskScreen(Colors.white),
           SideBar(),
         ],
       ),

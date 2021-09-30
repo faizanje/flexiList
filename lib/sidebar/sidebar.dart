@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/menu_screen/add_task_screen.dart';
 import 'package:noteapp/sidebar/controller/sidebar_controller.dart';
 
 class SideBar extends StatelessWidget {
@@ -11,6 +12,7 @@ class SideBar extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final _animationDuration = const Duration(milliseconds: 300);
     final sidebarController = Get.put(SidebarController());
+    Color setColor = kNavbarColor;
 
     return Obx(
       () => AnimatedPositioned(
@@ -27,33 +29,69 @@ class SideBar extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   print('Tapped');
-                  sidebarController.randomizeColor();
+                  setColor = sidebarController.randomizeColor();
                 },
                 child: Container(
-                  color: sidebarController.color.value,
+                  color: setColor,
+                  width: 100,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          AddTaskScreen(sidebarController.primarycolor.value);
+                          print("taped");
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                            color: Colors.yellow,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             Flexible(
-              flex: 5,
-              child: Container(
-                width: 45,
-                height: 110,
-                alignment: Alignment.centerLeft,
-                color: Colors.orangeAccent,
-                child: IconButton(
-                  onPressed: () {
-                    sidebarController.isSlideBarOpen.toggle();
-                    // setState(() {
-                    //   this.isSlideBarOpen = !this.isSlideBarOpen;
-                    // });
-                    print('clicked animated button');
-                  },
-                  icon: Icon(
-                    Icons.menu,
-                    color: Colors.white,
-                  ),
-                ),
+              flex: 8,
+              child: ClipPath(
+                clipper: CustomMenuClipper(),
+                child: Container(
+                    width: 40,
+                    height: 110,
+                    alignment: Alignment.centerLeft,
+                    color: kNavbarColor,
+                    child: sidebarController.isSlideBarOpen.value
+                        ? IconButton(
+                            onPressed: () {
+                              sidebarController.isSlideBarOpen.toggle();
+                              setColor = sidebarController.primarycolor.value;
+                              print('opened');
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.blue,
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              sidebarController.isSlideBarOpen.toggle();
+
+                              setColor = sidebarController.primarycolor.value;
+                              print('closed ');
+                            },
+                            icon: Icon(
+                              Icons.opacity,
+                              color: Colors.blue,
+                              size: 26,
+                            ),
+                          )),
               ),
             ),
           ],
@@ -63,67 +101,29 @@ class SideBar extends StatelessWidget {
   }
 }
 
-// class SideBar extends StatefulWidget {
-//   @override
-//   _SideBarState createState() => _SideBarState();
-// }
-//
-// class _SideBarState extends State<SideBar> {
-//   final _animationDuration = const Duration(milliseconds: 300);
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//   }
-//
-//   @override
-//   void dispose() {
-//     // TODO: implement dispose
-//
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final screenWidth = MediaQuery.of(context).size.width;
-//     return AnimatedPositioned(
-//       duration: _animationDuration,
-//       top: 0,
-//       bottom: 0,
-//       left: isSlideBarOpen ? 0 : 0,
-//       right: isSlideBarOpen ? 0 : screenWidth - 45,
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: <Widget>[
-//           Flexible(
-//             flex: 2,
-//             child: Container(
-//               color: Colors.red,
-//             ),
-//           ),
-//           Flexible(
-//             flex: 5,
-//             child: Container(
-//               width: 45,
-//               height: 110,
-//               alignment: Alignment.centerLeft,
-//               color: Colors.orangeAccent,
-//               child: IconButton(
-//                 onPressed: () {
-//                   setState(() {
-//                     this.isSlideBarOpen = !this.isSlideBarOpen;
-//                   });
-//                   print('clicked animated button');
-//                 },
-//                 icon: Icon(
-//                   Icons.menu,
-//                   color: Colors.white,
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+class CustomMenuClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Paint paint = Paint();
+    paint.color = Colors.white;
+
+    final width = size.width;
+    final height = size.height;
+
+    Path path = Path();
+    path.moveTo(0, 0);
+    path.quadraticBezierTo(0, 8, 10, 16);
+    path.quadraticBezierTo(width - 1, height / 2 - 20, width, height / 2);
+    path.quadraticBezierTo(width + 1, height / 2 + 20, 10, height - 16);
+    path.quadraticBezierTo(0, height - 8, 0, height);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    // TODO: implement shouldReclip
+    return true;
+  }
+}

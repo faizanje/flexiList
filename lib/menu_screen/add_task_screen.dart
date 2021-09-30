@@ -10,10 +10,15 @@ import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/taskItem.dart';
 
 class AddTaskScreen extends StatelessWidget {
+  Color hColor;
+
+  AddTaskScreen(this.hColor);
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final addTaskController = Get.put(AddTaskController());
+    String title = "";
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -92,9 +97,6 @@ class AddTaskScreen extends StatelessWidget {
               //     onDeleteClicked: () {},
               //   );
               // }),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
               Expanded(
                 child: GetBuilder<AddTaskController>(builder: (controller) {
                   return GroupedListView<TaskItem, String>(

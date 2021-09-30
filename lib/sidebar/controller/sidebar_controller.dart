@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:noteapp/constant/constant.dart';
 
 class SidebarController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -11,6 +12,7 @@ class SidebarController extends GetxController
   RxString title = RxString('');
   late Rx<AnimationController> animationController;
   Rx<Color> color = Rx(Colors.deepPurple);
+  Rx<Color> primarycolor = Rx(kNavbarColor);
 
   randomizeColor() {
     color.value =
