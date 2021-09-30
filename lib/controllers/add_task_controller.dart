@@ -9,14 +9,8 @@ import 'package:noteapp/models/taskItem.dart';
 
 class AddTaskController extends GetxController {
   RxList<TaskItem> toDoTasksList = RxList([]);
-  Rx<Color> color = Rx(kNavbarColor);
-  RxList<TaskItem> toDoTasksList = RxList([
-    TaskItem(
-      isChecked: false,
-      taskStatus: TASK_STATUS.TODO,
-      taskName: "asdasd",
-    )
-  ]);
+  Rx<Color> color = Rx<Color>(Colors.red);
+
   TextEditingController textEditingController = TextEditingController();
 
   setChecked(TaskItem taskItem, bool? value) {
@@ -26,6 +20,7 @@ class AddTaskController extends GetxController {
 
   void addTask(TaskItem taskItem) {
     toDoTasksList.add(taskItem);
+    update();
   }
 
   changePrimaryColor() {

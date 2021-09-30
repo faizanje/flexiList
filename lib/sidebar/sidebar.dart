@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/controllers/add_task_controller.dart';
 import 'package:noteapp/menu_screen/add_task_screen.dart';
 import 'package:noteapp/sidebar/controller/sidebar_controller.dart';
 
@@ -13,7 +14,7 @@ class SideBar extends StatelessWidget {
     final _animationDuration = const Duration(milliseconds: 300);
     final sidebarController = Get.put(SidebarController());
     Color setColor = kNavbarColor;
-
+    final addTaskController = Get.find<AddTaskController>();
     return Obx(
       () => AnimatedPositioned(
         duration: _animationDuration,
@@ -39,7 +40,8 @@ class SideBar extends StatelessWidget {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                          AddTaskScreen(sidebarController.primarycolor.value);
+                          addTaskController.color.value = Colors.yellow;
+                          // addTaskController.randomizeColor();
                           print("taped");
                         },
                         child: Container(
