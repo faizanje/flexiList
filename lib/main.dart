@@ -34,8 +34,8 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: kNavbarColor,
           ),
           // body: OnboardingPages(),
-          body: AddTaskScreen(),
-          // body: SideBarLayout(),
+          // body: AddTaskScreen(),
+          body: SideBarLayout(),
         ),
       ),
     );

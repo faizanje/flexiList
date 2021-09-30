@@ -9,21 +9,11 @@ import 'package:noteapp/controllers/task_item_controller.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/taskItem.dart';
 
-class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({Key? key}) : super(key: key);
-
-  @override
-  _AddTaskScreenState createState() => _AddTaskScreenState();
-}
-
-class _AddTaskScreenState extends State<AddTaskScreen> {
-  List<TaskItem> taskItems = [];
-  TextEditingController _controller = TextEditingController();
+class AddTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final addTaskController = Get.put(AddTaskController());
-    String title = "";
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -64,7 +54,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 height: size.height * 0.02,
               ),
               TextField(
-                controller: _controller,
+                controller: addTaskController.textEditingController,
                 decoration: InputDecoration(
                   hintText: 'Title Here',
                   contentPadding: EdgeInsets.symmetric(vertical: 5),
@@ -79,13 +69,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   TaskItem taskItem = TaskItem(
                     taskStatus: TASK_STATUS.TODO,
                     isChecked: false,
-                    taskName: _controller.text,
+                    taskName: addTaskController.textEditingController.text,
                   );
-                  setState(() {
-                    taskItems.add(taskItem);
-                    _controller.clear();
-                  });
-                  // addTaskController.addTask(taskItem);
+                  addTaskController.addTask(taskItem);
                 },
                 icon: Icon(Icons.add),
                 label: Text('Add Item'),
@@ -110,64 +96,72 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 height: size.height * 0.02,
               ),
               Expanded(
-                child: GroupedListView<TaskItem, String>(
-                  elements: taskItems,
-                  groupBy: (element) => element.taskStatusStr,
-                  groupSeparatorBuilder: (String groupByValue) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 10),
-                            child: Text(
-                              groupByValue,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                child: GetBuilder<AddTaskController>(builder: (controller) {
+                  return GroupedListView<TaskItem, String>(
+                    elements: addTaskController.toDoTasksList,
+                    groupBy: (element) => element.taskStatusStr,
+                    groupSeparatorBuilder: (String groupByValue) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 10),
+                              child: Text(
+                                groupByValue,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                  indexedItemBuilder: (context, element, index) {
-                    return TaskCheckItem(
-                      value: element.isChecked,
-                      title: element.taskName,
-                      onChanged: (newValue) {
-                        print(newValue);
-                        setState(
-                          () {
-                            element.isChecked = newValue;
+                        ],
+                      );
+                    },
+                    indexedItemBuilder: (context, element, index) {
+                      return Obx(
+                        () => TaskCheckItem(
+                          value:
+                              addTaskController.toDoTasksList[index].isChecked,
+                          title:
+                              addTaskController.toDoTasksList[index].taskName,
+                          onChanged: (newValue) {
+                            print(newValue);
+                            var changed =
+                                addTaskController.toDoTasksList[index];
+                            changed.isChecked = newValue;
+                            addTaskController.toDoTasksList[index] = changed;
                             switch (newValue) {
                               case null:
-                                element.taskStatus = TASK_STATUS.LATER;
+                                addTaskController.toDoTasksList[index]
+                                    .taskStatus = TASK_STATUS.LATER;
                                 break;
                               case true:
-                                element.taskStatus = TASK_STATUS.DONE;
+                                addTaskController.toDoTasksList[index]
+                                    .taskStatus = TASK_STATUS.DONE;
                                 break;
                               case false:
-                                element.taskStatus = TASK_STATUS.TODO;
+                                addTaskController.toDoTasksList[index]
+                                    .taskStatus = TASK_STATUS.TODO;
                                 break;
                             }
                           },
-                        );
-                      },
-                      onDownloadClicked: () {},
-                      onDeleteClicked: () {
-                        this.taskItems.remove(element);
-                      },
-                    );
-                  },
-                ),
+                          onDownloadClicked: () {},
+                          onDeleteClicked: () {
+                            addTaskController.toDoTasksList.remove(element);
+                          },
+                        ),
+                      );
+                    },
+                  );
+                }),
               ),
               Divider(),
               Center(
