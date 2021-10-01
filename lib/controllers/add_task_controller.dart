@@ -11,6 +11,8 @@ class AddTaskController extends GetxController {
   RxList<TaskItem> toDoTasksList = RxList([]);
   Rx<Color> color = Rx<Color>(Colors.red);
 
+  var isSlidePanelOpen = false.obs;
+
   TextEditingController textEditingController = TextEditingController();
 
   setChecked(TaskItem taskItem, bool? value) {

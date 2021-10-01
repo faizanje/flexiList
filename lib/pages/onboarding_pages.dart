@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/pages/select_country_lang.dart';
 import 'package:noteapp/widgets/slide_dots_Animation.dart';
-
 import '../constant/introduction_json.dart';
 
 class OnboardingPages extends StatefulWidget {
@@ -46,7 +47,6 @@ class _OnboardingPagesState extends State<OnboardingPages> {
         Stack(
           children: <Widget>[
             Container(
-              margin: const EdgeInsets.only(bottom: 25),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -81,6 +81,7 @@ class OnBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -88,14 +89,25 @@ class OnBoardScreen extends StatelessWidget {
             children: <Widget>[
               Align(
                 alignment: Alignment.topRight,
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SelectContLang()));
-                    },
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SelectContLang()));
+                  },
+                  child: Container(
+                    width: 100,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            topLeft: Radius.circular(30),
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30)),
+                        color: Colors.transparent,
+                        border: Border.all(color: kNavbarColor)),
                     child: Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(2.4),
                       width: 100,
                       height: 40,
                       decoration: BoxDecoration(
@@ -104,50 +116,35 @@ class OnBoardScreen extends StatelessWidget {
                               topLeft: Radius.circular(30),
                               bottomLeft: Radius.circular(30),
                               bottomRight: Radius.circular(30)),
-                          color: Colors.transparent,
+                          color: kNavbarColor,
                           border: Border.all(color: kNavbarColor)),
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.all(2.4),
-                        width: 100,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30),
-                                bottomRight: Radius.circular(30)),
-                            color: kNavbarColor,
-                            border: Border.all(color: kNavbarColor)),
-                        child: Text(
-                          "SKIP",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                            fontStyle: FontStyle.italic,
-                          ),
+                      child: Text(
+                        "SKIP",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(50),
-                child: Image.asset(
-                  path,
-                ),
+              Lottie.network(
+                'https://github.com/faizanje/sk-shopping-list/raw/lottie-assets/41068-man-filling-a-list%20(1).json',
+                height: 250.h,
+                width: 250.w,
               ),
               Text(
                 onBoardData[0]['title'],
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 30.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 10.sp,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -165,7 +162,7 @@ class OnBoardScreen extends StatelessWidget {
           Stack(
             children: <Widget>[
               Positioned(
-                left: MediaQuery.of(context).size.width / 2.44,
+                left: MediaQuery.of(context).size.width / 2.5,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.transparent,
@@ -187,6 +184,7 @@ class OnBoardScreen extends StatelessWidget {
                     child: Icon(
                       Icons.arrow_forward_rounded,
                       size: 30,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -194,6 +192,7 @@ class OnBoardScreen extends StatelessWidget {
               SvgPicture.asset(
                 'assets/images/footer.svg',
                 width: MediaQuery.of(context).size.width,
+                fit: BoxFit.contain,
               ),
             ],
           ),

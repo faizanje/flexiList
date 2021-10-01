@@ -18,8 +18,8 @@ class SideBar extends StatelessWidget {
     return Obx(
       () => AnimatedPositioned(
         duration: _animationDuration,
-        top: 0,
-        bottom: 0,
+        top: 30,
+        bottom: 30,
         left: sidebarController.isSlideBarOpen.value ? 0 : 0,
         right: sidebarController.isSlideBarOpen.value ? 0 : screenWidth - 45,
         child: Row(
@@ -27,36 +27,29 @@ class SideBar extends StatelessWidget {
           children: <Widget>[
             Flexible(
               flex: 2,
-              child: GestureDetector(
-                onTap: () {
-                  print('Tapped');
-                  setColor = sidebarController.randomizeColor();
-                },
-                child: Container(
-                  color: setColor,
-                  width: 100,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          addTaskController.color.value = Colors.yellow;
-                          // addTaskController.randomizeColor();
-                          print("taped");
-                        },
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                            color: Colors.yellow,
+              child: Container(
+                color: setColor,
+                width: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        addTaskController.color.value = Colors.yellow;
+                        print("taped");
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
                           ),
+                          color: Colors.yellow,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -118,7 +111,12 @@ class CustomMenuClipper extends CustomClipper<Path> {
     path.quadraticBezierTo(width - 1, height / 2 - 20, width, height / 2);
     path.quadraticBezierTo(width + 1, height / 2 + 20, 10, height - 16);
     path.quadraticBezierTo(0, height - 8, 0, height);
-    path.close();
+
+    // path.quadraticBezierTo(8, 0, 16, 0);
+    // path.quadraticBezierTo(height / 2 - 20, width - 1, height / 2, width);
+    // path.quadraticBezierTo(height / 2 + 20, width + 1, 10, height - 16);
+    // path.quadraticBezierTo(0, height - 8, 0, height);
+    // path.close();
 
     return path;
   }
