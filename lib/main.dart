@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noteapp/menu_screen/add_task_screen.dart';
-import 'package:noteapp/pages/onboarding_pages.dart';
+import 'package:noteapp/pages/onboarding_screen.dart';
 import 'package:noteapp/sidebar/sidebar_layout.dart';
 import 'package:noteapp/widgets/BottomNavBar.dart';
 import 'constant/constant.dart';
@@ -11,12 +11,7 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -30,9 +25,6 @@ class _MyAppState extends State<MyApp> {
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),
         color: Colors.white,
-        // routes: {
-        //   BottomNavBar.routeName: (ctx) => BottomNavBar(),
-        // },
         home: SafeArea(
           child: Scaffold(
             backgroundColor: Colors.white,
@@ -40,9 +32,9 @@ class _MyAppState extends State<MyApp> {
             //   title: Text("Note App"),
             //   backgroundColor: kNavbarColor,
             // ),
-            // body: OnboardingPages(),
+            body: OnBoardingScreen(),
             // body: BottomNavBar(),
-            body: AddTaskScreen(),
+            // body: AddTaskScreen(),
             // body: SideBarLayout(),
           ),
         ),
