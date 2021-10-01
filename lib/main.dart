@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noteapp/screens/add_task_screen.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
 import 'package:noteapp/screens/onboarding_screen.dart';
 
@@ -33,8 +34,8 @@ class MyApp extends StatelessWidget {
             //   backgroundColor: kNavbarColor,
             // ),
             // body: OnBoardingScreen(),
-            body: BottomNavScreen(),
-            // body: AddTaskScreen(),
+            // body: BottomNavScreen(),
+            body: AddTaskScreen(),
             // body: SideBarLayout(),
           ),
         ),
