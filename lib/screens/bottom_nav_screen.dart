@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
-import 'package:noteapp/screens/notes_list_screen.dart';
+import 'package:noteapp/screens/notes/view/notes_list_screen.dart';
 import 'package:noteapp/screens/archive_screen.dart';
 import 'package:noteapp/screens/layout_screen.dart';
 import 'package:noteapp/screens/reports_screen.dart';
@@ -20,6 +20,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final _pageOption = [
     NotesListScreen(),
     ReportsScreen(),
+    Container(),
     ArchiveScreen(),
     LayoutScreen()
   ];
