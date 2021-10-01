@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:noteapp/components/onboarding_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
-import 'package:noteapp/widgets/slide_dots_Animation.dart';
+import 'package:noteapp/components/slide_dots_Animation.dart';
 import '../constant/introduction_json.dart';
 
 class OnBoardingScreen extends StatefulWidget {

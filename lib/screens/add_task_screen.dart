@@ -10,7 +10,7 @@ import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/add_task_controller.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/taskItem.dart';
-import 'package:noteapp/sidebar/controller/sidebar_controller.dart';
+import 'package:noteapp/controllers/sidebar_controller.dart';
 
 class AddTaskScreen extends StatelessWidget {
   @override
