@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -20,7 +21,8 @@ class AddTaskScreen extends StatelessWidget {
       Colors.yellow,
       Colors.greenAccent,
       Colors.cyan,
-      Colors.redAccent
+      Colors.redAccent,
+      Colors.deepPurple.shade200
     ];
     final size = MediaQuery.of(context).size;
     // final addTaskController = Get.find<AddTaskController>();
@@ -226,7 +228,7 @@ class AddTaskScreen extends StatelessWidget {
                                       print('opened');
                                     },
                                     icon: Icon(
-                                      Icons.arrow_back_ios,
+                                      Icons.arrow_forward_ios_rounded,
                                       color: Colors.blue,
                                     ),
                                   )
@@ -247,16 +249,27 @@ class AddTaskScreen extends StatelessWidget {
                           color: kNavbarColor,
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                         ),
+                        constraints: BoxConstraints(
+                          maxHeight: 500.h,
+                        ),
                         width: 60,
-                        height: 500,
-                        child: ListView.builder(
-                          itemCount: colors.length,
-                          itemBuilder: (context, index) =>
-                              CircularColorContainer(
-                            containerColor: colors[index],
-                            onColorChanged: (Color color) {
-                              addTaskController.color.value = color;
-                            },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 40.0),
+                          child: ListView.separated(
+                            separatorBuilder: (context, index) => SizedBox(
+                              height: 5,
+                            ),
+                            shrinkWrap: true,
+                            itemCount: colors.length,
+                            itemBuilder: (context, index) => Align(
+                              alignment: Alignment.center,
+                              child: CircularColorContainer(
+                                containerColor: colors[index],
+                                onColorChanged: (Color color) {
+                                  addTaskController.color.value = color;
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       )
