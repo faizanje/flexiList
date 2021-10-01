@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:noteapp/menu_screen/add_task_screen.dart';
 import 'package:noteapp/pages/onboarding_screen.dart';
-import 'package:noteapp/sidebar/sidebar_layout.dart';
-import 'package:noteapp/widgets/BottomNavBar.dart';
+
 import 'constant/constant.dart';
 
 void main() {
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Size(360, 640),
-      builder: () => MaterialApp(
+      builder: () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light().copyWith(
           colorScheme: ColorScheme.light().copyWith(

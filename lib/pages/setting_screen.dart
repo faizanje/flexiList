@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/pages/setting_menu_json.dart';
 import 'package:noteapp/widgets/BottomNavBar.dart';
@@ -50,8 +51,9 @@ class SettingScreen extends StatelessWidget {
                         color: kNavbarColor,
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => BottomNavBar()));
+                        Get.to(() => BottomNavBar());
+                        // Navigator.of(context).p/ush(MaterialPageRoute(
+                        //     builder: (context) => BottomNavBar()));
                       },
                     ),
                     SizedBox(

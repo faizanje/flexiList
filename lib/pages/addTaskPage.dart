@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/pages/layout_screen.dart';
 
@@ -26,8 +27,9 @@ class _AddTaskpageState extends State<AddTaskpage> {
                   ),
                   GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => LayoutScreen()));
+                        Get.to(() => LayoutScreen());
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (context) => LayoutScreen()));
                       },
                       child: SvgPicture.asset('assets/images/menu_icon.svg')),
                   SizedBox(

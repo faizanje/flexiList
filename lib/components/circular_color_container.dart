@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class CircularColorContainer extends StatelessWidget {
   final Color containerColor;

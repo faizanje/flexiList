@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/components/onboarding_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/pages/select_country_lang.dart';
@@ -30,8 +31,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             alignment: Alignment.topRight,
             child: InkWell(
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SelectContLang()));
+                Get.to(() => SelectContLang());
               },
               child: Container(
                 decoration: BoxDecoration(

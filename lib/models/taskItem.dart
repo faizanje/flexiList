@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 
 class TaskItem {

@@ -8,16 +8,15 @@ import 'package:noteapp/components/circular_color_container.dart';
 import 'package:noteapp/components/task_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/add_task_controller.dart';
-import 'package:noteapp/controllers/task_item_controller.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/taskItem.dart';
 import 'package:noteapp/sidebar/controller/sidebar_controller.dart';
-import 'package:noteapp/sidebar/sidebar.dart';
 
 class AddTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = [
+      Colors.white,
       Colors.yellow,
       Colors.greenAccent,
       Colors.cyan,
@@ -25,11 +24,9 @@ class AddTaskScreen extends StatelessWidget {
       Colors.deepPurple.shade200
     ];
     final size = MediaQuery.of(context).size;
-    // final addTaskController = Get.find<AddTaskController>();
     final addTaskController = Get.put(AddTaskController());
     final sidebarController = Get.put(SidebarController());
 
-    String title = "";
     return SafeArea(
       child: Obx(
         () => Scaffold(
@@ -39,7 +36,8 @@ class AddTaskScreen extends StatelessWidget {
             backgroundColor: addTaskController.color.value,
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Get.back();
+                // Navigator.pop(context);
               },
               icon: SvgPicture.asset(
                 'assets/icons/bck btn.svg',
@@ -109,67 +107,76 @@ class AddTaskScreen extends StatelessWidget {
                         builder: (controller) {
                           return GroupedListView<TaskItem, String>(
                             elements: addTaskController.toDoTasksList,
+                            groupComparator: (value1, value2) {
+                              print('$value1.comapreTo($value2)');
+                              return value2.compareTo(value1);
+                            },
                             groupBy: (element) => element.taskStatusStr,
                             groupSeparatorBuilder: (String groupByValue) {
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: kPrimaryColor,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 25, vertical: 10),
-                                      child: Text(
-                                        groupByValue,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
+                              return AnimatedContainer(
+                                duration: Duration(milliseconds: 600),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: kPrimaryColor,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 25, vertical: 8),
+                                        child: Text(
+                                          groupByValue,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               );
                             },
                             indexedItemBuilder: (context, element, index) {
                               return Obx(
-                                () => TaskCheckItem(
-                                  value: addTaskController
-                                      .toDoTasksList[index].isChecked,
-                                  title: addTaskController
-                                      .toDoTasksList[index].taskName,
-                                  onChanged: (newValue) {
-                                    print(newValue);
-                                    var changed =
-                                        addTaskController.toDoTasksList[index];
-                                    changed.isChecked = newValue;
-                                    addTaskController.toDoTasksList[index] =
-                                        changed;
-                                    switch (newValue) {
-                                      case null:
-                                        addTaskController.toDoTasksList[index]
-                                            .taskStatus = TASK_STATUS.LATER;
-                                        break;
-                                      case true:
-                                        addTaskController.toDoTasksList[index]
-                                            .taskStatus = TASK_STATUS.DONE;
-                                        break;
-                                      case false:
-                                        addTaskController.toDoTasksList[index]
-                                            .taskStatus = TASK_STATUS.TODO;
-                                        break;
-                                    }
+                                () => AnimatedContainer(
+                                  duration: Duration(milliseconds: 300),
+                                  child: TaskCheckItem(
+                                    value: addTaskController
+                                        .toDoTasksList[index].isChecked,
+                                    title: addTaskController
+                                        .toDoTasksList[index].taskName,
+                                    onChanged: (newValue) {
+                                      print(newValue);
+                                      var changed = addTaskController
+                                          .toDoTasksList[index];
+                                      changed.isChecked = newValue;
+                                      addTaskController.toDoTasksList[index] =
+                                          changed;
+                                      switch (newValue) {
+                                        case null:
+                                          addTaskController.toDoTasksList[index]
+                                              .taskStatus = TASK_STATUS.LATER;
+                                          break;
+                                        case true:
+                                          addTaskController.toDoTasksList[index]
+                                              .taskStatus = TASK_STATUS.DONE;
+                                          break;
+                                        case false:
+                                          addTaskController.toDoTasksList[index]
+                                              .taskStatus = TASK_STATUS.TODO;
+                                          break;
+                                      }
 
-                                    addTaskController.update();
-                                  },
-                                  onDownloadClicked: () {},
-                                  onDeleteClicked: () {
-                                    addTaskController.removeTask(element);
-                                  },
+                                      addTaskController.update();
+                                    },
+                                    onDownloadClicked: () {},
+                                    onDeleteClicked: () {
+                                      addTaskController.removeTask(element);
+                                    },
+                                  ),
                                 ),
                               );
                             },
@@ -199,7 +206,8 @@ class AddTaskScreen extends StatelessWidget {
               ),
               Obx(
                 () => AnimatedPositioned(
-                  duration: Duration(milliseconds: 200),
+                  curve: Curves.elasticInOut,
+                  duration: Duration(milliseconds: 500),
                   right: sidebarController.isSlideBarOpen.value ? 0 : -60,
                   bottom: 0,
                   top: 0,

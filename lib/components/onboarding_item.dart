@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
-import 'package:noteapp/constant/constant.dart';
-import 'package:noteapp/constant/introduction_json.dart';
-import 'package:noteapp/pages/select_country_lang.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+import 'package:noteapp/constant/introduction_json.dart';
 
 class OnBoardingItem extends StatelessWidget {
   final String path;
+
   const OnBoardingItem({
     Key? key,
     required this.path,
@@ -15,7 +13,6 @@ class OnBoardingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
         children: <Widget>[

@@ -3,6 +3,7 @@ import 'package:country_currency_pickers/country_picker_dropdown.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/widgets/BottomNavBar.dart';
 
@@ -163,8 +164,9 @@ class _SelectContLangState extends State<SelectContLang> {
                           border: Border.all(color: kNavbarColor)),
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => BottomNavBar()));
+                          Get.to(() => BottomNavBar());
+                          // Navigator.of(context).push(MaterialPageRoute(
+                          //     builder: (context) => BottomNavBar()));
                         },
                         child: Container(
                           alignment: Alignment.center,
