@@ -5,15 +5,15 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
-import 'package:noteapp/widgets/BottomNavBar.dart';
+import 'package:noteapp/screens/bottom_nav_screen.dart';
 
-class SelectContLang extends StatefulWidget {
+class SelectCountryScreen extends StatefulWidget {
   static const routeName = "/selectLan";
   @override
-  _SelectContLangState createState() => _SelectContLangState();
+  _SelectCountryScreenState createState() => _SelectCountryScreenState();
 }
 
-class _SelectContLangState extends State<SelectContLang> {
+class _SelectCountryScreenState extends State<SelectCountryScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -164,7 +164,7 @@ class _SelectContLangState extends State<SelectContLang> {
                           border: Border.all(color: kNavbarColor)),
                       child: InkWell(
                         onTap: () {
-                          Get.to(() => BottomNavBar());
+                          Get.to(() => BottomNavScreen());
                           // Navigator.of(context).push(MaterialPageRoute(
                           //     builder: (context) => BottomNavBar()));
                         },

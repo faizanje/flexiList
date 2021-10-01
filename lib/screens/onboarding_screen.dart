@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/components/onboarding_item.dart';
 import 'package:noteapp/constant/constant.dart';
-import 'package:noteapp/pages/select_country_lang.dart';
+import 'package:noteapp/screens/select_country_screen.dart';
 import 'package:noteapp/widgets/slide_dots_Animation.dart';
 import '../constant/introduction_json.dart';
 
@@ -31,7 +31,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             alignment: Alignment.topRight,
             child: InkWell(
               onTap: () {
-                Get.to(() => SelectContLang());
+                Get.to(() => SelectCountryScreen());
               },
               child: Container(
                 decoration: BoxDecoration(

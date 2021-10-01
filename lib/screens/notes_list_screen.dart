@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
-import 'package:noteapp/pages/layout_screen.dart';
+import 'package:noteapp/screens/layout_screen.dart';
 
-class AddTaskpage extends StatefulWidget {
+class NotesListScreen extends StatefulWidget {
   @override
-  _AddTaskpageState createState() => _AddTaskpageState();
+  _NotesListScreenState createState() => _NotesListScreenState();
 }
 
-class _AddTaskpageState extends State<AddTaskpage> {
+class _NotesListScreenState extends State<NotesListScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

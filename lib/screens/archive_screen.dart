@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ArchivePage extends StatefulWidget {
+class ArchiveScreen extends StatefulWidget {
   @override
-  _ArchivePageState createState() => _ArchivePageState();
+  _ArchiveScreenState createState() => _ArchiveScreenState();
 }
 
-class _ArchivePageState extends State<ArchivePage> {
+class _ArchiveScreenState extends State<ArchiveScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(

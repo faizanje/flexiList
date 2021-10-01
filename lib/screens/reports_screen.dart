@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ReportPage extends StatefulWidget {
+class ReportsScreen extends StatefulWidget {
   @override
-  _ReportPageState createState() => _ReportPageState();
+  _ReportsScreenState createState() => _ReportsScreenState();
 }
 
-class _ReportPageState extends State<ReportPage> {
+class _ReportsScreenState extends State<ReportsScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(

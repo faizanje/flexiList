@@ -3,8 +3,8 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:noteapp/menu_screen/currency.dart';
 import 'package:noteapp/menu_screen/language.dart';
 import 'package:noteapp/menu_screen/theme.dart';
-import 'package:noteapp/pages/setting_menu_json.dart';
-import 'package:noteapp/pages/setting_screen.dart';
+import 'package:noteapp/models/setting_menu_json.dart';
+import 'package:noteapp/screens/setting_screen.dart';
 import '../menu_screen/date_format.dart';
 
 class LayoutScreen extends StatefulWidget {

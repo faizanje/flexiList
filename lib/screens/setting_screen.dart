@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
-import 'package:noteapp/pages/setting_menu_json.dart';
-import 'package:noteapp/widgets/BottomNavBar.dart';
+import 'package:noteapp/models/setting_menu_json.dart';
+import 'package:noteapp/screens/bottom_nav_screen.dart';
 
 class MenuItems {
   static const dateFormat =
@@ -51,7 +51,7 @@ class SettingScreen extends StatelessWidget {
                         color: kNavbarColor,
                       ),
                       onPressed: () {
-                        Get.to(() => BottomNavBar());
+                        Get.to(() => BottomNavScreen());
                         // Navigator.of(context).p/ush(MaterialPageRoute(
                         //     builder: (context) => BottomNavBar()));
                       },
