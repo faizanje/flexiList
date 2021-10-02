@@ -7,19 +7,20 @@ import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/models/taskItem.dart';
 
 class AddTaskController extends GetxController {
-  RxList<TaskItem> toDoTasksList = RxList([]);
-  Rx<Color> color = Rx<Color>(Colors.white);
+  final isCurrencySelected = false.obs;
+  final RxList<TodoItemModel> toDoTasksList = RxList([]);
+  final Rx<Color> color = Rx<Color>(Colors.white);
 
-  var isSlidePanelOpen = false.obs;
+  final isSlidePanelOpen = false.obs;
 
   TextEditingController textEditingController = TextEditingController();
 
-  setChecked(TaskItem taskItem, bool? value) {
+  setChecked(TodoItemModel taskItem, bool? value) {
     taskItem.isChecked = value;
     update();
   }
 
-  void addTask(TaskItem taskItem) {
+  void addTask(TodoItemModel taskItem) {
     toDoTasksList.add(taskItem);
     textEditingController.clear();
     update();
@@ -34,7 +35,7 @@ class AddTaskController extends GetxController {
         Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
   }
 
-  removeTask(TaskItem taskItem) {
+  removeTask(TodoItemModel taskItem) {
     toDoTasksList.remove(taskItem);
     update();
   }

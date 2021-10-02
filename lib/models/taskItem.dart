@@ -1,9 +1,10 @@
 import 'package:noteapp/models/enums/task_status.dart';
 
-class TaskItem {
+class TodoItemModel {
   String taskName;
-  bool? isChecked = false;
-  TASK_STATUS taskStatus = TASK_STATUS.TODO;
+  bool? isChecked;
+  int price;
+  TASK_STATUS taskStatus;
 
   String get taskStatusStr {
     switch (taskStatus) {
@@ -16,9 +17,9 @@ class TaskItem {
     }
   }
 
-  TaskItem({
-    this.taskName = "",
-    required this.isChecked,
-    required this.taskStatus,
-  });
+  TodoItemModel(
+      {required this.taskName,
+      this.isChecked,
+      this.taskStatus = TASK_STATUS.TODO,
+      this.price = 0});
 }
