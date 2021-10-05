@@ -25,6 +25,7 @@ class AddTaskController extends GetxController {
       this.homeTaskItemModel = homeTaskItemModel;
       this.isCurrencySelected.value = this.homeTaskItemModel.isCurrencySelected;
       this.color.value = Color(this.homeTaskItemModel.colorValue);
+      this.isArchived = homeTaskItemModel.isArchived;
       this.toDoTasksList.addAll(this.homeTaskItemModel.todoItemList);
       print('IsInBox ${this.homeTaskItemModel.isInBox}');
       this.isEditing = true;

@@ -67,12 +67,15 @@ class AddTaskScreen extends StatelessWidget {
                         addTaskController.isCurrencySelected.toggle();
                       },
                       icon: Obx(
-                        () => SvgPicture.asset(
-                          'assets/icons/Vector.svg',
-                          color:
-                              addTaskController.isCurrencySelected.value == true
-                                  ? kPrimaryColor
-                                  : Colors.grey,
+                        () => Tooltip(
+                          message: 'Toggle currency',
+                          child: SvgPicture.asset(
+                            'assets/icons/Vector.svg',
+                            color: addTaskController.isCurrencySelected.value ==
+                                    true
+                                ? kPrimaryColor
+                                : Colors.grey,
+                          ),
                         ),
                       ),
                     ),
@@ -80,15 +83,22 @@ class AddTaskScreen extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           addTaskController.isArchived
-                              ? addTaskController.archiveTask()
-                              : addTaskController.unArchiveTask();
+                              ? addTaskController.unArchiveTask()
+                              : addTaskController.archiveTask();
                           notesListController.update();
                           Get.back();
                         },
-                        icon: SvgPicture.asset(
-                          addTaskController.isArchived
-                              ? 'D:/AProjects/Android Studio Projects/noteapp (1)/noteapp/assets/icons/unarchive_ic_icon.svg'
-                              : 'assets/icons/Vector-1.svg',
+                        icon: Tooltip(
+                          message: addTaskController.isArchived
+                              ? 'Unarchive'
+                              : 'Archive',
+                          child: Icon(
+                            addTaskController.isArchived
+                                ? Icons.unarchive
+                                : Icons.archive,
+                            color: kPrimaryColor,
+                            size: 30,
+                          ),
                         ),
                       ),
                   ],
