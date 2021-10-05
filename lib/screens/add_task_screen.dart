@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:noteapp/components/circular_color_container.dart';
@@ -9,12 +10,16 @@ import 'package:noteapp/components/slide_color_panel_design.dart';
 import 'package:noteapp/components/task_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/add_task_controller.dart';
+import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/models/enums/task_status.dart';
-import 'package:noteapp/models/taskItem.dart';
-import 'dart:ui' as ui;
+import 'package:noteapp/models/home_task_item_model.dart';
+import 'package:noteapp/models/todo_item.dart';
 import 'package:noteapp/controllers/sidebar_controller.dart';
 
 class AddTaskScreen extends StatelessWidget {
+  final HomeTaskItemModel? homeTaskItemModel;
+  AddTaskScreen({this.homeTaskItemModel});
+
   @override
   Widget build(BuildContext context) {
     final colors = [
@@ -27,8 +32,9 @@ class AddTaskScreen extends StatelessWidget {
     ];
     final size = MediaQuery.of(context).size;
     final addTaskController = Get.put(AddTaskController());
-    final sidebarController = Get.put(SidebarController());
-
+    final sideBarController = Get.put(SidebarController());
+    final notesListController = Get.find<NotesListController>();
+    addTaskController.init(this.homeTaskItemModel);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -58,17 +64,45 @@ class AddTaskScreen extends StatelessWidget {
                   ),
                   actions: [
                     IconButton(
-                      onPressed: () {},
-                      icon: SvgPicture.asset(
-                        'assets/icons/Vector.svg',
+                      color: Colors.redAccent,
+                      onPressed: () {
+                        addTaskController.isCurrencySelected.toggle();
+                      },
+                      icon: Obx(
+                        () => Tooltip(
+                          message: 'Toggle currency',
+                          child: SvgPicture.asset(
+                            'assets/icons/Vector.svg',
+                            color: addTaskController.isCurrencySelected.value ==
+                                    true
+                                ? kPrimaryColor
+                                : Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: SvgPicture.asset(
-                        'assets/icons/Vector-1.svg',
+                    if (addTaskController.isEditing)
+                      IconButton(
+                        onPressed: () {
+                          addTaskController.isArchived
+                              ? addTaskController.unArchiveTask()
+                              : addTaskController.archiveTask();
+                          notesListController.update();
+                          Get.back();
+                        },
+                        icon: Tooltip(
+                          message: addTaskController.isArchived
+                              ? 'Unarchive'
+                              : 'Archive',
+                          child: Icon(
+                            addTaskController.isArchived
+                                ? Icons.unarchive
+                                : Icons.archive,
+                            color: kPrimaryColor,
+                            size: 30,
+                          ),
+                        ),
                       ),
-                    ),
                   ],
                 ),
                 Flexible(
@@ -99,7 +133,7 @@ class AddTaskScreen extends StatelessWidget {
                         Center(
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              TaskItem taskItem = TaskItem(
+                              TodoItemModel taskItem = TodoItemModel(
                                 taskStatus: TASK_STATUS.TODO,
                                 isChecked: false,
                                 taskName: addTaskController
@@ -119,85 +153,84 @@ class AddTaskScreen extends StatelessWidget {
                         Expanded(
                           child: GetBuilder<AddTaskController>(
                             builder: (controller) {
-                              return GroupedListView<TaskItem, String>(
+                              return GroupedListView<TodoItemModel, String>(
                                 elements: addTaskController.toDoTasksList,
                                 groupComparator: (value1, value2) {
                                   print('$value1.comapreTo($value2)');
                                   return value2.compareTo(value1);
                                 },
                                 groupBy: (element) => element.taskStatusStr,
-                                groupSeparatorBuilder: (String groupByValue) {
-                                  return AnimatedContainer(
-                                    duration: Duration(milliseconds: 600),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: kPrimaryColor,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 25, vertical: 8),
-                                            child: Text(
-                                              groupByValue,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                groupHeaderBuilder: (element) {
+                                  print('group header builder called');
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: kPrimaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 25, vertical: 8),
+                                          child: Text(
+                                            element.taskStatusStr,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   );
                                 },
                                 indexedItemBuilder: (context, element, index) {
                                   return Obx(
-                                    () => AnimatedContainer(
-                                      duration: Duration(milliseconds: 300),
-                                      child: TaskCheckItem(
-                                        value: addTaskController
-                                            .toDoTasksList[index].isChecked,
-                                        title: addTaskController
-                                            .toDoTasksList[index].taskName,
-                                        onChanged: (newValue) {
-                                          print(newValue);
-                                          var changed = addTaskController
-                                              .toDoTasksList[index];
-                                          changed.isChecked = newValue;
-                                          addTaskController
-                                              .toDoTasksList[index] = changed;
-                                          switch (newValue) {
-                                            case null:
-                                              addTaskController
-                                                      .toDoTasksList[index]
-                                                      .taskStatus =
-                                                  TASK_STATUS.LATER;
-                                              break;
-                                            case true:
-                                              addTaskController
-                                                      .toDoTasksList[index]
-                                                      .taskStatus =
-                                                  TASK_STATUS.DONE;
-                                              break;
-                                            case false:
-                                              addTaskController
-                                                      .toDoTasksList[index]
-                                                      .taskStatus =
-                                                  TASK_STATUS.TODO;
-                                              break;
-                                          }
-
-                                          addTaskController.update();
-                                        },
-                                        onDownloadClicked: () {},
-                                        onDeleteClicked: () {
-                                          addTaskController.removeTask(element);
-                                        },
-                                      ),
+                                    () => TaskCheckItem(
+                                      price: addTaskController
+                                          .toDoTasksList[index].price,
+                                      value: addTaskController
+                                          .toDoTasksList[index].isChecked,
+                                      title: addTaskController
+                                          .toDoTasksList[index].taskName,
+                                      onChanged: (newValue) {
+                                        print(newValue);
+                                        var changed = addTaskController
+                                            .toDoTasksList[index];
+                                        changed.isChecked = newValue;
+                                        addTaskController.toDoTasksList[index] =
+                                            changed;
+                                        switch (newValue) {
+                                          case null:
+                                            addTaskController
+                                                .toDoTasksList[index]
+                                                .taskStatus = TASK_STATUS.LATER;
+                                            break;
+                                          case true:
+                                            addTaskController
+                                                .toDoTasksList[index]
+                                                .taskStatus = TASK_STATUS.DONE;
+                                            break;
+                                          case false:
+                                            addTaskController
+                                                .toDoTasksList[index]
+                                                .taskStatus = TASK_STATUS.TODO;
+                                            break;
+                                        }
+                                        addTaskController.update();
+                                      },
+                                      onDownloadClicked: () {},
+                                      onDeleteClicked: () {
+                                        addTaskController.removeTask(element);
+                                      },
+                                      isCurrencyToggled: addTaskController
+                                          .isCurrencySelected.value,
+                                      onPriceChanged: (int newPrice) {
+                                        addTaskController.toDoTasksList[index]
+                                            .price = newPrice;
+                                      },
                                     ),
                                   );
                                 },
@@ -210,8 +243,50 @@ class AddTaskScreen extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.all(8),
                             child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text('ADD TASK'),
+                              onPressed: () async {
+                                if (addTaskController.isEditing) {
+                                  this.homeTaskItemModel!
+                                    ..todoItemList =
+                                        addTaskController.toDoTasksList
+                                    ..colorValue =
+                                        addTaskController.color.value.value
+                                    ..isArchived = addTaskController.isArchived
+                                    ..isCurrencySelected = addTaskController
+                                        .isCurrencySelected.value;
+
+                                  try {
+                                    await homeTaskItemModel!.save();
+                                  } catch (e) {
+                                    print('Exception ${e.toString()}');
+                                  }
+                                } else {
+                                  HomeTaskItemModel homeTaskItemModel =
+                                      HomeTaskItemModel(
+                                    todoItemList:
+                                        addTaskController.toDoTasksList,
+                                    colorValue:
+                                        addTaskController.color.value.value,
+                                    isArchived: addTaskController.isArchived,
+                                    isCurrencySelected: addTaskController
+                                        .isCurrencySelected.value,
+                                  );
+                                  notesListController.notesList
+                                      .add(homeTaskItemModel);
+                                  notesListController.filteredNotesList
+                                      .add(homeTaskItemModel);
+                                  notesListController.homeTaskItemBox
+                                      .add(homeTaskItemModel);
+                                }
+
+                                notesListController.update();
+
+                                Get.back();
+                                Get.snackbar(
+                                    'Task Added', 'Task has been added');
+                              },
+                              child: Text(addTaskController.isEditing
+                                  ? 'EDIT TASK'
+                                  : 'ADD TASK'),
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 20),
@@ -228,118 +303,103 @@ class AddTaskScreen extends StatelessWidget {
                 )
               ],
             ),
-            Obx(
-              () => AnimatedPositioned(
-                curve: Curves.elasticInOut,
-                duration: Duration(milliseconds: 500),
-                right: sidebarController.isSlideBarOpen.value ? 0 : -60,
-                bottom: 0,
-                top: 0,
-                // child: ClipPath(
-                child: Row(
-                  children: [
-                    Container(
-                      child: Stack(children: [
-                        CustomPaint(
-                          size: Size(174, 200),
-                          painter: RPSCustomPainter(),
-                        ),
-                        Positioned(
-                          right: 10,
-                          bottom: 90.2,
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            width: 30,
-                            height: 30,
-                            child: sidebarController.isSlideBarOpen.value
-                                ? IconButton(
-                                    onPressed: () {
-                                      sidebarController.isSlideBarOpen.toggle();
-                                      print('opened');
-                                    },
-                                    icon: Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      color: Colors.blue,
-                                    ),
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      sidebarController.isSlideBarOpen.toggle();
-                                      print('closed ');
-                                    },
-                                    icon: Icon(
-                                      Icons.opacity,
-                                      color: Colors.blue,
-                                      size: 26,
-                                    )),
-                          ),
-                        ),
-                      ]),
-                    ),
+            SideColorPanel(colors: colors),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-                    // InkWell(
-                    //   onTap: () {
-                    //     sidebarController.isSlideBarOpen.toggle();
-                    //   },
-                    //   child: CustomPaint(
-                    //       size: Size(174, 200),
-                    //       painter: RPSCustomPainter(),
-                    //       child: sidebarController.isSlideBarOpen.value
-                    //           ? IconButton(
-                    //               onPressed: () {
-                    //                 sidebarController.isSlideBarOpen.toggle();
-                    //                 print('opened');
-                    //               },
-                    //               icon: Icon(
-                    //                 Icons.arrow_forward_ios_rounded,
-                    //                 color: Colors.blue,
-                    //               ),
-                    //             )
-                    //           : IconButton(
-                    //               onPressed: () {
-                    //                 sidebarController.isSlideBarOpen.toggle();
-                    //                 print('closed ');
-                    //               },
-                    //               icon: Icon(
-                    //                 Icons.opacity,
-                    //                 color: Colors.blue,
-                    //                 size: 26,
-                    //               ),
-                    //             )),
-                    // ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: kNavbarColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                      ),
-                      constraints: BoxConstraints(
-                        maxHeight: 500.h,
-                      ),
-                      width: 60,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 40.0),
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 5,
+class SideColorPanel extends StatelessWidget {
+  const SideColorPanel({
+    Key? key,
+    required this.colors,
+  }) : super(key: key);
+
+  final List<Color> colors;
+
+  @override
+  Widget build(BuildContext context) {
+    final addTaskController = Get.find<AddTaskController>();
+    final sidebarController = Get.find<SidebarController>();
+    return Obx(
+      () => AnimatedPositioned(
+        curve: Curves.elasticInOut,
+        duration: Duration(milliseconds: 500),
+        right: sidebarController.isSlideBarOpen.value ? 0 : -60,
+        bottom: 0,
+        top: 0,
+        // child: ClipPath(
+        child: Row(
+          children: [
+            InkWell(
+              onTap: () {
+                sidebarController.isSlideBarOpen.toggle();
+              },
+              child: Container(
+                  decoration: BoxDecoration(
+                    color: kNavbarColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      bottomLeft: Radius.circular(30),
+                    ),
+                  ),
+                  width: 40,
+                  height: 50,
+                  alignment: Alignment.centerLeft,
+                  child: sidebarController.isSlideBarOpen.value
+                      ? IconButton(
+                          onPressed: () {
+                            sidebarController.isSlideBarOpen.toggle();
+                            print('opened');
+                          },
+                          icon: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.blue,
                           ),
-                          shrinkWrap: true,
-                          itemCount: colors.length,
-                          itemBuilder: (context, index) => Align(
-                            alignment: Alignment.center,
-                            child: CircularColorContainer(
-                              containerColor: colors[index],
-                              onColorChanged: (Color color) {
-                                addTaskController.color.value = color;
-                              },
-                            ),
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            sidebarController.isSlideBarOpen.toggle();
+                            print('closed ');
+                          },
+                          icon: Icon(
+                            Icons.opacity,
+                            color: Colors.blue,
+                            size: 26,
                           ),
-                        ),
-                      ),
-                    )
-                  ],
+                        )),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: kNavbarColor,
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              constraints: BoxConstraints(
+                maxHeight: 500.h,
+              ),
+              width: 60,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40.0),
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 5,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: colors.length,
+                  itemBuilder: (context, index) => Align(
+                    alignment: Alignment.center,
+                    child: CircularColorContainer(
+                      containerColor: colors[index],
+                      onColorChanged: (Color color) {
+                        addTaskController.color.value = color;
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
