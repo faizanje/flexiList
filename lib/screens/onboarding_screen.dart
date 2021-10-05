@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:noteapp/components/skip_button.dart';
 import 'package:noteapp/constant/constant.dart';
@@ -23,13 +24,12 @@ class OnBordingScreen extends StatelessWidget {
               decoration: getPageDecoration(),
             ),
           ),
-          done: Text('Read',
+          done: Text('Next',
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
-          onDone: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => OnBordingScreen())),
+          onDone: () => Get.to(() => SelectCountryScreen()),
           showSkipButton: true,
           skip: WidgetButton(),
-          onSkip: () => goToHome(context),
+          onSkip: () => Get.to(() => SelectCountryScreen()),
           next: Icon(Icons.arrow_forward),
           dotsDecorator: getDotDecoration(),
           onChange: (index) => print('Page $index selected'),
@@ -37,10 +37,6 @@ class OnBordingScreen extends StatelessWidget {
           nextFlex: 0,
           animationDuration: 1000,
         ),
-      );
-
-  void goToHome(context) => Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => SelectCountryScreen()),
       );
 
   Widget buildImage(String path) =>
