@@ -2,17 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:noteapp/components/circular_color_container.dart';
 import 'package:noteapp/components/task_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/add_task_controller.dart';
+import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/models/enums/task_status.dart';
-import 'package:noteapp/models/taskItem.dart';
+import 'package:noteapp/models/home_task_item_model.dart';
+import 'package:noteapp/models/todo_item.dart';
 import 'package:noteapp/controllers/sidebar_controller.dart';
 
 class AddTaskScreen extends StatelessWidget {
+  final HomeTaskItemModel? homeTaskItemModel;
+  AddTaskScreen({this.homeTaskItemModel});
+
   @override
   Widget build(BuildContext context) {
     final colors = [
@@ -25,8 +31,9 @@ class AddTaskScreen extends StatelessWidget {
     ];
     final size = MediaQuery.of(context).size;
     final addTaskController = Get.put(AddTaskController());
-    final sidebarController = Get.put(SidebarController());
-
+    final sideBarController = Get.put(SidebarController());
+    final notesListController = Get.find<NotesListController>();
+    addTaskController.init(this.homeTaskItemModel);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -69,12 +76,21 @@ class AddTaskScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: SvgPicture.asset(
-                        'assets/icons/Vector-1.svg',
+                    if (addTaskController.isEditing)
+                      IconButton(
+                        onPressed: () {
+                          addTaskController.isArchived
+                              ? addTaskController.archiveTask()
+                              : addTaskController.unArchiveTask();
+                          notesListController.update();
+                          Get.back();
+                        },
+                        icon: SvgPicture.asset(
+                          addTaskController.isArchived
+                              ? 'D:/AProjects/Android Studio Projects/noteapp (1)/noteapp/assets/icons/unarchive_ic_icon.svg'
+                              : 'assets/icons/Vector-1.svg',
+                        ),
                       ),
-                    ),
                   ],
                 ),
                 Flexible(
@@ -215,8 +231,50 @@ class AddTaskScreen extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.all(8),
                             child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text('ADD TASK'),
+                              onPressed: () async {
+                                if (addTaskController.isEditing) {
+                                  this.homeTaskItemModel!
+                                    ..todoItemList =
+                                        addTaskController.toDoTasksList
+                                    ..colorValue =
+                                        addTaskController.color.value.value
+                                    ..isArchived = addTaskController.isArchived
+                                    ..isCurrencySelected = addTaskController
+                                        .isCurrencySelected.value;
+
+                                  try {
+                                    await homeTaskItemModel!.save();
+                                  } catch (e) {
+                                    print('Exception ${e.toString()}');
+                                  }
+                                } else {
+                                  HomeTaskItemModel homeTaskItemModel =
+                                      HomeTaskItemModel(
+                                    todoItemList:
+                                        addTaskController.toDoTasksList,
+                                    colorValue:
+                                        addTaskController.color.value.value,
+                                    isArchived: addTaskController.isArchived,
+                                    isCurrencySelected: addTaskController
+                                        .isCurrencySelected.value,
+                                  );
+                                  notesListController.notesList
+                                      .add(homeTaskItemModel);
+                                  notesListController.filteredNotesList
+                                      .add(homeTaskItemModel);
+                                  notesListController.homeTaskItemBox
+                                      .add(homeTaskItemModel);
+                                }
+
+                                notesListController.update();
+
+                                Get.back();
+                                Get.snackbar(
+                                    'Task Added', 'Task has been added');
+                              },
+                              child: Text(addTaskController.isEditing
+                                  ? 'EDIT TASK'
+                                  : 'ADD TASK'),
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 20),

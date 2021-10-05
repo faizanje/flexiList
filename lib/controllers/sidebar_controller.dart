@@ -12,7 +12,6 @@ class SidebarController extends GetxController
   RxString title = RxString('');
   late Rx<AnimationController> animationController;
   Rx<Color> color = Rx(Colors.deepPurple);
-  Rx<Color> primarycolor = Rx(kNavbarColor);
 
   randomizeColor() {
     color.value =
