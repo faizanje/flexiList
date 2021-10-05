@@ -1,8 +1,13 @@
 import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/country_picker_dropdown.dart';
+import 'package:country_currency_pickers/currency_picker_cupertino.dart';
+import 'package:country_currency_pickers/currency_picker_dialog.dart';
+import 'package:country_currency_pickers/currency_picker_dropdown.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:country_list_pick/country_list_pick.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
@@ -133,12 +138,10 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                               bottomRight: Radius.circular(10)),
                           color: Colors.transparent,
                           border: Border.all(color: kNavbarColor)),
-                      child: CountryPickerDropdown(
-                        initialValue: 'tr',
-                        itemBuilder: _buildDropdownItem,
-                        onValuePicked: (Country? country) {
-                          print("${country!.name}");
-                        },
+                      child: CurrencyPickerDropdown(
+                        initialValue: 'INR',
+                        itemBuilder: _buildCurrencyDropdownItem,
+                        onValuePicked: (Country? country) {},
                       ),
                     ),
                   ],
@@ -203,7 +206,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
     );
   }
 
-  Widget _buildDropdownItem(Country country) => Row(
+  Widget _buildCurrencyDropdownItem(Country country) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           SizedBox(
@@ -213,7 +216,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
           SizedBox(
             width: 8.0,
           ),
-          Text("${country.isoCode}"),
+          Text("${country.currencyCode}"),
         ],
       );
 }

@@ -6,7 +6,7 @@ import 'package:noteapp/screens/add_task_screen.dart';
 import 'package:noteapp/screens/notes_list_screen.dart';
 import 'package:noteapp/screens/archive_screen.dart';
 import 'package:noteapp/screens/layout_screen.dart';
-import 'package:noteapp/screens/reports_screen.dart';
+import 'package:noteapp/screens/report_screen.dart';
 
 class BottomNavScreen extends StatefulWidget {
   static const routeName = "/navBar";
@@ -19,7 +19,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   int selectedPage = 0;
   final _pageOption = [
     NotesListScreen(),
-    ReportsScreen(),
+    ReportScreen(),
     Container(),
     ArchiveScreen(),
     LayoutScreen()

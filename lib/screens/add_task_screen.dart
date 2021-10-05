@@ -5,11 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:noteapp/components/circular_color_container.dart';
+import 'package:noteapp/components/slide_color_panel_design.dart';
 import 'package:noteapp/components/task_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/add_task_controller.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/taskItem.dart';
+import 'dart:ui' as ui;
 import 'package:noteapp/controllers/sidebar_controller.dart';
 
 class AddTaskScreen extends StatelessWidget {
@@ -236,44 +238,75 @@ class AddTaskScreen extends StatelessWidget {
                 // child: ClipPath(
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        sidebarController.isSlideBarOpen.toggle();
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: kNavbarColor,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              bottomLeft: Radius.circular(30),
-                            ),
+                    Container(
+                      child: Stack(children: [
+                        CustomPaint(
+                          size: Size(174, 200),
+                          painter: RPSCustomPainter(),
+                        ),
+                        Positioned(
+                          right: 10,
+                          bottom: 90.2,
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            width: 30,
+                            height: 30,
+                            child: sidebarController.isSlideBarOpen.value
+                                ? IconButton(
+                                    onPressed: () {
+                                      sidebarController.isSlideBarOpen.toggle();
+                                      print('opened');
+                                    },
+                                    icon: Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      color: Colors.blue,
+                                    ),
+                                  )
+                                : IconButton(
+                                    onPressed: () {
+                                      sidebarController.isSlideBarOpen.toggle();
+                                      print('closed ');
+                                    },
+                                    icon: Icon(
+                                      Icons.opacity,
+                                      color: Colors.blue,
+                                      size: 26,
+                                    )),
                           ),
-                          width: 40,
-                          height: 50,
-                          alignment: Alignment.centerLeft,
-                          child: sidebarController.isSlideBarOpen.value
-                              ? IconButton(
-                                  onPressed: () {
-                                    sidebarController.isSlideBarOpen.toggle();
-                                    print('opened');
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: Colors.blue,
-                                  ),
-                                )
-                              : IconButton(
-                                  onPressed: () {
-                                    sidebarController.isSlideBarOpen.toggle();
-                                    print('closed ');
-                                  },
-                                  icon: Icon(
-                                    Icons.opacity,
-                                    color: Colors.blue,
-                                    size: 26,
-                                  ),
-                                )),
+                        ),
+                      ]),
                     ),
+
+                    // InkWell(
+                    //   onTap: () {
+                    //     sidebarController.isSlideBarOpen.toggle();
+                    //   },
+                    //   child: CustomPaint(
+                    //       size: Size(174, 200),
+                    //       painter: RPSCustomPainter(),
+                    //       child: sidebarController.isSlideBarOpen.value
+                    //           ? IconButton(
+                    //               onPressed: () {
+                    //                 sidebarController.isSlideBarOpen.toggle();
+                    //                 print('opened');
+                    //               },
+                    //               icon: Icon(
+                    //                 Icons.arrow_forward_ios_rounded,
+                    //                 color: Colors.blue,
+                    //               ),
+                    //             )
+                    //           : IconButton(
+                    //               onPressed: () {
+                    //                 sidebarController.isSlideBarOpen.toggle();
+                    //                 print('closed ');
+                    //               },
+                    //               icon: Icon(
+                    //                 Icons.opacity,
+                    //                 color: Colors.blue,
+                    //                 size: 26,
+                    //               ),
+                    //             )),
+                    // ),
                     Container(
                       decoration: BoxDecoration(
                         color: kNavbarColor,

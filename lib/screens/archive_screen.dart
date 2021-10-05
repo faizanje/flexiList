@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ArchiveScreen extends StatefulWidget {
-  @override
-  _ArchiveScreenState createState() => _ArchiveScreenState();
-}
+class ArchiveScreen extends StatelessWidget {
+  const ArchiveScreen({Key? key}) : super(key: key);
 
-class _ArchiveScreenState extends State<ArchiveScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        child: Text("Note Page"),
+        child: Text("Archive Page"),
       ),
     );
   }

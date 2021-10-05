@@ -33,7 +33,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^9.1.0
   material_design_icons_flutter: ^4.0.5955
-  introduction_screen: ^1.0.9
   flutter_gifimage: ^1.0.1
   country_list_pick: ^1.0.1+5
   country_currency_pickers: ^2.0.0
@@ -44,6 +43,7 @@ dependencies:
   flutter_screenutil: ^5.0.0+2
   google_fonts: ^2.1.0
   lottie: ^1.2.1
+  introduction_screen: ^2.1.0
 
 
 dev_dependencies:
