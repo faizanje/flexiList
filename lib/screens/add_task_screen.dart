@@ -188,49 +188,55 @@ class AddTaskScreen extends StatelessWidget {
                                 },
                                 indexedItemBuilder: (context, element, index) {
                                   return Obx(
-                                    () => TaskCheckItem(
-                                      price: addTaskController
-                                          .toDoTasksList[index].price,
-                                      value: addTaskController
-                                          .toDoTasksList[index].isChecked,
-                                      title: addTaskController
-                                          .toDoTasksList[index].taskName,
-                                      onChanged: (newValue) {
-                                        print(newValue);
-                                        var changed = addTaskController
-                                            .toDoTasksList[index];
-                                        changed.isChecked = newValue;
-                                        addTaskController.toDoTasksList[index] =
-                                            changed;
-                                        switch (newValue) {
-                                          case null:
-                                            addTaskController
-                                                .toDoTasksList[index]
-                                                .taskStatus = TASK_STATUS.LATER;
-                                            break;
-                                          case true:
-                                            addTaskController
-                                                .toDoTasksList[index]
-                                                .taskStatus = TASK_STATUS.DONE;
-                                            break;
-                                          case false:
-                                            addTaskController
-                                                .toDoTasksList[index]
-                                                .taskStatus = TASK_STATUS.TODO;
-                                            break;
-                                        }
-                                        addTaskController.update();
-                                      },
-                                      onDownloadClicked: () {},
-                                      onDeleteClicked: () {
-                                        addTaskController.removeTask(element);
-                                      },
-                                      isCurrencyToggled: addTaskController
-                                          .isCurrencySelected.value,
-                                      onPriceChanged: (int newPrice) {
-                                        addTaskController.toDoTasksList[index]
-                                            .price = newPrice;
-                                      },
+                                    () => Container(
+                                      margin: EdgeInsets.only(right: 30),
+                                      child: TaskCheckItem(
+                                        price: addTaskController
+                                            .toDoTasksList[index].price,
+                                        value: addTaskController
+                                            .toDoTasksList[index].isChecked,
+                                        title: addTaskController
+                                            .toDoTasksList[index].taskName,
+                                        onChanged: (newValue) {
+                                          print(newValue);
+                                          var changed = addTaskController
+                                              .toDoTasksList[index];
+                                          changed.isChecked = newValue;
+                                          addTaskController
+                                              .toDoTasksList[index] = changed;
+                                          switch (newValue) {
+                                            case null:
+                                              addTaskController
+                                                      .toDoTasksList[index]
+                                                      .taskStatus =
+                                                  TASK_STATUS.LATER;
+                                              break;
+                                            case true:
+                                              addTaskController
+                                                      .toDoTasksList[index]
+                                                      .taskStatus =
+                                                  TASK_STATUS.DONE;
+                                              break;
+                                            case false:
+                                              addTaskController
+                                                      .toDoTasksList[index]
+                                                      .taskStatus =
+                                                  TASK_STATUS.TODO;
+                                              break;
+                                          }
+                                          addTaskController.update();
+                                        },
+                                        onDownloadClicked: () {},
+                                        onDeleteClicked: () {
+                                          addTaskController.removeTask(element);
+                                        },
+                                        isCurrencyToggled: addTaskController
+                                            .isCurrencySelected.value,
+                                        onPriceChanged: (int newPrice) {
+                                          addTaskController.toDoTasksList[index]
+                                              .price = newPrice;
+                                        },
+                                      ),
                                     ),
                                   );
                                 },
@@ -325,7 +331,7 @@ class SideColorPanel extends StatelessWidget {
     final sidebarController = Get.find<SidebarController>();
     return Obx(
       () => AnimatedPositioned(
-        curve: Curves.elasticInOut,
+        curve: Curves.bounceOut,
         duration: Duration(milliseconds: 500),
         right: sidebarController.isSlideBarOpen.value ? 0 : -60,
         bottom: 0,
@@ -337,39 +343,45 @@ class SideColorPanel extends StatelessWidget {
               onTap: () {
                 sidebarController.isSlideBarOpen.toggle();
               },
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: kNavbarColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
+              child: Stack(
+                children: [
+                  Container(
+                    width: 170,
+                    height: 250,
+                    child: CustomPaint(
+                      painter: RPSCustomPainter(),
                     ),
                   ),
-                  width: 40,
-                  height: 50,
-                  alignment: Alignment.centerLeft,
-                  child: sidebarController.isSlideBarOpen.value
-                      ? IconButton(
-                          onPressed: () {
-                            sidebarController.isSlideBarOpen.toggle();
-                            print('opened');
-                          },
-                          icon: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: Colors.blue,
-                          ),
-                        )
-                      : IconButton(
-                          onPressed: () {
-                            sidebarController.isSlideBarOpen.toggle();
-                            print('closed ');
-                          },
-                          icon: Icon(
-                            Icons.opacity,
-                            color: Colors.blue,
-                            size: 26,
-                          ),
-                        )),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: Container(
+                        child: sidebarController.isSlideBarOpen.value
+                            ? IconButton(
+                                onPressed: () {
+                                  sidebarController.isSlideBarOpen.toggle();
+                                  print('opened');
+                                },
+                                icon: Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: Colors.blue,
+                                ),
+                              )
+                            : IconButton(
+                                onPressed: () {
+                                  sidebarController.isSlideBarOpen.toggle();
+                                  print('closed ');
+                                },
+                                icon: Icon(
+                                  Icons.opacity,
+                                  color: Colors.blue,
+                                  size: 26,
+                                ),
+                              )),
+                  )
+                ],
+              ),
             ),
             Container(
               decoration: BoxDecoration(

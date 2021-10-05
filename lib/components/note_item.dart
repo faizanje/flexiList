@@ -16,14 +16,18 @@ class NoteItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     addCheckboxListTilesToList();
-    return InkWell(
-      onTap: () {
-        Get.to(() => AddTaskScreen(
-              homeTaskItemModel: homeTaskItemModel,
-            ));
-      },
-      child: Card(
-        color: Color(homeTaskItemModel.colorValue),
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      color: Color(homeTaskItemModel.colorValue),
+      child: InkWell(
+        onTap: () {
+          Get.to(() => AddTaskScreen(
+                homeTaskItemModel: homeTaskItemModel,
+              ));
+        },
+        borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
