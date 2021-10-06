@@ -8,6 +8,7 @@ import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/models/todo_item.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
 import 'package:noteapp/screens/onboarding_screen.dart';
+import 'package:noteapp/screens/report_screen.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
             // ),
             // body: ArchiveScreen(),
             // body: BottomNavScreen(),
-            body: OnBordingScreen(),
+            body: ReportScreen(),
             // body: AddTaskScreen(),
             // body: SideBarLayout(),
           ),
