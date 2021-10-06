@@ -29,6 +29,7 @@ class AddTaskController extends GetxController {
       this.toDoTasksList.addAll(this.homeTaskItemModel.todoItemList);
       print('IsInBox ${this.homeTaskItemModel.isInBox}');
       this.isEditing = true;
+      this.textEditingController.text = this.homeTaskItemModel.title!;
     }
   }
 

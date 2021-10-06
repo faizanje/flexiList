@@ -18,9 +18,13 @@ class HomeTaskItemModel extends HiveObject {
   @HiveField(3)
   List<TodoItemModel> todoItemList;
 
+  @HiveField(4)
+  String? title = DateTime.now().toLocal().toIso8601String();
+
   HomeTaskItemModel(
       {this.isArchived = false,
       this.isCurrencySelected = false,
       required this.colorValue,
-      required this.todoItemList});
+      required this.todoItemList,
+      this.title});
 }

@@ -15,6 +15,7 @@ class NoteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    addTitleToList();
     addCheckboxListTilesToList();
     return Card(
       shape: RoundedRectangleBorder(
@@ -40,16 +41,38 @@ class NoteItem extends StatelessWidget {
     );
   }
 
+  void addTitleToList() {
+    this.list.add(Container(
+          margin: EdgeInsets.only(left: 10),
+          child: Text(
+            this.homeTaskItemModel.title!,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ));
+  }
+
   void addCheckboxListTilesToList() {
     int index = 0;
+    int laterItem = 0;
+    int checkedItems = 0;
+    final totalItems = homeTaskItemModel.todoItemList.length;
     homeTaskItemModel.todoItemList.forEach((element) {
+      if (element.isChecked == null) {
+        laterItem++;
+      } else if (element.isChecked == true) {
+        checkedItems++;
+      }
       // if (true) {
-      if (index++ <= 3) {
+      if (index++ < 4) {
         list.add(IgnorePointer(
           ignoring: true,
           child: CheckboxListTile(
             activeColor: kPrimaryColor,
             dense: true,
+            isThreeLine: false,
             contentPadding: EdgeInsets.all(0),
             controlAffinity: ListTileControlAffinity.leading,
             tristate: true,
@@ -64,13 +87,37 @@ class NoteItem extends StatelessWidget {
       }
     });
 
-    list.add(Center(
-        child: Text(
-      '...',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 20,
-      ),
-    )));
+    if (index > 4)
+      list.add(Center(
+          child: Text(
+        '...',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
+      )));
+
+    this.list.add(Container(
+          margin: EdgeInsets.only(left: 10),
+          child: Text(
+            '$checkedItems/$totalItems completed',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ));
+
+    if (laterItem > 0)
+      this.list.add(Container(
+            margin: EdgeInsets.only(left: 10),
+            child: Text(
+              '$laterItem/$totalItems for later',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ));
   }
 }

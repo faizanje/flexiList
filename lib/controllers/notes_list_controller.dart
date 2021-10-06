@@ -44,6 +44,10 @@ class NotesListController extends GetxController {
     } else {
       isSearching.value = true;
       notesList.forEach((note) {
+        if (note.title!.toLowerCase().contains(searchText.toLowerCase())) {
+          filteredNotesList.add(note);
+          return;
+        }
         for (var task in note.todoItemList) {
           if (task.taskName.toLowerCase().contains(searchText.toLowerCase())) {
             filteredNotesList.add(note);

@@ -136,8 +136,7 @@ class AddTaskScreen extends StatelessWidget {
                               TodoItemModel taskItem = TodoItemModel(
                                 taskStatus: TASK_STATUS.TODO,
                                 isChecked: false,
-                                taskName: addTaskController
-                                    .textEditingController.text,
+                                taskName: '',
                               );
                               addTaskController.addTask(taskItem);
                             },
@@ -155,9 +154,19 @@ class AddTaskScreen extends StatelessWidget {
                             builder: (controller) {
                               return GroupedListView<TodoItemModel, String>(
                                 elements: addTaskController.toDoTasksList,
+                                // itemComparator: (element1, element2) => element1
+                                //     .taskName
+                                //     .compareTo(element2.taskName),
                                 groupComparator: (value1, value2) {
                                   print('$value1.comapreTo($value2)');
-                                  return value2.compareTo(value1);
+                                  if (value1 == 'Todo') {
+                                    return 0;
+                                  } else if (value1 == 'Later' &&
+                                      value2 == 'Done') {
+                                    return 0;
+                                  } else {
+                                    return 1;
+                                  }
                                 },
                                 groupBy: (element) => element.taskStatusStr,
                                 groupHeaderBuilder: (element) {
@@ -197,6 +206,10 @@ class AddTaskScreen extends StatelessWidget {
                                             .toDoTasksList[index].isChecked,
                                         title: addTaskController
                                             .toDoTasksList[index].taskName,
+                                        onTaskTitleChanged: (newTitle) {
+                                          addTaskController.toDoTasksList[index]
+                                              .taskName = newTitle;
+                                        },
                                         onChanged: (newValue) {
                                           print(newValue);
                                           var changed = addTaskController
@@ -258,7 +271,17 @@ class AddTaskScreen extends StatelessWidget {
                                         addTaskController.color.value.value
                                     ..isArchived = addTaskController.isArchived
                                     ..isCurrencySelected = addTaskController
-                                        .isCurrencySelected.value;
+                                        .isCurrencySelected.value
+                                    ..title = addTaskController
+                                            .textEditingController
+                                            .value
+                                            .text
+                                            .isEmpty
+                                        ? DateTime.now()
+                                            .toLocal()
+                                            .toIso8601String()
+                                        : addTaskController
+                                            .textEditingController.value.text;
 
                                   try {
                                     await homeTaskItemModel!.save();
@@ -268,6 +291,16 @@ class AddTaskScreen extends StatelessWidget {
                                 } else {
                                   HomeTaskItemModel homeTaskItemModel =
                                       HomeTaskItemModel(
+                                    title: addTaskController
+                                            .textEditingController
+                                            .value
+                                            .text
+                                            .isEmpty
+                                        ? DateTime.now()
+                                            .toLocal()
+                                            .toIso8601String()
+                                        : addTaskController
+                                            .textEditingController.value.text,
                                     todoItemList:
                                         addTaskController.toDoTasksList,
                                     colorValue:

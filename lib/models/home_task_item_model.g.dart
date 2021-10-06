@@ -21,13 +21,14 @@ class HomeTaskItemModelAdapter extends TypeAdapter<HomeTaskItemModel> {
       isCurrencySelected: fields[1] as bool,
       colorValue: fields[2] as int,
       todoItemList: (fields[3] as List).cast<TodoItemModel>(),
+      title: fields[4] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, HomeTaskItemModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.isArchived)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class HomeTaskItemModelAdapter extends TypeAdapter<HomeTaskItemModel> {
       ..writeByte(2)
       ..write(obj.colorValue)
       ..writeByte(3)
-      ..write(obj.todoItemList);
+      ..write(obj.todoItemList)
+      ..writeByte(4)
+      ..write(obj.title);
   }
 
   @override

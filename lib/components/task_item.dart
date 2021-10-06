@@ -13,6 +13,7 @@ class TaskCheckItem extends StatelessWidget {
   final void Function(bool?) onChanged;
   final void Function() onDownloadClicked, onDeleteClicked;
   final void Function(int) onPriceChanged;
+  final void Function(String) onTaskTitleChanged;
   final isCurrencyToggled;
 
   TaskCheckItem(
@@ -23,7 +24,8 @@ class TaskCheckItem extends StatelessWidget {
       required this.onDeleteClicked,
       required this.isCurrencyToggled,
       required this.onPriceChanged,
-      this.price = 0});
+      this.price = 0,
+      required this.onTaskTitleChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,17 @@ class TaskCheckItem extends StatelessWidget {
       contentPadding: EdgeInsets.all(0),
       controlAffinity: ListTileControlAffinity.leading,
       tristate: true,
-      title: Text(
-        '$title',
-        style: TextStyle(fontSize: 16),
+      title: TextField(
+        controller: TextEditingController()..text = title,
+        onChanged: onTaskTitleChanged,
+        decoration: InputDecoration(
+          isCollapsed: true,
+          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          isDense: true,
+          border: null,
+        ),
+        maxLines: null,
+        style: TextStyle(fontSize: 16.sp),
       ),
       secondary: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -53,11 +63,11 @@ class TaskCheckItem extends StatelessWidget {
                     width: 20,
                   ),
                   SizedBox(
-                    width: 13.w,
+                    width: 4.w,
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 13.w),
-                    width: 60.w,
+                    width: 50.w,
                     height: 35.h,
                     child: Center(
                       child: TextField(
@@ -78,7 +88,6 @@ class TaskCheckItem extends StatelessWidget {
                           fontSize: 12.sp,
                         ),
                         decoration: InputDecoration(
-                          hintText: '15',
                           contentPadding: EdgeInsets.symmetric(vertical: 5),
                           isDense: true,
                           border: OutlineInputBorder(),
