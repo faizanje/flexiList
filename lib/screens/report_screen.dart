@@ -16,37 +16,6 @@ class ReportScreen extends StatelessWidget {
     final reportsController = Get.put(ReportsController());
     return Scaffold(
       backgroundColor: Color(0xffF9F9F9),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        toolbarHeight: 80, // Set this height
-        flexibleSpace: Container(
-          height: 80,
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                  onPressed: () {
-                    // Get.back();
-                  },
-                  icon: SvgPicture.asset('assets/icons/bck btn.svg')),
-              Text(
-                "Filter",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: kPrimaryColor,
-                ),
-              ),
-              Icon(
-                Icons.filter_alt,
-                color: kPrimaryColor,
-                size: 28,
-              ),
-            ],
-          ),
-        ),
-      ),
       body: Container(
         padding: EdgeInsets.all(10),
         child: GetX<NotesListController>(
@@ -86,7 +55,7 @@ class ReportScreen extends StatelessWidget {
                                             e.taskName,
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 18,
+                                              fontSize: 16,
                                             ),
                                           ),
                                         ))
@@ -105,7 +74,7 @@ class ReportScreen extends StatelessWidget {
                             child: Text(
                               notesListController.completedNotes[index].title!,
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                           );
                         },
