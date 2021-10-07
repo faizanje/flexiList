@@ -56,7 +56,7 @@ class AddTaskController extends GetxController {
 
   void addTask(TodoItemModel taskItem) {
     toDoTasksList.add(taskItem);
-    textEditingController.clear();
+    // textEditingController.clear();
     update();
   }
 

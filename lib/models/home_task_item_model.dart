@@ -21,6 +21,8 @@ class HomeTaskItemModel extends HiveObject {
   @HiveField(4)
   String? title = DateTime.now().toLocal().toIso8601String();
 
+  bool isExpanded = false;
+
   HomeTaskItemModel(
       {this.isArchived = false,
       this.isCurrencySelected = false,

@@ -11,6 +11,7 @@ import 'package:noteapp/components/task_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/add_task_controller.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
+import 'package:noteapp/controllers/reports_controller.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/models/todo_item.dart';
@@ -318,6 +319,11 @@ class AddTaskScreen extends StatelessWidget {
                                 }
 
                                 notesListController.update();
+                                try {
+                                  Get.find<ReportsController>().initList();
+                                } catch (e) {
+                                  print('Exception $e');
+                                }
 
                                 Get.back();
                                 Get.snackbar(

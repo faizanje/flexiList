@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
+import 'package:noteapp/controllers/reports_controller.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
 import 'package:noteapp/screens/notes_list_screen.dart';
 import 'package:noteapp/screens/archive_screen.dart';
@@ -37,6 +38,13 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             if (position == 2) {
               Get.to(() => AddTaskScreen());
               return false;
+            }
+            if (position != 1) {
+              try {
+                Get.delete<ReportsController>();
+              } catch (e) {
+                print('Exception $e');
+              }
             }
             setState(() {
               selectedPage = position;

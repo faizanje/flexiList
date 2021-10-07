@@ -19,6 +19,11 @@ class NotesListController extends GetxController {
     filteredNotesList.addAll(homeTaskItemBox.values);
   }
 
+  List<HomeTaskItemModel> get completedNotes => filteredNotesList
+      .where((element) => element.todoItemList
+          .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
+      .toList();
+
   archiveNote(HomeTaskItemModel item) async {
     item.isArchived = true;
     await item.save();
