@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
 
 class SelectCountryScreen extends StatefulWidget {
@@ -30,6 +31,14 @@ class CountryItem {
 
 class _SelectCountryScreenState extends State<SelectCountryScreen> {
   bool flag = false;
+  final List locale = [
+    {'name': 'ENGLISH', 'locale': Locale('en', 'US')},
+    {'name': 'URDU', 'locale': Locale('ur', 'PK')},
+  ];
+  updateLanguage(Locale locale) {
+    Get.back();
+    Get.updateLocale(locale);
+  }
 
   List<Item> listItem = <Item>[
     Item('AUD', SvgPicture.asset('assets/images/aud.svg')),
@@ -41,8 +50,8 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
   ];
 
   List<CountryItem> countryListItem = <CountryItem>[
-    CountryItem('Hindi', SvgPicture.asset('assets/images/hindi.svg')),
     CountryItem('English', SvgPicture.asset('assets/images/english.svg')),
+    CountryItem('Hindi', SvgPicture.asset('assets/images/hindi.svg')),
     CountryItem('Urdu', SvgPicture.asset('assets/images/urdu.svg')),
   ];
   late Item selectedItem;
@@ -66,7 +75,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
-          title: Text("Language"),
+          title: Text(kLanguage),
           leading: flag
               ? IconButton(
                   onPressed: () {
@@ -111,7 +120,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 60, horizontal: 30),
                       child: Text(
-                        'Choose Your Language and Currency',
+                        'kChooseLocation'.tr,
                         style: TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.w900,
@@ -138,7 +147,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<Item>(
                     isExpanded: true,
-                    hint: Text("Select item"),
+                    hint: Text('kSelectItem'.tr),
                     value: selectedItem,
                     onChanged: (Item? value) {
                       setState(() {
@@ -181,11 +190,17 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<CountryItem>(
                     isExpanded: true,
-                    hint: Text("Select item"),
+                    hint: Text('kSelectItem'.tr),
                     value: countrySelectedItem,
                     onChanged: (CountryItem? value) {
+                      print(value!.name);
+                      if (value.name == "English") {
+                        countrySelectedItem = value;
+                        updateLanguage(locale[0]['locale']);
+                      }
                       setState(() {
-                        countrySelectedItem = value!;
+                        countrySelectedItem = value;
+                        updateLanguage(locale[1]['locale']);
                       });
                     },
                     items: countryListItem.map((CountryItem value) {
@@ -246,7 +261,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                               color: kNavbarColor,
                               border: Border.all(color: kNavbarColor)),
                           child: Text(
-                            "GET STARTED",
+                            'kGetStarted'.tr,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,

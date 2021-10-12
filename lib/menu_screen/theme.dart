@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 
 class ThemePage extends StatefulWidget {
   @override
@@ -27,7 +29,7 @@ class _ThemePageState extends State<ThemePage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
-          title: Text("Theme"),
+          title: Text('kTheme'.tr),
           leading: flag
               ? IconButton(
                   onPressed: () {
@@ -61,7 +63,7 @@ class _ThemePageState extends State<ThemePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Light",
+                'kLanguage'.tr,
                 style: TextStyle(fontSize: 18, color: Colors.black),
               ),
               SizedBox(

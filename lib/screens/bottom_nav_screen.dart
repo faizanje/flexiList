@@ -2,6 +2,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/controllers/reports_controller.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
@@ -54,11 +55,13 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           style: TabStyle.reactCircle,
           backgroundColor: kNavbarColor,
           items: [
-            TabItem(icon: Icons.event_note_rounded, title: 'Note'),
-            TabItem(icon: Icons.report_gmailerrorred_outlined, title: 'Report'),
+            TabItem(icon: Icons.event_note_rounded, title: 'kTitleNote'.tr),
+            TabItem(
+                icon: Icons.report_gmailerrorred_outlined,
+                title: 'kTitleReport'.tr),
             TabItem(icon: Icons.add),
-            TabItem(icon: Icons.archive, title: 'Archive'),
-            TabItem(icon: Icons.settings, title: 'Setting'),
+            TabItem(icon: Icons.archive, title: 'kTitleArchive'.tr),
+            TabItem(icon: Icons.settings, title: 'kTitleSetting'.tr),
           ],
           initialActiveIndex: 0,
         ),

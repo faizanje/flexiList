@@ -1,9 +1,4 @@
 import 'dart:core';
-import 'dart:core';
-import 'dart:core';
-import 'dart:core';
-import 'dart:core';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -119,7 +114,7 @@ class AddTaskScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Title",
+                          'kTitle'.tr,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 30),
                         ),
@@ -129,7 +124,7 @@ class AddTaskScreen extends StatelessWidget {
                         TextField(
                           controller: addTaskController.textEditingController,
                           decoration: InputDecoration(
-                            hintText: "Title Here",
+                            hintText: 'kTitleHere'.tr,
                             contentPadding: EdgeInsets.symmetric(vertical: 5),
                             isDense: true,
                           ),
@@ -148,7 +143,7 @@ class AddTaskScreen extends StatelessWidget {
                               addTaskController.addTask(taskItem);
                             },
                             icon: Icon(Icons.add),
-                            label: Text("Add Item"),
+                            label: Text('kAddItem'.tr),
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -191,7 +186,7 @@ class AddTaskScreen extends StatelessWidget {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 25, vertical: 8),
                                           child: Text(
-                                            element.taskStatusStr,
+                                            element.taskStatusStr.tr,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w600,
@@ -332,12 +327,11 @@ class AddTaskScreen extends StatelessWidget {
                                 }
 
                                 Get.back();
-                                Get.snackbar(
-                                    'Task Added', 'Task has been added');
+                                Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);
                               },
                               child: Text(addTaskController.isEditing
-                                  ? 'EDIT TASK'
-                                  : 'ADD TASK'),
+                                  ? 'kEditText'.tr
+                                  : 'kAddTask'.tr),
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 20),

@@ -4,6 +4,7 @@ import 'package:noteapp/components/done_button.dart';
 import 'package:noteapp/components/skip_button.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:get/get.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/controllers/reports_controller.dart';
 
@@ -19,7 +20,7 @@ class ReportScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: kPrimaryColor,
         title: Text(
-          "Report",
+          'kTitleReport'.tr,
           style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -127,7 +128,7 @@ class ReportScreen extends StatelessWidget {
           Column(
             children: <Widget>[
               Text(
-                "Title",
+                'kTitle'.tr,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
               ),
               WidgetButtonDone(),

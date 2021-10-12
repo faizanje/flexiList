@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/models/setting_menu_json.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
 
@@ -58,7 +59,7 @@ class SettingScreen extends StatelessWidget {
                       width: 20,
                     ),
                     Text(
-                      "Setting",
+                      'kTitleSetting'.tr,
                       style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
@@ -86,7 +87,7 @@ class SettingScreen extends StatelessWidget {
           selected: currentItem == item,
           minLeadingWidth: 20,
           leading: Icon(item.icon),
-          title: Text(item.title),
+          title: Text(item.title.tr),
           onTap: () {
             onSelectItem(item);
           },

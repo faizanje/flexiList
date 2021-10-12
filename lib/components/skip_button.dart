@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
 
 class WidgetButton extends StatelessWidget {
@@ -33,7 +34,7 @@ class WidgetButton extends StatelessWidget {
             color: kNavbarColor,
             border: Border.all(color: kNavbarColor)),
         child: Text(
-          "SKIP",
+          kSkip,
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,

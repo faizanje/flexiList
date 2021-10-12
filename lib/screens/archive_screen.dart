@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:noteapp/components/no_notes_found.dart';
 import 'package:noteapp/components/note_item.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/screens/layout_screen.dart';
 
@@ -163,7 +164,7 @@ class ArchiveScreen extends StatelessWidget {
                   ),
                 ),
                 border: InputBorder.none,
-                hintText: "Search notes",
+                hintText: 'kHintText'.tr,
                 hintStyle: TextStyle(color: Colors.grey),
               ),
               onChanged: (newValue) {

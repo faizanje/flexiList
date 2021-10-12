@@ -13,6 +13,7 @@ import 'package:noteapp/screens/select_country_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'constant/constant.dart';
+import 'language/LocaleString.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: Size(360, 640),
       builder: () => GetMaterialApp(
+        translations: LocaleString(),
+        locale: Locale('en', 'US'),
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light().copyWith(
           colorScheme: ColorScheme.light().copyWith(

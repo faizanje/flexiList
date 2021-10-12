@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:noteapp/components/no_notes_found.dart';
 import 'package:noteapp/components/note_item.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
@@ -13,7 +14,7 @@ import 'package:noteapp/screens/layout_screen.dart';
 
 class NotesListScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext con) {
     final notesListController = Get.find<NotesListController>();
     return SafeArea(
       child: Container(
@@ -165,7 +166,7 @@ class NotesListScreen extends StatelessWidget {
                   ),
                 ),
                 border: InputBorder.none,
-                hintText: "Search notes",
+                hintText: 'kHintText'.tr,
                 hintStyle: TextStyle(color: Colors.grey),
               ),
               onChanged: (newValue) {

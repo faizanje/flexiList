@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
+import 'package:noteapp/constant/strings.dart';
 
 class ThemeScreen extends StatefulWidget {
   @override
@@ -23,7 +25,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Theme Screen"),
+        title: Text('kThemeScreen'.tr),
         leading: flag
             ? IconButton(
                 onPressed: () {

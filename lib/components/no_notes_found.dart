@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:noteapp/constant/strings.dart';
 
 class NoNotesFound extends StatelessWidget {
   const NoNotesFound({
@@ -23,7 +24,7 @@ class NoNotesFound extends StatelessWidget {
           height: 14.h,
         ),
         Text(
-          "Add Your First Note",
+          kAddYourFirstNote,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w600,

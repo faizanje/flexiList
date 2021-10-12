@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 
 final String kTitle = "Title";
-
 final String kTitleHere = "Title Here";
 final String kAddItem = "Add Item";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
-// final String = "";
+final String kEditText = "EDIT TASK";
+final String kAddTask = "ADD TASK";
+final String kHintText = "Search notes";
+final String kTitleNote = "Note";
+final String kTitleReport = "Report";
+final String kTitleArchive = "Archive";
+final String kTitleSetting = "Setting";
+final String kNext = "Next";
+final String kLanguage = "Language";
+final String kChooseLocation = "Choose Your Language and Currency";
+final String kSelectItem = "Select item";
+final String kGetStarted = "GET STARTED";
+final String kTheme = "Theme";
+final String kThemeScreen = "Theme Screen";
+final String kCurrency = "Currency";
+final String kDone = "Done";
+final String kAddYourFirstNote = "Add Your First Note";
+final String kSkip = "SKIP";
+final String kSkipTaskAdded = "Task Added";
+final String kLater = "Later";
+final String kTodo = "Todo";
+
 // final String = "";
 // final String = "";
 // final String = "";

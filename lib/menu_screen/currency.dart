@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 
 class CurrencyPage extends StatefulWidget {
   @override
@@ -25,7 +27,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange,
-        title: Text("Currency"),
+        title: Text('kCurrency'.tr),
         leading: flag
             ? IconButton(
                 onPressed: () {
@@ -56,7 +58,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
       ),
       body: Center(
         child: Text(
-          "Currency",
+          'kCurrency'.tr,
           style: TextStyle(
             color: kNavbarColor,
             fontSize: 30,

@@ -1,4 +1,6 @@
+import 'package:get/get_navigation/src/root/internacionalization.dart';
 import 'package:hive/hive.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 
 part 'todo_item.g.dart';
@@ -20,11 +22,11 @@ class TodoItemModel extends HiveObject {
   String get taskStatusStr {
     switch (taskStatus) {
       case TASK_STATUS.LATER:
-        return "Later";
+        return 'kLater';
       case TASK_STATUS.DONE:
-        return "Done";
+        return 'kDone';
       case TASK_STATUS.TODO:
-        return "Todo";
+        return 'kTodo';
     }
   }
 

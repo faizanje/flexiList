@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 
 class LanguagePage extends StatefulWidget {
   @override
@@ -25,7 +27,7 @@ class _LanguagePageState extends State<LanguagePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text("Language"),
+        title: Text('kLanguage'.tr),
         leading: flag
             ? IconButton(
                 onPressed: () {
@@ -56,7 +58,7 @@ class _LanguagePageState extends State<LanguagePage> {
       ),
       body: Center(
         child: Text(
-          "Language",
+          'kLanguage'.tr,
           style: TextStyle(
             color: kNavbarColor,
             fontSize: 30,

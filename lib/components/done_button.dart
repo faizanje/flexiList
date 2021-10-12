@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
 
 class WidgetButtonDone extends StatelessWidget {
@@ -29,7 +30,7 @@ class WidgetButtonDone extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "Done",
+              kDone,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w200,
