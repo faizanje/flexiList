@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,8 +7,6 @@ import 'package:noteapp/components/no_notes_found.dart';
 import 'package:noteapp/components/note_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
-import 'package:noteapp/models/home_task_item_model.dart';
-import 'package:noteapp/screens/add_task_screen.dart';
 import 'package:noteapp/screens/layout_screen.dart';
 
 class ArchiveScreen extends StatelessWidget {

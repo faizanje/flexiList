@@ -7,6 +7,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:noteapp/components/skip_button.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/introduction_json.dart';
+import 'package:noteapp/screens/bottom_nav_screen.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
 
 class OnBordingScreen extends StatelessWidget {
@@ -26,10 +27,10 @@ class OnBordingScreen extends StatelessWidget {
           ),
           done: Text('Next',
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
-          onDone: () => Get.to(() => SelectCountryScreen()),
+          onDone: () => Get.to(() => BottomNavScreen()),
           showSkipButton: true,
           skip: WidgetButton(),
-          onSkip: () => Get.to(() => SelectCountryScreen()),
+          onSkip: () => Get.to(BottomNavScreen()),
           next: Icon(Icons.arrow_forward),
           dotsDecorator: getDotDecoration(),
           onChange: (index) => print('Page $index selected'),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'dart:ui' as ui;
+
+//Copy this CustomPainter code to the Bottom of the File
+import 'dart:ui' as ui;
 
 class RPSCustomPainter extends CustomPainter {
   @override
@@ -8,26 +12,28 @@ class RPSCustomPainter extends CustomPainter {
       ..color = kPrimaryColor
       ..style = PaintingStyle.fill
       ..strokeWidth = 1.0;
+
     Path path_0 = Path();
-    path_0.moveTo(size.width, size.height * 0.0050000);
-    path_0.quadraticBezierTo(size.width * 0.9030000, size.height * 0.1027500,
-        size.width * 0.9000000, size.height * 0.3000000);
+    path_0.moveTo(size.width * 1.0066000, size.height * 0.1493000);
+    path_0.quadraticBezierTo(size.width * 0.8570000, size.height * 0.1995000,
+        size.width * 0.8538000, size.height * 0.2765000);
     path_0.cubicTo(
-        size.width * 0.8502500,
-        size.height * 0.4036500,
-        size.width * 0.7512500,
-        size.height * 0.3938000,
-        size.width * 0.7486000,
-        size.height * 0.5007000);
+        size.width * 0.8498000,
+        size.height * 0.4315000,
+        size.width * 0.3611000,
+        size.height * 0.3877000,
+        size.width * 0.3626000,
+        size.height * 0.4925000);
     path_0.cubicTo(
-        size.width * 0.7500000,
-        size.height * 0.6103500,
-        size.width * 0.8515000,
-        size.height * 0.6000000,
-        size.width * 0.8953000,
-        size.height * 0.7000000);
-    path_0.quadraticBezierTo(size.width * 0.8997500, size.height * 0.9026500,
-        size.width, size.height);
+        size.width * 0.3622000,
+        size.height * 0.5894000,
+        size.width * 0.8578000,
+        size.height * 0.5715000,
+        size.width * 0.8578000,
+        size.height * 0.7147000);
+    path_0.quadraticBezierTo(size.width * 0.8578000, size.height * 0.7855000,
+        size.width * 1.0066000, size.height * 0.8486000);
+
     canvas.drawPath(path_0, paint_0);
   }
 

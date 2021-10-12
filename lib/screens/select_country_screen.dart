@@ -1,13 +1,11 @@
 import 'package:country_currency_pickers/country.dart';
-import 'package:country_currency_pickers/country_picker_dropdown.dart';
-import 'package:country_currency_pickers/currency_picker_cupertino.dart';
-import 'package:country_currency_pickers/currency_picker_dialog.dart';
 import 'package:country_currency_pickers/currency_picker_dropdown.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
@@ -18,11 +16,85 @@ class SelectCountryScreen extends StatefulWidget {
   _SelectCountryScreenState createState() => _SelectCountryScreenState();
 }
 
+class Item {
+  Item(this.name, this.icon);
+  final String name;
+  final SvgPicture icon;
+}
+
+class CountryItem {
+  CountryItem(this.name, this.icon);
+  final String name;
+  final SvgPicture icon;
+}
+
 class _SelectCountryScreenState extends State<SelectCountryScreen> {
+  bool flag = false;
+
+  List<Item> listItem = <Item>[
+    Item('AUD', SvgPicture.asset('assets/images/aud.svg')),
+    Item('CAD', SvgPicture.asset('assets/images/cad.svg')),
+    Item('GBP', SvgPicture.asset('assets/images/gbp.svg')),
+    Item('INR', SvgPicture.asset('assets/images/inr.svg')),
+    Item('USD', SvgPicture.asset('assets/images/usd.svg')),
+    Item('YEN', SvgPicture.asset('assets/images/yen.svg')),
+  ];
+
+  List<CountryItem> countryListItem = <CountryItem>[
+    CountryItem('Hindi', SvgPicture.asset('assets/images/hindi.svg')),
+    CountryItem('English', SvgPicture.asset('assets/images/english.svg')),
+    CountryItem('Urdu', SvgPicture.asset('assets/images/urdu.svg')),
+  ];
+  late Item selectedItem;
+  late CountryItem countrySelectedItem;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedItem = listItem.first;
+    countrySelectedItem = countryListItem.first;
+
+    ZoomDrawer.of(context)!.toggle();
+    setState(() {
+      flag = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          title: Text("Language"),
+          leading: flag
+              ? IconButton(
+                  onPressed: () {
+                    ZoomDrawer.of(context)!.toggle();
+                    setState(() {
+                      flag = false;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    size: 37,
+                    color: Colors.white,
+                  ),
+                )
+              : IconButton(
+                  onPressed: () {
+                    ZoomDrawer.of(context)!.toggle();
+                    setState(() {
+                      flag = true;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 37,
+                    color: Colors.white,
+                  ),
+                ),
+        ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
@@ -47,104 +119,93 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      alignment: AlignmentDirectional.centerStart,
-                      width: MediaQuery.of(context).size.width - 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10),
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          color: Colors.transparent,
-                          border: Border.all(color: kNavbarColor)),
-                      child: CountryListPick(
-                        appBar: AppBar(
-                          backgroundColor: kNavbarColor,
-                          title: Text('Pick your country'),
-                        ),
-
-                        pickerBuilder: (context, CountryCode? countryCode) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Image.asset(
-                                    countryCode!.flagUri!,
-                                    width: 40,
-                                    height: 40,
-                                    package: 'country_list_pick',
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Text(
-                                    countryCode.name!,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: kNavbarColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.arrow_drop_down_rounded,
-                                    size: 50,
-                                    color: kNavbarColor,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                        theme: CountryTheme(
-                          isShowFlag: true,
-                          isShowTitle: true,
-                          // isShowCode: true,
-                          isDownIcon: true,
-                          showEnglishName: false,
-                          labelColor: kNavbarColor,
-                        ),
-                        initialSelection: '+62',
-
-                        // initialSelection: 'US',
-                        onChanged: (CountryCode? code) {
-                          print(code!.name);
-                          print(code.code);
-                          print(code.dialCode);
-                          print(code.flagUri);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      alignment: AlignmentDirectional.centerStart,
-                      width: MediaQuery.of(context).size.width - 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10),
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          color: Colors.transparent,
-                          border: Border.all(color: kNavbarColor)),
-                      child: CurrencyPickerDropdown(
-                        initialValue: 'INR',
-                        itemBuilder: _buildCurrencyDropdownItem,
-                        onValuePicked: (Country? country) {},
-                      ),
-                    ),
                   ],
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width - 60,
+                height: 60,
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)),
+                    color: Colors.transparent,
+                    border: Border.all(color: kNavbarColor)),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<Item>(
+                    isExpanded: true,
+                    hint: Text("Select item"),
+                    value: selectedItem,
+                    onChanged: (Item? value) {
+                      setState(() {
+                        selectedItem = value!;
+                      });
+                    },
+                    items: listItem.map((Item value) {
+                      return DropdownMenuItem<Item>(
+                        value: value,
+                        child: Row(
+                          children: <Widget>[
+                            value.icon,
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              value.name,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width - 60,
+                height: 60,
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)),
+                    color: Colors.transparent,
+                    border: Border.all(color: kNavbarColor)),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<CountryItem>(
+                    isExpanded: true,
+                    hint: Text("Select item"),
+                    value: countrySelectedItem,
+                    onChanged: (CountryItem? value) {
+                      setState(() {
+                        countrySelectedItem = value!;
+                      });
+                    },
+                    items: countryListItem.map((CountryItem value) {
+                      return DropdownMenuItem<CountryItem>(
+                        value: value,
+                        child: Row(
+                          children: <Widget>[
+                            value.icon,
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              value.name,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
               SizedBox(

@@ -15,6 +15,15 @@ class ReportScreen extends StatelessWidget {
     // final notesListController = Get.find<NotesListController>();
     final reportsController = Get.put(ReportsController());
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: kPrimaryColor,
+        title: Text(
+          "Report",
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      ),
       backgroundColor: Color(0xffF9F9F9),
       body: Container(
         padding: EdgeInsets.all(10),

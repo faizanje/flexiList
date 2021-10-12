@@ -39,10 +39,6 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),
         color: Colors.white,
-        getPages: [
-          GetPage(
-              name: '/selectLanguageScreen', page: () => SelectCountryScreen()),
-        ],
         home: SafeArea(
           child: Scaffold(
             backgroundColor: Colors.white,
@@ -51,8 +47,8 @@ class MyApp extends StatelessWidget {
             //   backgroundColor: kNavbarColor,
             // ),
             // body: ArchiveScreen(),
-            body: BottomNavScreen(),
-            // body: OnBordingScreen(),
+            // body: BottomNavScreen(),
+            body: OnBordingScreen(),
             // body: AddTaskScreen(),
             // body: SideBarLayout(),
           ),

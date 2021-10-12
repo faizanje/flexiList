@@ -1,14 +1,20 @@
+import 'dart:core';
+import 'dart:core';
+import 'dart:core';
+import 'dart:core';
+import 'dart:core';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:noteapp/components/circular_color_container.dart';
 import 'package:noteapp/components/slide_color_panel_design.dart';
 import 'package:noteapp/components/task_item.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/controllers/add_task_controller.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/controllers/reports_controller.dart';
@@ -113,7 +119,7 @@ class AddTaskScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Title',
+                          "Title",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 30),
                         ),
@@ -123,7 +129,7 @@ class AddTaskScreen extends StatelessWidget {
                         TextField(
                           controller: addTaskController.textEditingController,
                           decoration: InputDecoration(
-                            hintText: 'Title Here',
+                            hintText: "Title Here",
                             contentPadding: EdgeInsets.symmetric(vertical: 5),
                             isDense: true,
                           ),
@@ -142,7 +148,7 @@ class AddTaskScreen extends StatelessWidget {
                               addTaskController.addTask(taskItem);
                             },
                             icon: Icon(Icons.add),
-                            label: Text('Add Item'),
+                            label: Text("Add Item"),
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -378,49 +384,42 @@ class SideColorPanel extends StatelessWidget {
         // child: ClipPath(
         child: Row(
           children: [
-            InkWell(
-              onTap: () {
-                sidebarController.isSlideBarOpen.toggle();
-              },
-              child: Stack(
-                children: [
-                  Container(
-                    width: 170,
-                    height: 250,
-                    child: CustomPaint(
-                      painter: RPSCustomPainter(),
-                    ),
+            Stack(
+              children: [
+                Container(
+                  height: 250,
+                  child: CustomPaint(
+                    size: Size(64, (64 * 1.5).toDouble()),
+                    painter: RPSCustomPainter(),
                   ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Container(
-                        child: sidebarController.isSlideBarOpen.value
-                            ? IconButton(
-                                onPressed: () {
-                                  sidebarController.isSlideBarOpen.toggle();
-                                  print('opened');
-                                },
-                                icon: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: Colors.blue,
-                                ),
-                              )
-                            : IconButton(
-                                onPressed: () {
-                                  sidebarController.isSlideBarOpen.toggle();
-                                  print('closed ');
-                                },
-                                icon: Icon(
-                                  Icons.opacity,
-                                  color: Colors.blue,
-                                  size: 26,
-                                ),
-                              )),
-                  )
-                ],
-              ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: -5,
+                  bottom: 0,
+                  child: Container(
+                      child: sidebarController.isSlideBarOpen.value
+                          ? IconButton(
+                              onPressed: () {
+                                sidebarController.isSlideBarOpen.toggle();
+                              },
+                              icon: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: Colors.blue,
+                              ),
+                            )
+                          : IconButton(
+                              onPressed: () {
+                                sidebarController.isSlideBarOpen.toggle();
+                              },
+                              icon: Icon(
+                                Icons.opacity,
+                                color: Colors.blue,
+                                size: 26,
+                              ),
+                            )),
+                )
+              ],
             ),
             Container(
               decoration: BoxDecoration(

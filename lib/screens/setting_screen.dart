@@ -5,17 +5,15 @@ import 'package:noteapp/models/setting_menu_json.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
 
 class MenuItems {
-  static const dateFormat =
-      MenuItem(title: "Date Format", icon: Icons.date_range);
+  // static const dateFormat =
+  //     MenuItem(title: "Date Format", icon: Icons.date_range);
   static const theme = MenuItem(title: "Theme", icon: Icons.color_lens_rounded);
-  static const currency =
-      MenuItem(title: "Currency", icon: Icons.monetization_on_outlined);
+  // static const currency =
+  //     MenuItem(title: "Currency", icon: Icons.monetization_on_outlined);
   static const language = MenuItem(title: "Language", icon: Icons.language);
 
   static const all = <MenuItem>[
-    dateFormat,
     theme,
-    currency,
     language,
   ];
 }

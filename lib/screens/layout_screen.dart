@@ -4,8 +4,8 @@ import 'package:noteapp/menu_screen/currency.dart';
 import 'package:noteapp/menu_screen/language.dart';
 import 'package:noteapp/menu_screen/theme.dart';
 import 'package:noteapp/models/setting_menu_json.dart';
+import 'package:noteapp/screens/select_country_screen.dart';
 import 'package:noteapp/screens/setting_screen.dart';
-import '../menu_screen/date_format.dart';
 
 class LayoutScreen extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class LayoutScreen extends StatefulWidget {
 }
 
 class _LayoutScreenState extends State<LayoutScreen> {
-  MenuItem currentItem = MenuItems.dateFormat;
+  MenuItem currentItem = MenuItems.theme;
 
   @override
   Widget build(BuildContext context) {
@@ -29,26 +29,25 @@ class _LayoutScreenState extends State<LayoutScreen> {
         },
         currentItem: currentItem,
       ),
-      style: DrawerStyle.Style1,
+      style: DrawerStyle.Style2,
       angle: -10,
       slideWidth: MediaQuery.of(context).size.width * 0.8,
-      showShadow: true,
-      backgroundColor: Colors.orangeAccent,
+      // showShadow: true,
+      // backgroundColor: Colors.orangeAccent,
     );
   }
 
   Widget getScreen() {
     switch (currentItem) {
-      case MenuItems.dateFormat:
-        return DateFormat();
       case MenuItems.theme:
         return ThemePage();
-      case MenuItems.currency:
-        return CurrencyPage();
       case MenuItems.language:
-        return LanguagePage();
+        return SelectCountryScreen();
+
+      // case MenuItems.language:
+      //   return SelectCountryScreen();
       default:
-        return DateFormat();
+        return SelectCountryScreen();
     }
   }
 }

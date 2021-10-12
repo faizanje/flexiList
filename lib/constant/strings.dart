@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+
+final String kTitle = "Title";
+
+final String kTitleHere = "Title Here";
+final String kAddItem = "Add Item";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
+// final String = "";
