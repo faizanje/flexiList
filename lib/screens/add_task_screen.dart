@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -372,6 +373,7 @@ class SideColorPanel extends StatelessWidget {
       () => AnimatedPositioned(
         curve: Curves.bounceOut,
         duration: Duration(milliseconds: 500),
+
         right: sidebarController.isSlideBarOpen.value ? 0 : -60,
         bottom: 0,
         top: 0,
@@ -380,6 +382,10 @@ class SideColorPanel extends StatelessWidget {
           children: [
             Stack(
               children: [
+                // Transform.rotate(
+                //   angle: 3.14,
+                // transform: Matrix4.rotationX(pi),
+                // child:
                 Container(
                   height: 250,
                   child: CustomPaint(
@@ -387,6 +393,7 @@ class SideColorPanel extends StatelessWidget {
                     painter: RPSCustomPainter(),
                   ),
                 ),
+                // ),
                 Positioned(
                   right: 0,
                   top: -5,

@@ -19,9 +19,9 @@ class OnBordingScreen extends StatelessWidget {
           pages: List.generate(
             onBoardData.length,
             (index) => PageViewModel(
-              title: onBoardData[index]['title'],
-              body: onBoardData[index]['description'],
-              image: buildImage(onBoardData[index]['path']),
+              title: onBoardData[index]['onBoardTitle'],
+              body: onBoardData[index]['onBoardDescription'],
+              image: buildImage(onBoardData[index]['onBoardPath']),
               decoration: getPageDecoration(),
             ),
           ),
