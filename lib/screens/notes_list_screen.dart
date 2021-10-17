@@ -14,8 +14,10 @@ import 'package:noteapp/screens/layout_screen.dart';
 import 'package:reorderableitemsview/reorderableitemsview.dart';
 
 class NotesListScreen extends StatelessWidget {
+  final activeNotes = <Widget>[];
   @override
   Widget build(BuildContext con) {
+    List<Widget> notesList = <Widget>[];
     final notesListController = Get.find<NotesListController>();
     return SafeArea(
       child: Container(
@@ -30,52 +32,93 @@ class NotesListScreen extends StatelessWidget {
               height: 12.h,
             ),
             Flexible(
-              child: GetBuilder<NotesListController>(builder: (controller) {
-                return controller.filteredNotesList
-                        .where((element) => !element.isArchived)
-                        .toList()
-                        .isEmpty
-                    ? NoNotesFound()
-                    : ReorderableItemsView(
-                        children: getNotesList(),
-                        onReorder: (oldIndex, newIndex) {},
-                        crossAxisCount: 2,
-                        staggeredTiles: List.generate(
+              child: GetX<NotesListController>(
+                  initState: setNotesList(),
+                  builder: (controller) {
+                    print('Notes list builder called');
+                    return
+                        // notesList.isEmpty
+                        // controller.activeNotes.isEmpty
+                        controller.filteredNotesList
+                                .where((element) => !element.isArchived)
+                                .toList()
+                                .isEmpty
+                            ? NoNotesFound()
+                            : ReorderableItemsView(
+                                mainAxisSpacing: 4,
+                                crossAxisSpacing: 4,
+                                children: notesList,
+                                onReorder: (oldIndex, newIndex) {
+                                  var list = controller.filteredNotesList
+                                      .where((element) => !element.isArchived)
+                                      .toList();
+
+                                  int newOldIndex = notesListController
+                                      .filteredNotesList
+                                      .indexOf(list[oldIndex]);
+                                  int newNewIndex = notesListController
+                                      .filteredNotesList
+                                      .indexOf(list[newIndex]);
+                                  notesListController.reorderNote(
+                                      newOldIndex, newNewIndex);
+                                },
+                                isGrid: true,
+                                crossAxisCount: 2,
+                                staggeredTiles: List.generate(
+                                  controller.filteredNotesList
+                                      .where((element) => !element.isArchived)
+                                      .toList()
+                                      .length,
+                                  (index) => StaggeredTileExtended.count(
+                                      1,
+                                      // notesListController
+                                      //         .filteredNotesList[index]
+                                      //         .isArchived
+                                      //     ? 0
+                                      //     :
+                                      1),
+                                )
+                                /*List.generate(
                           getNotesList().length,
-                          (index) => StaggeredTileExtended.count(2, 1),
-                        ),
-                        isGrid: true,
-                      );
-                // : StaggeredGridView.countBuilder(
-                //     crossAxisCount: 2,
-                //     itemCount: notesListController.filteredNotesList.length,
-                //     itemBuilder: (BuildContext context, int index) =>
-                //         GetBuilder<NotesListController>(
-                //       builder: (controller) {
-                //         if (!notesListController
-                //             .filteredNotesList[index].isArchived)
-                //           return Dismissible(
-                //             key: Key(controller.filteredNotesList[index].key
-                //                 .toString()),
-                //             onDismissed: (direction) {
-                //               controller.archiveNote(
-                //                   controller.filteredNotesList[index]);
-                //             },
-                //             child: NoteItem(
-                //               homeTaskItemModel:
-                //                   controller.filteredNotesList[index],
-                //             ),
-                //           );
-                //         else
-                //           return Container();
-                //       },
-                //     ),
-                //     staggeredTileBuilder: (int index) =>
-                //         StaggeredTile.fit(1),
-                //     mainAxisSpacing: 4.0,
-                //     crossAxisSpacing: 4.0,
-                //   );
-              }),
+                          (index) => StaggeredTileExtended.count(1, 1),
+                        )*/
+                                ,
+                                // isGrid: true,
+                              );
+                    // : StaggeredGridView.countBuilder(
+                    //     crossAxisCount: 2,
+                    //     itemCount: notesListController.filteredNotesList.length,
+                    //     itemBuilder: (BuildContext context, int index) =>
+                    //         GetBuilder<NotesListController>(
+                    //       builder: (controller) {
+                    //         if (!notesListController
+                    //             .filteredNotesList[index].isArchived)
+                    //           return Dismissible(
+                    //             key: Key(controller.filteredNotesList[index].key
+                    //                 .toString()),
+                    //             onDismissed: (direction) {
+                    //               controller.archiveNote(
+                    //                   controller.filteredNotesList[index]);
+                    //             },
+                    //             child: NoteItem(
+                    //               homeTaskItemModel:
+                    //                   controller.filteredNotesList[index],
+                    //             ),
+                    //           );
+                    //         else
+                    //           return Container(
+                    //             height: 100,
+                    //             width: 100,
+                    //             color: Colors.red,
+                    //           );
+                    //       },
+                    //     ),
+                    //     staggeredTileBuilder: (int index) =>
+                    //         StaggeredTile.fit(1),
+                    //     mainAxisSpacing: 4.0,
+                    //     crossAxisSpacing: 4.0,
+                    //   );
+                  }),
             ),
 
             // Card(
@@ -190,30 +233,39 @@ class NotesListScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> getNotesList() {
-    List<Widget> notesList = [];
+  setNotesList() {
+    print('Setting notes list');
+    activeNotes.clear();
     final notesController = Get.find<NotesListController>();
-    return notesController.filteredNotesList
-        .map(
-          (element) => GetBuilder<NotesListController>(
+    notesController.filteredNotesList.asMap().forEach((index, _) {
+      if (!notesController.filteredNotesList[index].isArchived) {
+        activeNotes.add(
+          GetBuilder<NotesListController>(
             init: NotesListController(),
-            key: Key(element.key.toString()),
+            key: Key(notesController.filteredNotesList[index].key.toString()),
             builder: (notesListController) {
-              if (!element.isArchived)
+              if (!notesController.filteredNotesList[index].isArchived)
                 return Dismissible(
-                  key: Key(element.key.toString()),
+                  key: Key(
+                      notesController.filteredNotesList[index].key.toString()),
                   onDismissed: (direction) {
-                    notesListController.archiveNote(element);
+                    notesListController
+                        .archiveNote(notesController.filteredNotesList[index]);
                   },
                   child: NoteItem(
-                    homeTaskItemModel: element,
+                    homeTaskItemModel: notesController.filteredNotesList[index],
                   ),
                 );
               else
-                return Container();
+                return Container(
+                  // height: 100,
+                  // width: 100,
+                  color: Colors.red,
+                );
             },
           ),
-        )
-        .toList();
+        );
+      }
+    });
   }
 }

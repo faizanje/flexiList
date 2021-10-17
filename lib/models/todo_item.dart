@@ -22,11 +22,11 @@ class TodoItemModel extends HiveObject {
   String get taskStatusStr {
     switch (taskStatus) {
       case TASK_STATUS.LATER:
-        return 'kLater';
+        return 'Later';
       case TASK_STATUS.DONE:
-        return 'kDone';
+        return 'Done';
       case TASK_STATUS.TODO:
-        return 'kTodo';
+        return 'Todo';
     }
   }
 

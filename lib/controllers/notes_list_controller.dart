@@ -11,6 +11,7 @@ class NotesListController extends GetxController {
   late Box<HomeTaskItemModel> homeTaskItemBox;
   RxList<HomeTaskItemModel> notesList = RxList([]);
   RxList<HomeTaskItemModel> filteredNotesList = RxList([]);
+
   @override
   void onInit() {
     super.onInit();
@@ -24,9 +25,27 @@ class NotesListController extends GetxController {
           .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
       .toList();
 
+  List<HomeTaskItemModel> get archivedNotesList =>
+      filteredNotesList.where((element) => element.isArchived).toList();
+
+  List<HomeTaskItemModel> get activeNotes =>
+      filteredNotesList.where((element) => !element.isArchived).toList();
+
+  // List<HomeTaskItemModel> activeNotesList = [];
+
+  initActiveNotes() {}
+
   archiveNote(HomeTaskItemModel item) async {
     item.isArchived = true;
     await item.save();
+    update();
+  }
+
+  reorderNote(int newIndex, int oldIndex) {
+    print(
+        '${filteredNotesList[oldIndex].title} moved to ${filteredNotesList[newIndex].title}');
+
+    filteredNotesList.insert(newIndex, filteredNotesList.removeAt(oldIndex));
     update();
   }
 

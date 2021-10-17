@@ -30,7 +30,7 @@ class OnBordingScreen extends StatelessWidget {
           onDone: () => Get.to(() => BottomNavScreen()),
           showSkipButton: true,
           skip: WidgetButton(),
-          onSkip: () => Get.to(BottomNavScreen()),
+          onSkip: () => Get.to(() => BottomNavScreen()),
           next: Icon(Icons.arrow_forward),
           dotsDecorator: getDotDecoration(),
           onChange: (index) => print('Page $index selected'),

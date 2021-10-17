@@ -66,7 +66,7 @@ class NoteItem extends StatelessWidget {
         checkedItems++;
       }
       // if (true) {
-      if (index++ < 4) {
+      if (index++ < 2) {
         list.add(IgnorePointer(
           ignoring: true,
           child: CheckboxListTile(
@@ -87,7 +87,7 @@ class NoteItem extends StatelessWidget {
       }
     });
 
-    if (index > 4)
+    if (index > 2)
       list.add(Center(
           child: Text(
         '...',
