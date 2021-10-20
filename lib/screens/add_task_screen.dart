@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:hive/hive.dart';
 import 'package:noteapp/components/circular_color_container.dart';
 import 'package:noteapp/components/slide_color_panel_design.dart';
 import 'package:noteapp/components/task_item.dart';
@@ -312,11 +313,14 @@ class AddTaskScreen extends StatelessWidget {
                                     isCurrencySelected: addTaskController
                                         .isCurrencySelected.value,
                                   );
+                                  homeTaskItemModel.order =
+                                      homeTaskItemModel.key;
                                   notesListController.notesList
                                       .add(homeTaskItemModel);
                                   notesListController.filteredNotesList
                                       .add(homeTaskItemModel);
-                                  notesListController.homeTaskItemBox
+
+                                  await notesListController.homeTaskItemBox
                                       .add(homeTaskItemModel);
                                 }
 

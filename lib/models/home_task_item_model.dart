@@ -21,6 +21,9 @@ class HomeTaskItemModel extends HiveObject {
   @HiveField(4)
   String? title = DateTime.now().toLocal().toIso8601String();
 
+  @HiveField(5)
+  int? order;
+
   bool isExpanded = false;
 
   HomeTaskItemModel(

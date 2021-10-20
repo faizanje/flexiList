@@ -16,6 +16,8 @@ class NotesListController extends GetxController {
   void onInit() {
     super.onInit();
     homeTaskItemBox = Hive.box(kBoxTodo);
+    // List<HomeTaskItemModel> listToSort = homeTaskItemBox.values.toList();
+    // listToSort.sort((a, b) => a.order!.compareTo(b.order!));
     notesList.addAll(homeTaskItemBox.values);
     filteredNotesList.addAll(homeTaskItemBox.values);
   }
@@ -25,11 +27,11 @@ class NotesListController extends GetxController {
           .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
       .toList();
 
-  List<HomeTaskItemModel> get archivedNotesList =>
-      filteredNotesList.where((element) => element.isArchived).toList();
-
-  List<HomeTaskItemModel> get activeNotes =>
-      filteredNotesList.where((element) => !element.isArchived).toList();
+  // RxList<HomeTaskItemModel> get archivedNotesList =>
+  //     filteredNotesList.where((element) => element.isArchived).toList().obs;
+  //
+  RxList<HomeTaskItemModel> get activeNotes =>
+      filteredNotesList.where((element) => !element.isArchived).toList().obs;
 
   // List<HomeTaskItemModel> activeNotesList = [];
 
@@ -38,13 +40,14 @@ class NotesListController extends GetxController {
   archiveNote(HomeTaskItemModel item) async {
     item.isArchived = true;
     await item.save();
+    filteredNotesList.remove(item);
     update();
+    filteredNotesList.add(item);
   }
 
   reorderNote(int newIndex, int oldIndex) {
     print(
         '${filteredNotesList[oldIndex].title} moved to ${filteredNotesList[newIndex].title}');
-
     filteredNotesList.insert(newIndex, filteredNotesList.removeAt(oldIndex));
     update();
   }
