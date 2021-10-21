@@ -31,7 +31,8 @@ class LocaleString extends Translations {
           "kTaskAdded": "Task has been Added",
           'onBoardTitle': "Story Title",
           "onBoardDescription":
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc cursus suspendisse urna lorem lobortis in feugiat nisl. Interdum habitant mollis maecenas praesent nunc. Sed mauris tristique dui ante amet tempus magna sed."
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc cursus suspendisse urna lorem lobortis in feugiat nisl. Interdum habitant mollis maecenas praesent nunc. Sed mauris tristique dui ante amet tempus magna sed.",
+          "kUpdate": "UPDATE"
         },
         // //HINDI LANGUAGE
         // 'hi_IN': {

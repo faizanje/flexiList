@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
@@ -16,7 +18,7 @@ class NoteItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     addTitleToList();
-    addCheckboxListTilesToList();
+    addCheckboxListTilesToList(context);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -45,7 +47,14 @@ class NoteItem extends StatelessWidget {
     this.list.add(Container(
           margin: EdgeInsets.only(left: 10),
           child: Text(
-            this.homeTaskItemModel.title!,
+            this.homeTaskItemModel.title!.isNotEmpty
+                ? this.homeTaskItemModel.title!
+                : DateFormat.yMd()
+                    .add_jm()
+                    .format(this.homeTaskItemModel.dateTime),
+            maxLines: 1,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -54,7 +63,7 @@ class NoteItem extends StatelessWidget {
         ));
   }
 
-  void addCheckboxListTilesToList() {
+  void addCheckboxListTilesToList(BuildContext context) {
     int index = 0;
     int laterItem = 0;
     int checkedItems = 0;
@@ -79,6 +88,8 @@ class NoteItem extends StatelessWidget {
             title: Text(
               '${element.taskName}',
               style: TextStyle(fontSize: 16),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
             value: element.isChecked,
             onChanged: (bool? value) {},

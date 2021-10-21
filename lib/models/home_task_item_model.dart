@@ -22,7 +22,7 @@ class HomeTaskItemModel extends HiveObject {
   String? title = DateTime.now().toLocal().toIso8601String();
 
   @HiveField(5)
-  int? order;
+  DateTime dateTime;
 
   bool isExpanded = false;
 
@@ -31,5 +31,6 @@ class HomeTaskItemModel extends HiveObject {
       this.isCurrencySelected = false,
       required this.colorValue,
       required this.todoItemList,
-      this.title});
+      this.title})
+      : dateTime = DateTime.now();
 }

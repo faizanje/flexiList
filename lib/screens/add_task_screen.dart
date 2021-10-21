@@ -32,7 +32,10 @@ class AddTaskScreen extends StatelessWidget {
       Colors.greenAccent,
       Colors.cyan,
       Colors.redAccent,
-      Colors.deepPurple.shade200
+      Colors.deepPurple.shade200,
+      Colors.amber.shade300,
+      Colors.deepOrangeAccent,
+      Colors.white60
     ];
     final size = MediaQuery.of(context).size;
     final addTaskController = Get.put(AddTaskController());
@@ -76,11 +79,13 @@ class AddTaskScreen extends StatelessWidget {
                         () => Tooltip(
                           message: 'Toggle currency',
                           child: SvgPicture.asset(
-                            'assets/icons/Vector.svg',
+                            addTaskController
+                                .settingsModel.currencyItem.iconPath,
                             color: addTaskController.isCurrencySelected.value ==
                                     true
                                 ? kPrimaryColor
                                 : Colors.grey,
+                            height: kSizeCurrency,
                           ),
                         ),
                       ),
@@ -276,7 +281,8 @@ class AddTaskScreen extends StatelessWidget {
                                     ..isArchived = addTaskController.isArchived
                                     ..isCurrencySelected = addTaskController
                                         .isCurrencySelected.value
-                                    ..title = addTaskController
+                                    ..title =
+                                        /*addTaskController
                                             .textEditingController
                                             .value
                                             .text
@@ -284,7 +290,8 @@ class AddTaskScreen extends StatelessWidget {
                                         ? DateTime.now()
                                             .toLocal()
                                             .toIso8601String()
-                                        : addTaskController
+                                        : */
+                                        addTaskController
                                             .textEditingController.value.text;
 
                                   try {
@@ -295,7 +302,8 @@ class AddTaskScreen extends StatelessWidget {
                                 } else {
                                   HomeTaskItemModel homeTaskItemModel =
                                       HomeTaskItemModel(
-                                    title: addTaskController
+                                    title:
+                                        /*addTaskController
                                             .textEditingController
                                             .value
                                             .text
@@ -303,7 +311,8 @@ class AddTaskScreen extends StatelessWidget {
                                         ? DateTime.now()
                                             .toLocal()
                                             .toIso8601String()
-                                        : addTaskController
+                                        :*/
+                                        addTaskController
                                             .textEditingController.value.text,
                                     todoItemList:
                                         addTaskController.toDoTasksList,
@@ -313,8 +322,8 @@ class AddTaskScreen extends StatelessWidget {
                                     isCurrencySelected: addTaskController
                                         .isCurrencySelected.value,
                                   );
-                                  homeTaskItemModel.order =
-                                      homeTaskItemModel.key;
+                                  // homeTaskItemModel.order =
+                                  //     homeTaskItemModel.key;
                                   notesListController.notesList
                                       .add(homeTaskItemModel);
                                   notesListController.filteredNotesList

@@ -4,7 +4,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/controllers/add_task_controller.dart';
 
 class TaskCheckItem extends StatelessWidget {
   final bool? value;
@@ -29,6 +31,7 @@ class TaskCheckItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final addTaskController = Get.find<AddTaskController>();
     return CheckboxListTile(
       activeColor: kPrimaryColor,
       dense: true,
@@ -57,10 +60,9 @@ class TaskCheckItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SvgPicture.asset(
-                    'assets/icons/Vector.svg',
+                    addTaskController.settingsModel.currencyItem.iconPath,
                     color: kPrimaryColor,
-                    height: 20,
-                    width: 20,
+                    height: kSizeCurrency,
                   ),
                   SizedBox(
                     width: 4.w,

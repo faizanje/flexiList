@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:noteapp/components/done_button.dart';
 import 'package:noteapp/components/skip_button.dart';
 import 'package:noteapp/constant/constant.dart';
@@ -82,7 +83,13 @@ class ReportScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
                             child: Text(
-                              notesListController.completedNotes[index].title!,
+                              notesListController
+                                      .completedNotes[index].title!.isNotEmpty
+                                  ? notesListController
+                                      .completedNotes[index].title!
+                                  : DateFormat.yMd().add_jm().format(
+                                      notesListController
+                                          .completedNotes[index].dateTime),
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),

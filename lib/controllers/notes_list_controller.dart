@@ -6,6 +6,7 @@ import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 
 class NotesListController extends GetxController {
+  final isGrid = true.obs;
   final isSearching = false.obs;
   final searchController = TextEditingController();
   late Box<HomeTaskItemModel> homeTaskItemBox;
@@ -27,15 +28,19 @@ class NotesListController extends GetxController {
           .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
       .toList();
 
-  // RxList<HomeTaskItemModel> get archivedNotesList =>
-  //     filteredNotesList.where((element) => element.isArchived).toList().obs;
-  //
+  RxList<HomeTaskItemModel> get archivedNotesList =>
+      filteredNotesList.where((element) => element.isArchived).toList().obs;
+
   RxList<HomeTaskItemModel> get activeNotes =>
       filteredNotesList.where((element) => !element.isArchived).toList().obs;
 
   // List<HomeTaskItemModel> activeNotesList = [];
 
   initActiveNotes() {}
+
+  List<HomeTaskItemModel> getArchiveNotesList() {
+    return filteredNotesList.where((element) => !element.isArchived).toList();
+  }
 
   archiveNote(HomeTaskItemModel item) async {
     item.isArchived = true;
@@ -45,9 +50,32 @@ class NotesListController extends GetxController {
     filteredNotesList.add(item);
   }
 
-  reorderNote(int newIndex, int oldIndex) {
+  reorderNote(int newIndex, int oldIndex) async {
     print(
         '${filteredNotesList[oldIndex].title} moved to ${filteredNotesList[newIndex].title}');
+    final oldItem = homeTaskItemBox.getAt(oldIndex);
+    final newItem = homeTaskItemBox.getAt(newIndex);
+
+    print('Old index $oldIndex, newIndex $newIndex');
+
+    print('oldItem.title ${oldItem!.title} oldItem.key ${oldItem.key}');
+    print('newItem.title ${newItem!.title} oldItem.key ${newItem.key}');
+
+    // await oldItem.delete();
+    // await newItem.delete();
+
+    HomeTaskItemModel homeTaskItemModelDummy1 =
+        HomeTaskItemModel(colorValue: 0, todoItemList: []);
+    HomeTaskItemModel homeTaskItemModelDummy2 =
+        HomeTaskItemModel(colorValue: 1, todoItemList: []);
+
+    //first enter some dummy content
+    await homeTaskItemBox.putAt(oldIndex, homeTaskItemModelDummy1);
+    await homeTaskItemBox.putAt(newIndex, homeTaskItemModelDummy2);
+    // here you just swap this box item, oldIndex <> newIndex
+    await homeTaskItemBox.putAt(oldIndex, newItem);
+    await homeTaskItemBox.putAt(newIndex, oldItem);
+
     filteredNotesList.insert(newIndex, filteredNotesList.removeAt(oldIndex));
     update();
   }
@@ -83,6 +111,11 @@ class NotesListController extends GetxController {
         }
       });
     }
+    update();
+  }
+
+  void toggleIsGrid() {
+    isGrid.toggle();
     update();
   }
 }

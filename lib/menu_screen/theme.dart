@@ -4,6 +4,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/strings.dart';
+import 'package:noteapp/services/theme_service.dart';
 
 class ThemePage extends StatefulWidget {
   @override
@@ -63,7 +64,7 @@ class _ThemePageState extends State<ThemePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'kLanguage'.tr,
+                'Dark',
                 style: TextStyle(fontSize: 18, color: Colors.black),
               ),
               SizedBox(
@@ -74,6 +75,7 @@ class _ThemePageState extends State<ThemePage> {
                 onChanged: (value) {
                   setState(() {
                     _switchValue = value;
+                    ThemeService().switchTheme(value);
                   });
                 },
               ),
@@ -81,7 +83,7 @@ class _ThemePageState extends State<ThemePage> {
                 width: 5,
               ),
               Text(
-                "Dark",
+                "Light",
                 style: TextStyle(fontSize: 18, color: Colors.black),
               ),
             ],

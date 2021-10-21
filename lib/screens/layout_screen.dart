@@ -29,8 +29,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
         },
         currentItem: currentItem,
       ),
-      style: DrawerStyle.Style2,
-      angle: -10,
+      // style: DrawerStyle.Style2,
+      style: DrawerStyle.DefaultStyle,
+      // angle: -10,
       slideWidth: MediaQuery.of(context).size.width * 0.8,
       // showShadow: true,
       // backgroundColor: Colors.orangeAccent,
@@ -42,7 +43,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
       case MenuItems.theme:
         return ThemePage();
       case MenuItems.language:
-        return SelectCountryScreen();
+        return SelectCountryScreen(
+          isEditing: true,
+        );
 
       // case MenuItems.language:
       //   return SelectCountryScreen();

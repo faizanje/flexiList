@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
+import 'package:noteapp/models/item_entity.dart';
+import 'package:noteapp/models/settings_model.dart';
 import 'package:noteapp/models/todo_item.dart';
+import 'package:noteapp/utils/storage_utils.dart';
 
 class AddTaskController extends GetxController {
   late HomeTaskItemModel homeTaskItemModel;
@@ -19,7 +23,7 @@ class AddTaskController extends GetxController {
   late Box<HomeTaskItemModel> homeTaskItemBox;
   bool isEditing = false;
   bool isArchived = false;
-
+  late SettingsModel settingsModel;
   init(HomeTaskItemModel? homeTaskItemModel) {
     if (homeTaskItemModel != null) {
       this.homeTaskItemModel = homeTaskItemModel;
@@ -37,15 +41,18 @@ class AddTaskController extends GetxController {
   void onInit() {
     super.onInit();
     homeTaskItemBox = Hive.box(kBoxTodo);
+    settingsModel = StorageUtils.getSettingsItem();
   }
 
   archiveTask() async {
     homeTaskItemModel.isArchived = true;
+    // await homeTaskItemBox.add(homeTaskItemModel)
     await homeTaskItemModel.save();
   }
 
   unArchiveTask() async {
     homeTaskItemModel.isArchived = false;
+    // await homeTaskItemBox.add(homeTaskItemModel);
     await homeTaskItemModel.save();
   }
 

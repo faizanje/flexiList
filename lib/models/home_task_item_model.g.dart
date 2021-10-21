@@ -22,13 +22,13 @@ class HomeTaskItemModelAdapter extends TypeAdapter<HomeTaskItemModel> {
       colorValue: fields[2] as int,
       todoItemList: (fields[3] as List).cast<TodoItemModel>(),
       title: fields[4] as String?,
-    );
+    )..dateTime = fields[5] as DateTime;
   }
 
   @override
   void write(BinaryWriter writer, HomeTaskItemModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.isArchived)
       ..writeByte(1)
@@ -38,7 +38,9 @@ class HomeTaskItemModelAdapter extends TypeAdapter<HomeTaskItemModel> {
       ..writeByte(3)
       ..write(obj.todoItemList)
       ..writeByte(4)
-      ..write(obj.title);
+      ..write(obj.title)
+      ..writeByte(5)
+      ..write(obj.dateTime);
   }
 
   @override

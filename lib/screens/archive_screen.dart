@@ -9,11 +9,15 @@ import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/screens/layout_screen.dart';
+import 'package:reorderableitemsview/reorderableitemsview.dart';
 
 class ArchiveScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext con) {
     final notesListController = Get.find<NotesListController>();
+    // Get.changeTheme(ThemeData.dark());
+    // Get.find();
+    List<Widget> notesList = <Widget>[];
     return SafeArea(
       child: Container(
         margin: EdgeInsets.only(bottom: 40),
@@ -27,41 +31,41 @@ class ArchiveScreen extends StatelessWidget {
               height: 12.h,
             ),
             Flexible(
-              child: GetBuilder<NotesListController>(builder: (controller) {
-                return controller.filteredNotesList
-                        .where((element) => element.isArchived)
-                        .toList()
-                        .isEmpty
+              child: GetX<NotesListController>(initState: (_) {
+                print(_);
+                print('Notes list triggereda');
+              }, builder: (controller) {
+                print('Notes list builder called');
+                return notesListController.archivedNotesList.isEmpty
                     ? NoNotesFound()
-                    : StaggeredGridView.countBuilder(
+                    : ReorderableItemsView(
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        children: getNotesList(),
+                        onReorder: (oldIndex, newIndex) {
+                          int realOldIndex = notesListController
+                              .filteredNotesList
+                              .indexOf(notesListController
+                                  .archivedNotesList[oldIndex]);
+                          int realNewIndex = notesListController
+                              .filteredNotesList
+                              .indexOf(notesListController
+                                  .archivedNotesList[newIndex]);
+                          notesListController.reorderNote(
+                              realNewIndex, realOldIndex);
+                        },
+                        isGrid: notesListController.isGrid.value,
                         crossAxisCount: 2,
-                        itemCount: notesListController.filteredNotesList.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            GetBuilder<NotesListController>(
-                          builder: (controller) {
-                            if (notesListController
-                                .filteredNotesList[index].isArchived)
-                              return Dismissible(
-                                key: Key(controller.filteredNotesList[index].key
-                                    .toString()),
-                                onDismissed: (direction) {
-                                  controller.deleteNote(
-                                      controller.filteredNotesList[index]);
-                                },
-                                child: NoteItem(
-                                  homeTaskItemModel:
-                                      controller.filteredNotesList[index],
-                                ),
-                              );
-                            else
-                              return Container();
-                          },
-                        ),
-                        staggeredTileBuilder: (int index) =>
-                            StaggeredTile.fit(1),
-                        mainAxisSpacing: 4.0,
-                        crossAxisSpacing: 4.0,
-                      );
+                        staggeredTiles: List.generate(
+                          notesListController.archivedNotesList.length,
+                          (index) => StaggeredTileExtended.count(
+                              1,
+                              notesListController.archivedNotesList[index]
+                                          .todoItemList.length >
+                                      2
+                                  ? 1.15.h
+                                  : 1.h),
+                        ));
               }),
             ),
 
@@ -112,16 +116,91 @@ class ArchiveScreen extends StatelessWidget {
     );
   }
 
+  getNotesList() {
+    print('Setting notes list');
+    // archivedNotesList.clear();
+    final notesListController = Get.find<NotesListController>();
+
+    // return notesListController.archivedNotesList.map((e) => null)
+    // int index = 0;
+
+    var list = <Widget>[];
+    // for (var index = 0; index < notesListController.archivedNotesList.length; index++) {
+    //   list.add(Container(
+    //     key: ValueKey(notesListController.archivedNotesList[index].key),
+    //     child: Obx(
+    //       () => Dismissible(
+    //         key: Key(notesListController.archivedNotesList[index].key.toString()),
+    //         onDismissed: (direction) {
+    //           notesListController
+    //               .archiveNote(notesListController.archivedNotesList[index]);
+    //         },
+    //         child: NoteItem(
+    //           homeTaskItemModel: notesListController.archivedNotesList[index],
+    //         ),
+    //       ),
+    //     ),
+    //   ));
+    // }
+
+    // return list;
+    // return notesListController.archivedNotesList.map((e) {
+    //   index++;
+    //   return
+    //   index++;
+    // }).toList(growable: true);
+    notesListController.filteredNotesList.asMap().forEach((index, _) {
+      if (notesListController.filteredNotesList[index].isArchived) {
+        list.add(
+          GetBuilder<NotesListController>(
+            init: NotesListController(),
+            key: Key(
+                notesListController.filteredNotesList[index].key.toString()),
+            builder: (notesListController) {
+              if (notesListController.filteredNotesList[index].isArchived)
+                return Dismissible(
+                  key: Key(notesListController.filteredNotesList[index].key
+                      .toString()),
+                  onDismissed: (direction) {
+                    notesListController.deleteNote(
+                        notesListController.filteredNotesList[index]);
+                  },
+                  child: NoteItem(
+                    homeTaskItemModel:
+                        notesListController.filteredNotesList[index],
+                  ),
+                );
+              else
+                return Visibility(
+                  visible: false,
+                  child: Container(
+                    height: 5,
+                    width: 5,
+                    color: Colors.red,
+                  ),
+                );
+            },
+          ),
+        );
+      }
+    });
+    return list;
+  }
+
   Row buildAppBar() {
     final notesListController = Get.find<NotesListController>();
     return Row(
       children: <Widget>[
-        IconButton(
-          onPressed: () {
-            Get.to(() => LayoutScreen());
-          },
-          icon: SvgPicture.asset('assets/images/menu_icon.svg'),
-        ),
+        Obx(() {
+          return IconButton(
+            onPressed: () {
+              notesListController.toggleIsGrid();
+            },
+            icon: notesListController.isGrid.value
+                ? SvgPicture.asset('assets/icons/list.svg')
+                : SvgPicture.asset('assets/icons/grid_view_black_24dp.svg'),
+          );
+        }),
         Container(
           alignment: AlignmentDirectional.centerStart,
           width: 297.w,
@@ -152,7 +231,7 @@ class ArchiveScreen extends StatelessWidget {
                     onTap: () {
                       if (notesListController.isSearching.value) {
                         notesListController.searchController.clear();
-                        notesListController.onSearched('', false);
+                        notesListController.onSearched('', true);
                       }
                     },
                     child: Icon(

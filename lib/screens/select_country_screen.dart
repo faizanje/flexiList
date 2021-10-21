@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:country_currency_pickers/country.dart';
 import 'package:country_currency_pickers/currency_picker_dropdown.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
@@ -7,27 +9,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/strings.dart';
+import 'package:noteapp/models/item_entity.dart';
+import 'package:noteapp/models/settings_model.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
+import 'package:noteapp/utils/storage_utils.dart';
 
 class SelectCountryScreen extends StatefulWidget {
+  final bool isEditing;
+  SelectCountryScreen({this.isEditing = false});
   static const routeName = "/selectLan";
   @override
   _SelectCountryScreenState createState() => _SelectCountryScreenState();
 }
 
-class Item {
-  Item(this.name, this.icon);
-  final String name;
-  final SvgPicture icon;
-}
-
-class CountryItem {
-  CountryItem(this.name, this.icon);
-  final String name;
-  final SvgPicture icon;
-}
+// class Item {
+//   Item(this.name, this.icon);
+//   final String name;
+//   final SvgPicture icon;
+// }
 
 class _SelectCountryScreenState extends State<SelectCountryScreen> {
   bool flag = false;
@@ -41,29 +43,44 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
   }
 
   List<Item> listItem = <Item>[
-    Item('AUD', SvgPicture.asset('assets/images/aud.svg')),
-    Item('CAD', SvgPicture.asset('assets/images/cad.svg')),
-    Item('GBP', SvgPicture.asset('assets/images/gbp.svg')),
-    Item('INR', SvgPicture.asset('assets/images/inr.svg')),
-    Item('USD', SvgPicture.asset('assets/images/usd.svg')),
-    Item('YEN', SvgPicture.asset('assets/images/yen.svg')),
+    Item('AUD', 'assets/images/aud.svg'),
+    Item('CAD', 'assets/images/cad.svg'),
+    Item('GBP', 'assets/images/gbp.svg'),
+    Item('INR', 'assets/images/inr.svg'),
+    Item('USD', 'assets/images/usd.svg'),
+    Item('YEN', 'assets/images/yen.svg'),
   ];
 
-  List<CountryItem> countryListItem = <CountryItem>[
-    CountryItem('English', SvgPicture.asset('assets/images/english.svg')),
-    CountryItem('Hindi', SvgPicture.asset('assets/images/hindi.svg')),
-    CountryItem('Urdu', SvgPicture.asset('assets/images/urdu.svg')),
+  List<Item> countryListItem = <Item>[
+    Item('English', 'assets/images/english.svg'),
+    Item('Hindi', 'assets/images/hindi.svg'),
+    Item('Urdu', 'assets/images/urdu.svg'),
   ];
-  late Item selectedItem;
-  late CountryItem countrySelectedItem;
+  late Item selectedCurrency;
+  late Item countrySelectedItem;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    selectedItem = listItem.first;
-    countrySelectedItem = countryListItem.first;
 
-    ZoomDrawer.of(context)!.toggle();
+    if (widget.isEditing) {
+      SettingsModel settingsModel = StorageUtils.getSettingsItem();
+      // print('${item.name} ${item.iconPath}');
+      // print('${item.name}: ${item.iconPath}');
+      int indexCurrency = listItem.indexWhere(
+          (element) => element.name == settingsModel.currencyItem.name);
+      selectedCurrency = listItem[indexCurrency];
+      int indexCountry = countryListItem.indexWhere(
+          (element) => element.name == settingsModel.countryItem.name);
+      countrySelectedItem = countryListItem[indexCountry];
+    } else {
+      selectedCurrency = listItem.first;
+      countrySelectedItem = countryListItem.first;
+    }
+
+    if (ZoomDrawer.of(context) != null) {
+      ZoomDrawer.of(context)!.toggle();
+    }
     setState(() {
       flag = true;
     });
@@ -122,7 +139,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                       child: Text(
                         'kChooseLocation'.tr,
                         style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 30,
                           fontWeight: FontWeight.w900,
                           color: kNavbarColor,
                         ),
@@ -148,10 +165,10 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                   child: DropdownButton<Item>(
                     isExpanded: true,
                     hint: Text('kSelectItem'.tr),
-                    value: selectedItem,
+                    value: selectedCurrency,
                     onChanged: (Item? value) {
                       setState(() {
-                        selectedItem = value!;
+                        selectedCurrency = value!;
                       });
                     },
                     items: listItem.map((Item value) {
@@ -159,7 +176,11 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                         value: value,
                         child: Row(
                           children: <Widget>[
-                            value.icon,
+                            SvgPicture.asset(
+                              value.iconPath,
+                              color: kPrimaryColor,
+                              height: kSizeCurrency,
+                            ),
                             SizedBox(
                               width: 10,
                             ),
@@ -188,11 +209,11 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                     color: Colors.transparent,
                     border: Border.all(color: kNavbarColor)),
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton<CountryItem>(
+                  child: DropdownButton<Item>(
                     isExpanded: true,
                     hint: Text('kSelectItem'.tr),
                     value: countrySelectedItem,
-                    onChanged: (CountryItem? value) {
+                    onChanged: (Item? value) {
                       print(value!.name);
                       if (value.name == "English") {
                         countrySelectedItem = value;
@@ -203,12 +224,12 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                         updateLanguage(locale[1]['locale']);
                       });
                     },
-                    items: countryListItem.map((CountryItem value) {
-                      return DropdownMenuItem<CountryItem>(
+                    items: countryListItem.map((Item value) {
+                      return DropdownMenuItem<Item>(
                         value: value,
                         child: Row(
                           children: <Widget>[
-                            value.icon,
+                            SvgPicture.asset(value.iconPath),
                             SizedBox(
                               width: 10,
                             ),
@@ -242,8 +263,17 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                           color: Colors.transparent,
                           border: Border.all(color: kNavbarColor)),
                       child: InkWell(
-                        onTap: () {
-                          Get.to(() => BottomNavScreen());
+                        onTap: () async {
+                          SettingsModel settingsModel = SettingsModel(
+                              currencyItem: selectedCurrency,
+                              countryItem: countrySelectedItem);
+                          StorageUtils.saveSettingsItem(settingsModel);
+                          if (widget.isEditing) {
+                            Get.snackbar('Settings Updated',
+                                'Settings has been updated successfully');
+                          } else {
+                            Get.to(() => BottomNavScreen());
+                          }
                           // Navigator.of(context).push(MaterialPageRoute(
                           //     builder: (context) => BottomNavBar()));
                         },
@@ -261,7 +291,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                               color: kNavbarColor,
                               border: Border.all(color: kNavbarColor)),
                           child: Text(
-                            'kGetStarted'.tr,
+                            widget.isEditing ? 'kUpdate'.tr : 'kGetStarted'.tr,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,

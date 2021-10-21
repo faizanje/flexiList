@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/strings.dart';
+import 'package:noteapp/controllers/app_controller.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/controllers/reports_controller.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
@@ -10,6 +11,8 @@ import 'package:noteapp/screens/notes_list_screen.dart';
 import 'package:noteapp/screens/archive_screen.dart';
 import 'package:noteapp/screens/layout_screen.dart';
 import 'package:noteapp/screens/report_screen.dart';
+import 'package:noteapp/services/application.dart';
+import 'package:noteapp/services/theme_service.dart';
 
 class BottomNavScreen extends StatefulWidget {
   static const routeName = "/navBar";
@@ -29,8 +32,16 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final appController = Get.find<AppController>();
     final notesListController = Get.put(NotesListController());
+    // final theme = Theme.of(Application.materialKey.currentContext!);
     return SafeArea(
       child: Scaffold(
         body: _pageOption[selectedPage],
@@ -53,7 +64,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             return true;
           },
           style: TabStyle.reactCircle,
-          backgroundColor: kNavbarColor,
+          // backgroundColor: kNavbarColor,
+          backgroundColor: appController.themeData.primaryColor,
+          // backgroundColor: context.theme.primaryColor,
+          // backgroundColor: Get.find<AppController>().color,
           items: [
             TabItem(icon: Icons.event_note_rounded, title: 'kTitleNote'.tr),
             TabItem(

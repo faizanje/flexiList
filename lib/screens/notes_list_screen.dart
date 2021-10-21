@@ -38,24 +38,39 @@ class NotesListScreen extends StatelessWidget {
                 print('Notes list triggereda');
               }, builder: (controller) {
                 print('Notes list builder called');
-                return notesListController.activeNotes.isEmpty
+                return notesListController.getArchiveNotesList().isEmpty
                     ? NoNotesFound()
                     : ReorderableItemsView(
                         mainAxisSpacing: 4,
                         crossAxisSpacing: 4,
                         children: getNotesList(),
-                        onReorder: (oldIndex, newIndex) {},
-                        isGrid: true,
+                        onReorder: (oldIndex, newIndex) {
+                          int realOldIndex = notesListController
+                              .filteredNotesList
+                              .indexOf(notesListController
+                                  .getArchiveNotesList()[oldIndex]);
+                          int realNewIndex = notesListController
+                              .getArchiveNotesList()
+                              .indexOf(notesListController
+                                  .getArchiveNotesList()[newIndex]);
+                          notesListController.reorderNote(
+                              realNewIndex, realOldIndex);
+                        },
+                        isGrid: notesListController.isGrid.value,
                         crossAxisCount: 2,
                         staggeredTiles: List.generate(
-                          notesListController.activeNotes.length,
-                          (index) => StaggeredTileExtended.count(
-                              1,
-                              notesListController.activeNotes[index]
-                                          .todoItemList.length >
-                                      2
-                                  ? 1.15.h
-                                  : 1.h),
+                          notesListController.getArchiveNotesList().length,
+                          (index) =>
+                              // StaggeredTile.fit(1)
+                              StaggeredTileExtended.count(
+                                  1,
+                                  notesListController
+                                              .getArchiveNotesList()[index]
+                                              .todoItemList
+                                              .length >
+                                          2
+                                      ? 1.15.h
+                                      : 1.h),
                         ));
               }),
             ),
@@ -182,12 +197,16 @@ class NotesListScreen extends StatelessWidget {
     final notesListController = Get.find<NotesListController>();
     return Row(
       children: <Widget>[
-        IconButton(
-          onPressed: () {
-            Get.to(() => LayoutScreen());
-          },
-          icon: SvgPicture.asset('assets/images/menu_icon.svg'),
-        ),
+        Obx(() {
+          return IconButton(
+            onPressed: () {
+              notesListController.toggleIsGrid();
+            },
+            icon: notesListController.isGrid.value
+                ? SvgPicture.asset('assets/icons/list.svg')
+                : SvgPicture.asset('assets/icons/grid_view_black_24dp.svg'),
+          );
+        }),
         Container(
           alignment: AlignmentDirectional.centerStart,
           width: 297.w,
