@@ -32,7 +32,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
       // style: DrawerStyle.Style2,
       style: DrawerStyle.DefaultStyle,
       // angle: -10,
-      slideWidth: MediaQuery.of(context).size.width * 0.8,
+      slideWidth: MediaQuery.of(context).size.width * 0.5,
       // showShadow: true,
       // backgroundColor: Colors.orangeAccent,
     );

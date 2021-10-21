@@ -19,7 +19,7 @@ class WidgetButton extends StatelessWidget {
               bottomLeft: Radius.circular(30),
               bottomRight: Radius.circular(30)),
           color: Colors.transparent,
-          border: Border.all(color: kNavbarColor)),
+          border: Border.all(color: Theme.of(context).primaryColor)),
       child: Container(
         alignment: Alignment.center,
         margin: EdgeInsets.all(2.4),
@@ -31,8 +31,8 @@ class WidgetButton extends StatelessWidget {
                 topLeft: Radius.circular(30),
                 bottomLeft: Radius.circular(30),
                 bottomRight: Radius.circular(30)),
-            color: kNavbarColor,
-            border: Border.all(color: kNavbarColor)),
+            color: Theme.of(context).primaryColor,
+            border: Border.all(color: Theme.of(context).primaryColor)),
         child: Text(
           kSkip,
           style: TextStyle(

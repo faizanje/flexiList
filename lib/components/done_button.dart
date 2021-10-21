@@ -24,7 +24,7 @@ class WidgetButtonDone extends StatelessWidget {
               topLeft: Radius.circular(30),
               bottomLeft: Radius.circular(30),
               bottomRight: Radius.circular(30)),
-          color: kBtnColor,
+          color: Theme.of(context).primaryColor,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

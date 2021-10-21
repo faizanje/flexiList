@@ -79,7 +79,7 @@ class NoteItem extends StatelessWidget {
         list.add(IgnorePointer(
           ignoring: true,
           child: CheckboxListTile(
-            activeColor: kPrimaryColor,
+            activeColor: Theme.of(context).primaryColor,
             dense: true,
             isThreeLine: false,
             contentPadding: EdgeInsets.all(0),
