@@ -8,7 +8,18 @@ import 'package:noteapp/models/settings_model.dart';
 class StorageUtils {
   static SettingsModel getSettingsItem() {
     final settingsStr = GetStorage().read(kKeySettings);
-    return SettingsModel.fromString(settingsStr);
+    if (settingsStr != null) {
+      print('settingsStr not null');
+      print('settingsStr = $settingsStr');
+      return SettingsModel.fromString(settingsStr);
+    }
+
+    print('settingsStr is null');
+
+    return SettingsModel(
+        currencyItem: Item('AUD', 'assets/images/aud.svg'),
+        countryItem: Item('English', 'assets/images/english.svg'),
+        isLightTheme: true);
   }
 
   static void saveSettingsItem(SettingsModel settingsModel) async {
