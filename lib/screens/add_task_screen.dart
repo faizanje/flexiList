@@ -83,7 +83,7 @@ class AddTaskScreen extends StatelessWidget {
                                 .settingsModel.currencyItem.iconPath,
                             color: addTaskController.isCurrencySelected.value ==
                                     true
-                                ? kPrimaryColor
+                                ? Theme.of(context).primaryColor
                                 : Colors.grey,
                             height: kSizeCurrency,
                           ),
@@ -107,7 +107,7 @@ class AddTaskScreen extends StatelessWidget {
                             addTaskController.isArchived
                                 ? Icons.unarchive
                                 : Icons.archive,
-                            color: kPrimaryColor,
+                            color: Theme.of(context).primaryColor,
                             size: 30,
                           ),
                         ),
@@ -185,7 +185,7 @@ class AddTaskScreen extends StatelessWidget {
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                          color: kPrimaryColor,
+                                          color: Theme.of(context).primaryColor,
                                           borderRadius:
                                               BorderRadius.circular(12),
                                         ),
@@ -403,7 +403,7 @@ class SideColorPanel extends StatelessWidget {
                   height: 250,
                   child: CustomPaint(
                     size: Size(64, (64 * 1.5).toDouble()),
-                    painter: RPSCustomPainter(),
+                    painter: RPSCustomPainter(context),
                   ),
                 ),
                 // ),
@@ -437,7 +437,7 @@ class SideColorPanel extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: kNavbarColor,
+                color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(30)),
               ),
               constraints: BoxConstraints(

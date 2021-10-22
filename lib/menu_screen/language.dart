@@ -60,7 +60,7 @@ class _LanguagePageState extends State<LanguagePage> {
         child: Text(
           'kLanguage'.tr,
           style: TextStyle(
-            color: kNavbarColor,
+            color: Theme.of(context).primaryColor,
             fontSize: 30,
           ),
         ),

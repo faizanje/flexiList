@@ -15,7 +15,7 @@ import 'package:reorderableitemsview/reorderableitemsview.dart';
 
 class NotesListScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext con) {
+  Widget build(BuildContext context) {
     final notesListController = Get.find<NotesListController>();
     // Get.changeTheme(ThemeData.dark());
     // Get.find();
@@ -28,7 +28,7 @@ class NotesListScreen extends StatelessWidget {
             SizedBox(
               height: 4.h,
             ),
-            buildAppBar(),
+            buildAppBar(context),
             SizedBox(
               height: 12.h,
             ),
@@ -193,7 +193,7 @@ class NotesListScreen extends StatelessWidget {
     return list;
   }
 
-  Row buildAppBar() {
+  Row buildAppBar(BuildContext context) {
     final notesListController = Get.find<NotesListController>();
     return Row(
       children: <Widget>[
@@ -244,7 +244,7 @@ class NotesListScreen extends StatelessWidget {
                       notesListController.isSearching.value
                           ? Icons.cancel_outlined
                           : Icons.search,
-                      color: kNavbarColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),

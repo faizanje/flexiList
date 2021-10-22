@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:noteapp/menu_screen/currency.dart';
 import 'package:noteapp/menu_screen/language.dart';
-import 'package:noteapp/menu_screen/theme.dart';
+import 'package:noteapp/menu_screen/theme_screen.dart';
 import 'package:noteapp/models/setting_menu_json.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
 import 'package:noteapp/screens/setting_screen.dart';

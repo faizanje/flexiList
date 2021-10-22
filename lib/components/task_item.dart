@@ -33,7 +33,7 @@ class TaskCheckItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final addTaskController = Get.find<AddTaskController>();
     return CheckboxListTile(
-      activeColor: kPrimaryColor,
+      activeColor: Theme.of(context).primaryColor,
       dense: true,
       contentPadding: EdgeInsets.all(0),
       controlAffinity: ListTileControlAffinity.leading,
@@ -61,7 +61,7 @@ class TaskCheckItem extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     addTaskController.settingsModel.currencyItem.iconPath,
-                    color: kPrimaryColor,
+                    color: Theme.of(context).primaryColor,
                     height: kSizeCurrency,
                   ),
                   SizedBox(

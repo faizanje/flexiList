@@ -67,10 +67,6 @@ class AddTaskController extends GetxController {
     update();
   }
 
-  changePrimaryColor() {
-    color.value = kNavbarColor;
-  }
-
   randomizeColor() {
     color.value =
         Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);

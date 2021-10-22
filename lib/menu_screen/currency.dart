@@ -60,7 +60,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
         child: Text(
           'kCurrency'.tr,
           style: TextStyle(
-            color: kNavbarColor,
+            color: Theme.of(context).primaryColor,
             fontSize: 30,
           ),
         ),

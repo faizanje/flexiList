@@ -47,7 +47,7 @@ class SettingScreen extends StatelessWidget {
                       icon: Icon(
                         Icons.arrow_back,
                         size: 26,
-                        color: kNavbarColor,
+                        color: Theme.of(context).primaryColor,
                       ),
                       onPressed: () {
                         Get.to(() => BottomNavScreen());
@@ -63,13 +63,13 @@ class SettingScreen extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
-                          color: kNavbarColor),
+                          color: Theme.of(context).primaryColor),
                     ),
                   ],
                 ),
               ),
               Spacer(),
-              ...MenuItems.all.map(buildMenuItem).toList(),
+              ...MenuItems.all.map((e) => buildMenuItem(context, e)).toList(),
               Spacer(
                 flex: 2,
               ),
@@ -80,17 +80,19 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  Widget buildMenuItem(MenuItem item) => ListTileTheme(
-        selectedTileColor: Colors.grey,
-        child: ListTile(
-          selectedTileColor: kNavbarColor.withOpacity(0.9),
-          selected: currentItem == item,
-          minLeadingWidth: 20,
-          leading: Icon(item.icon),
-          title: Text(item.title.tr),
-          onTap: () {
-            onSelectItem(item);
-          },
-        ),
-      );
+  Widget buildMenuItem(BuildContext context, MenuItem item) {
+    return ListTileTheme(
+      selectedTileColor: Colors.grey,
+      child: ListTile(
+        selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.9),
+        selected: currentItem == item,
+        minLeadingWidth: 20,
+        leading: Icon(item.icon),
+        title: Text(item.title.tr),
+        onTap: () {
+          onSelectItem(item);
+        },
+      ),
+    );
+  }
 }

@@ -22,7 +22,7 @@ class OnBordingScreen extends StatelessWidget {
               title: onBoardData[index]['onBoardTitle'],
               body: onBoardData[index]['onBoardDescription'],
               image: buildImage(onBoardData[index]['onBoardPath']),
-              decoration: getPageDecoration(),
+              decoration: getPageDecoration(context),
             ),
           ),
           done: Text('kNext'.tr,
@@ -34,7 +34,7 @@ class OnBordingScreen extends StatelessWidget {
           // onSkip: () => Get.to(() => BottomNavScreen()),
           onSkip: () => Get.to(() => SelectCountryScreen()),
           next: Icon(Icons.arrow_forward),
-          dotsDecorator: getDotDecoration(),
+          dotsDecorator: getDotDecoration(context),
           onChange: (index) => print('Page $index selected'),
           skipFlex: 0,
           nextFlex: 0,
@@ -45,23 +45,29 @@ class OnBordingScreen extends StatelessWidget {
   Widget buildImage(String path) =>
       Center(child: Image.asset(path, width: 350));
 
-  DotsDecorator getDotDecoration() => DotsDecorator(
-        color: Color(0xFFBDBDBD),
-        activeColor: kPrimaryColor,
-        size: Size(10, 10),
-        activeSize: Size(22, 10),
-        activeShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-      );
+  DotsDecorator getDotDecoration(BuildContext context) {
+    return DotsDecorator(
+      color: Color(0xFFBDBDBD),
+      activeColor: Theme.of(context).primaryColor,
+      size: Size(10, 10),
+      activeSize: Size(22, 10),
+      activeShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+    );
+  }
 
-  PageDecoration getPageDecoration() => PageDecoration(
-        titleTextStyle: TextStyle(
-            fontSize: 30, fontWeight: FontWeight.bold, color: kPrimaryColor),
-        bodyTextStyle: TextStyle(fontSize: 16),
-        descriptionPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10)
-            .copyWith(bottom: 0),
-        imagePadding: EdgeInsets.all(24),
-        pageColor: Colors.white,
-      );
+  PageDecoration getPageDecoration(BuildContext context) {
+    return PageDecoration(
+      titleTextStyle: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).primaryColor),
+      bodyTextStyle: TextStyle(fontSize: 16),
+      descriptionPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10)
+          .copyWith(bottom: 0),
+      imagePadding: EdgeInsets.all(24),
+      pageColor: Colors.white,
+    );
+  }
 }

@@ -19,7 +19,7 @@ class ReportScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: kPrimaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text(
           'kTitleReport'.tr,
           style: TextStyle(
@@ -42,7 +42,8 @@ class ReportScreen extends StatelessWidget {
                 () {
                   return ExpansionPanelList(
                     animationDuration: Duration(milliseconds: 500),
-                    dividerColor: kPrimaryColor.withOpacity(0.5),
+                    dividerColor:
+                        Theme.of(context).primaryColor.withOpacity(0.5),
                     elevation: 2,
                     children: [
                       ExpansionPanel(

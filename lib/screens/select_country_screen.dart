@@ -91,7 +91,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: kPrimaryColor,
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text(kLanguage),
           leading: flag
               ? IconButton(
@@ -141,7 +141,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w900,
-                          color: kNavbarColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -160,7 +160,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10)),
                     color: Colors.transparent,
-                    border: Border.all(color: kNavbarColor)),
+                    border: Border.all(color: Theme.of(context).primaryColor)),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<Item>(
                     isExpanded: true,
@@ -178,7 +178,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                           children: <Widget>[
                             SvgPicture.asset(
                               value.iconPath,
-                              color: kPrimaryColor,
+                              color: Theme.of(context).primaryColor,
                               height: kSizeCurrency,
                             ),
                             SizedBox(
@@ -207,7 +207,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10)),
                     color: Colors.transparent,
-                    border: Border.all(color: kNavbarColor)),
+                    border: Border.all(color: Theme.of(context).primaryColor)),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<Item>(
                     isExpanded: true,
@@ -261,7 +261,8 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                               bottomLeft: Radius.circular(10),
                               bottomRight: Radius.circular(10)),
                           color: Colors.transparent,
-                          border: Border.all(color: kNavbarColor)),
+                          border: Border.all(
+                              color: Theme.of(context).primaryColor)),
                       child: InkWell(
                         onTap: () async {
                           SettingsModel settingsModel = SettingsModel(
@@ -288,8 +289,9 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                                   topLeft: Radius.circular(10),
                                   bottomLeft: Radius.circular(10),
                                   bottomRight: Radius.circular(10)),
-                              color: kNavbarColor,
-                              border: Border.all(color: kNavbarColor)),
+                              color: Theme.of(context).primaryColor,
+                              border: Border.all(
+                                  color: Theme.of(context).primaryColor)),
                           child: Text(
                             widget.isEditing ? 'kUpdate'.tr : 'kGetStarted'.tr,
                             style: TextStyle(

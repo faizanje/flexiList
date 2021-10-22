@@ -16,9 +16,7 @@ class Themes {
     primaryColor: Colors.black,
     backgroundColor: Colors.black,
     buttonColor: Colors.red,
-    colorScheme: ColorScheme.light().copyWith(
-      primary: Colors.black38,
-    ),
+    colorScheme: ColorScheme.dark(),
     textTheme: GoogleFonts.nunitoTextTheme(),
   );
 }

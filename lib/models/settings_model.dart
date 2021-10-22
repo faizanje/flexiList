@@ -5,18 +5,18 @@ import 'package:noteapp/models/item_entity.dart';
 class SettingsModel {
   Item currencyItem;
   Item countryItem;
-  bool isDarkTheme;
+  bool isLightTheme;
 
   SettingsModel(
       {required this.currencyItem,
       required this.countryItem,
-      this.isDarkTheme = false});
+      this.isLightTheme = false});
 
   Map<String, dynamic> toJson() {
     return {
       "currencyItem": this.currencyItem,
       "countryItem": this.countryItem,
-      "isDarkTheme": this.isDarkTheme,
+      "isLightTheme": this.isLightTheme,
     };
   }
 
@@ -24,7 +24,7 @@ class SettingsModel {
     return SettingsModel(
       currencyItem: Item.fromJson(json["currencyItem"]),
       countryItem: Item.fromJson(json["countryItem"]),
-      isDarkTheme: json["isDarkTheme"],
+      isLightTheme: json["isLightTheme"],
     );
   }
 

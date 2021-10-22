@@ -29,7 +29,7 @@ class _ThemePageState extends State<ThemePage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: kPrimaryColor,
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text('kTheme'.tr),
           leading: flag
               ? IconButton(

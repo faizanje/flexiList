@@ -6,10 +6,13 @@ import 'dart:ui' as ui;
 import 'dart:ui' as ui;
 
 class RPSCustomPainter extends CustomPainter {
+  BuildContext context;
+  RPSCustomPainter(this.context);
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_0 = new Paint()
-      ..color = kPrimaryColor
+      ..color = Theme.of(this.context).primaryColor
       ..style = PaintingStyle.fill
       ..strokeWidth = 1.0;
 

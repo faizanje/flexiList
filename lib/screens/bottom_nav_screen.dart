@@ -39,6 +39,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.theme;
     final appController = Get.find<AppController>();
     final notesListController = Get.put(NotesListController());
     // final theme = Theme.of(Application.materialKey.currentContext!);
@@ -65,8 +66,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           },
           style: TabStyle.reactCircle,
           // backgroundColor: kNavbarColor,
-          backgroundColor: appController.themeData.primaryColor,
-          // backgroundColor: context.theme.primaryColor,
+          // backgroundColor: appController.themeData.primaryColor,
+          backgroundColor: Theme.of(context).primaryColor,
           // backgroundColor: Get.find<AppController>().color,
           items: [
             TabItem(icon: Icons.event_note_rounded, title: 'kTitleNote'.tr),
