@@ -10,7 +10,7 @@ class SettingsModel {
   SettingsModel(
       {required this.currencyItem,
       required this.countryItem,
-      this.isLightTheme = false});
+      this.isLightTheme = true});
 
   Map<String, dynamic> toJson() {
     return {

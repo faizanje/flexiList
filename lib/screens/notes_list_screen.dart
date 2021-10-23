@@ -203,8 +203,14 @@ class NotesListScreen extends StatelessWidget {
               notesListController.toggleIsGrid();
             },
             icon: notesListController.isGrid.value
-                ? SvgPicture.asset('assets/icons/list.svg')
-                : SvgPicture.asset('assets/icons/grid_view_black_24dp.svg'),
+                ? SvgPicture.asset(
+                    'assets/icons/list.svg',
+                    color: context.theme.primaryColor,
+                  )
+                : SvgPicture.asset(
+                    'assets/icons/grid_view_black_24dp.svg',
+                    color: context.theme.primaryColor,
+                  ),
           );
         }),
         Container(

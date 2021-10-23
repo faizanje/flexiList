@@ -34,6 +34,7 @@ class TaskCheckItem extends StatelessWidget {
     final addTaskController = Get.find<AddTaskController>();
     return CheckboxListTile(
       activeColor: Theme.of(context).primaryColor,
+      checkColor: Theme.of(context).accentColor,
       dense: true,
       contentPadding: EdgeInsets.all(0),
       controlAffinity: ListTileControlAffinity.leading,
@@ -64,11 +65,8 @@ class TaskCheckItem extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                     height: kSizeCurrency,
                   ),
-                  SizedBox(
-                    width: 4.w,
-                  ),
                   Container(
-                    margin: EdgeInsets.only(left: 13.w),
+                    margin: EdgeInsets.only(left: 5.w),
                     width: 50.w,
                     height: 35.h,
                     child: Center(
@@ -82,7 +80,7 @@ class TaskCheckItem extends StatelessWidget {
                           }
                         },
                         textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
+                        // keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                         ],
@@ -100,8 +98,40 @@ class TaskCheckItem extends StatelessWidget {
                 ],
               ),
             ),
+          if (value == null)
+            IconButton(
+              constraints: BoxConstraints(
+                minWidth: kMinInteractiveDimension - 20,
+              ),
+              onPressed: () {
+                print('Clicked value $value');
+                onDownloadClicked();
+              },
+              icon: Icon(
+                Icons.arrow_circle_up,
+                color: Get.theme.primaryColor,
+              ),
+              padding: EdgeInsets.only(left: 6),
+            ),
+          if (value == false)
+            IconButton(
+              constraints: BoxConstraints(
+                minWidth: kMinInteractiveDimension - 20,
+              ),
+              onPressed: onDownloadClicked,
+              icon: Icon(
+                Icons.schedule,
+                color: Get.theme.primaryColor,
+              ),
+              padding: EdgeInsets.only(left: 6),
+            ),
           IconButton(
+            constraints: BoxConstraints(
+              minWidth: kMinInteractiveDimension - 10,
+            ),
+            padding: EdgeInsets.all(0),
             onPressed: onDeleteClicked,
+            alignment: Alignment.bottomCenter,
             icon: SvgPicture.asset(
               'assets/icons/bx_bxs-trash-alt.svg',
             ),

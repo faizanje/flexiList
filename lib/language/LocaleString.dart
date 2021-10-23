@@ -32,16 +32,10 @@ class LocaleString extends Translations {
           'onBoardTitle': "Story Title",
           "onBoardDescription":
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc cursus suspendisse urna lorem lobortis in feugiat nisl. Interdum habitant mollis maecenas praesent nunc. Sed mauris tristique dui ante amet tempus magna sed.",
-          "kUpdate": "UPDATE"
+          "kUpdate": "UPDATE",
+          "kLight": 'Light',
+          "kDark": 'Dark',
         },
-        // //HINDI LANGUAGE
-        // 'hi_IN': {
-        //   'hello': 'नमस्ते दुनिया',
-        //   'message': 'प्रोटो कोडर प्वाइंट में आपका स्वागत है',
-        //   'title': 'स्पंदन भाषा - स्थानीयकरण',
-        //   'subscribe': 'सब्सक्राइब',
-        //   'changelang': 'भाषा बदलो'
-        // },
         //URDU LANGUAGE
         'ur_PK': {
           "kTitle": "عنوان",
@@ -71,6 +65,9 @@ class LocaleString extends Translations {
           'onBoardTitle': "کہانی کا عنوان",
           "onBoardDescription":
               "درد خود محبت ہے ، بنیادی گاہک۔ اب ریسوں نے کلائی معطل کر دی ہے۔ بعض اوقات نرم میناس اب موجود ہیں۔ لیکن وقت کی محبت سے پہلے اداس ہونا بہت اچھا ہے۔",
+          "kUpdate": "اپ ڈیٹ",
+          "kLight": 'روشن',
+          "kDark": 'سیاہ',
         },
       };
 }

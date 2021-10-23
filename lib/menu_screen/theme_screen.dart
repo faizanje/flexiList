@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/services/theme_service.dart';
+import 'package:noteapp/utils/storage_utils.dart';
 
 class ThemePage extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class _ThemePageState extends State<ThemePage> {
     ZoomDrawer.of(context)!.toggle();
     setState(() {
       flag = true;
+      _switchValue = StorageUtils.getSettingsItem().isLightTheme;
     });
   }
 
@@ -29,7 +31,7 @@ class _ThemePageState extends State<ThemePage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          // backgroundColor: Theme.of(context).backgroundColor,
           title: Text('kTheme'.tr),
           leading: flag
               ? IconButton(
@@ -64,8 +66,8 @@ class _ThemePageState extends State<ThemePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Dark',
-                style: TextStyle(fontSize: 18, color: Colors.black),
+                'kDark'.tr,
+                style: TextStyle(fontSize: 18),
               ),
               SizedBox(
                 width: 5,
@@ -83,8 +85,9 @@ class _ThemePageState extends State<ThemePage> {
                 width: 5,
               ),
               Text(
-                "Light",
-                style: TextStyle(fontSize: 18, color: Colors.black),
+                "kLight".tr,
+                style: TextStyle(fontSize: 18),
+                // style: TextStyle(fontSize: 18, color: Colors.black),
               ),
             ],
           ),

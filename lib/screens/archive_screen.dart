@@ -197,8 +197,14 @@ class ArchiveScreen extends StatelessWidget {
               notesListController.toggleIsGrid();
             },
             icon: notesListController.isGrid.value
-                ? SvgPicture.asset('assets/icons/list.svg')
-                : SvgPicture.asset('assets/icons/grid_view_black_24dp.svg'),
+                ? SvgPicture.asset(
+                    'assets/icons/list.svg',
+                    color: Theme.of(context).primaryColor,
+                  )
+                : SvgPicture.asset(
+                    'assets/icons/grid_view_black_24dp.svg',
+                    color: Theme.of(context).primaryColor,
+                  ),
           );
         }),
         Container(

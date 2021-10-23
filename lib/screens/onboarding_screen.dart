@@ -16,6 +16,7 @@ class OnBordingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SafeArea(
         child: IntroductionScreen(
+          globalBackgroundColor: Theme.of(context).backgroundColor,
           pages: List.generate(
             onBoardData.length,
             (index) => PageViewModel(
@@ -38,7 +39,7 @@ class OnBordingScreen extends StatelessWidget {
           onChange: (index) => print('Page $index selected'),
           skipFlex: 0,
           nextFlex: 0,
-          animationDuration: 1000,
+          animationDuration: 500,
         ),
       );
 
@@ -62,12 +63,12 @@ class OnBordingScreen extends StatelessWidget {
       titleTextStyle: TextStyle(
           fontSize: 30,
           fontWeight: FontWeight.bold,
-          color: Theme.of(context).primaryColor),
-      bodyTextStyle: TextStyle(fontSize: 16),
+          color: Theme.of(context).textTheme.bodyText1?.color),
+      bodyTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(),
       descriptionPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10)
           .copyWith(bottom: 0),
       imagePadding: EdgeInsets.all(24),
-      pageColor: Colors.white,
+      pageColor: Theme.of(context).backgroundColor,
     );
   }
 }

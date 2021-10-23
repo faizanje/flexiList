@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/constant/strings.dart';
 
 class NoNotesFound extends StatelessWidget {
@@ -24,7 +25,7 @@ class NoNotesFound extends StatelessWidget {
           height: 14.h,
         ),
         Text(
-          kAddYourFirstNote,
+          'kAddYourFirstNote'.tr,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w600,
@@ -36,6 +37,7 @@ class NoNotesFound extends StatelessWidget {
         Image.asset(
           'assets/images/arrow.png',
           height: 100,
+          color: Theme.of(context).primaryColor,
         ),
       ],
     );

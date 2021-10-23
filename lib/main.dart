@@ -13,6 +13,8 @@ import 'package:noteapp/screens/bottom_nav_screen.dart';
 import 'package:noteapp/screens/onboarding_screen.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
 import 'package:noteapp/services/application.dart';
+import 'package:noteapp/utils/locale_utils.dart';
+import 'package:noteapp/utils/storage_utils.dart';
 import 'package:noteapp/utils/themes.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -40,32 +42,29 @@ class MyApp extends StatelessWidget {
         // navigatorKey: Application.materialKey,
         // GlobalKey()
         translations: LocaleString(),
-        locale: Locale('en', 'US'),
+        locale: LocaleUtils.getLocaleFromStorage(),
+        // locale: Locale('en', 'US'),
         debugShowCheckedModeBanner: false,
-        theme: Themes.light,
+        theme: StorageUtils.getSettingsItem().isLightTheme
+            ? Themes.light
+            : Themes.dark,
         darkTheme: Themes.dark,
         color: Colors.white,
-        home: GetBuilder<AppController>(
-          init: AppController(),
-          assignId: true,
-          builder: (logic) {
-            return SafeArea(
-              child: Scaffold(
-                backgroundColor: Colors.white,
-                // appBar: AppBar(
-                //   title: Text("Note App"),
-                //   backgroundColor: kNavbarColor,
-                // ),
-                // body: ArchiveScreen(),
-                // body: BottomNavScreen(),
-                // body: OnBordingScreen(),
-                // body: BottomNavScreen(),
-                body: SelectCountryScreen(),
-                // body: AddTaskScreen(),
-                // body: SideBarLayout(),
-              ),
-            );
-          },
+        home: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            // appBar: AppBar(
+            //   title: Text("Note App"),
+            //   backgroundColor: kNavbarColor,
+            // ),
+            // body: ArchiveScreen(),
+            // body: BottomNavScreen(),
+            // body: OnBordingScreen(),
+            body: BottomNavScreen(),
+            // body: SelectCountryScreen(),
+            // body: AddTaskScreen(),
+            // body: SideBarLayout(),
+          ),
         ),
       ),
     );

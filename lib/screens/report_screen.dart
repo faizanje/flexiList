@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:noteapp/components/done_button.dart';
@@ -6,27 +7,30 @@ import 'package:noteapp/components/skip_button.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/strings.dart';
+import 'package:noteapp/controllers/add_task_controller.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/controllers/reports_controller.dart';
+import 'package:noteapp/utils/storage_utils.dart';
 
 class ReportScreen extends StatelessWidget {
   const ReportScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // final addTask = Get.find<AddTaskController>();
     // final notesListController = Get.find<NotesListController>();
     final reportsController = Get.put(ReportsController());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Theme.of(context).primaryColor,
+        // backgroundColor: Theme.of(context).primaryColor,
         title: Text(
           'kTitleReport'.tr,
           style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
-      backgroundColor: Color(0xffF9F9F9),
+      // backgroundColor: Color(0xffF9F9F9),
       body: Container(
         padding: EdgeInsets.all(10),
         child: GetX<NotesListController>(
@@ -60,15 +64,88 @@ class ReportScreen extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: notesListController
                                     .completedNotes[index].todoItemList
-                                    .map((e) => Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 5),
-                                          child: Text(
-                                            e.taskName,
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 16,
+                                    .map((element) => IgnorePointer(
+                                          ignoring: true,
+                                          child: CheckboxListTile(
+                                            // tileColor: Colors.black,
+                                            activeColor:
+                                                Theme.of(context).primaryColor,
+                                            checkColor:
+                                                Theme.of(context).accentColor,
+                                            dense: true,
+                                            isThreeLine: false,
+                                            contentPadding: EdgeInsets.all(0),
+                                            controlAffinity:
+                                                ListTileControlAffinity.leading,
+                                            tristate: true,
+                                            title: Text(
+                                              '${element.taskName}',
+                                              style: TextStyle(fontSize: 16),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
+                                            secondary: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                if (notesListController
+                                                    .completedNotes[index]
+                                                    .isCurrencySelected)
+                                                  Flexible(
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          StorageUtils
+                                                                  .getSettingsItem()
+                                                              .currencyItem
+                                                              .iconPath,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          height: kSizeCurrency,
+                                                        ),
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 5.w),
+                                                          width: 50.w,
+                                                          height: 35.h,
+                                                          child: Center(
+                                                            child: TextField(
+                                                              controller: TextEditingController()
+                                                                ..text = element
+                                                                    .price
+                                                                    .toString(),
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontSize: 12.sp,
+                                                              ),
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                contentPadding:
+                                                                    EdgeInsets.symmetric(
+                                                                        vertical:
+                                                                            5),
+                                                                isDense: true,
+                                                                border:
+                                                                    OutlineInputBorder(),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                            value: element.isChecked,
+                                            onChanged: (bool? value) {},
                                           ),
                                         ))
                                     .toList(),
@@ -76,6 +153,31 @@ class ReportScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
+                              if (notesListController
+                                  .completedNotes[index].isCurrencySelected)
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Total ',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SvgPicture.asset(
+                                      StorageUtils.getSettingsItem()
+                                          .currencyItem
+                                          .iconPath,
+                                      color: Get.theme.primaryColor,
+                                      height: kSizeCurrency - 5,
+                                    ),
+                                    Text(
+                                      '${notesListController.completedNotes[index].todoItemList.fold(0, (int previousValue, element) => element.price + previousValue)}',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )
                             ],
                           ),
                         ),

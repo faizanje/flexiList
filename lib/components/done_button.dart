@@ -34,12 +34,12 @@ class WidgetButtonDone extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w200,
-                color: Colors.white,
+                color: Theme.of(context).accentColor,
               ),
             ),
             Icon(
               Icons.check,
-              color: Color(0xff61FF8E),
+              color: Theme.of(context).accentColor,
             )
           ],
         ),

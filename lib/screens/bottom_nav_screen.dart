@@ -40,7 +40,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   Widget build(BuildContext context) {
     context.theme;
-    final appController = Get.find<AppController>();
+    // final appController = Get.find<AppController>();
     final notesListController = Get.put(NotesListController());
     // final theme = Theme.of(Application.materialKey.currentContext!);
     return SafeArea(
@@ -70,7 +70,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           backgroundColor: Theme.of(context).primaryColor,
           // backgroundColor: Get.find<AppController>().color,
           items: [
-            TabItem(icon: Icons.event_note_rounded, title: 'kTitleNote'.tr),
+            TabItem(
+              icon: Icons.event_note_rounded,
+              title: 'kTitleNote'.tr,
+            ),
             TabItem(
                 icon: Icons.report_gmailerrorred_outlined,
                 title: 'kTitleReport'.tr),
@@ -79,6 +82,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             TabItem(icon: Icons.settings, title: 'kTitleSetting'.tr),
           ],
           initialActiveIndex: 0,
+          color: context.theme.accentColor,
+          activeColor: context.theme.backgroundColor,
         ),
       ),
     );

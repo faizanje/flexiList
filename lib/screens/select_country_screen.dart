@@ -15,6 +15,7 @@ import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/models/item_entity.dart';
 import 'package:noteapp/models/settings_model.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
+import 'package:noteapp/utils/locale_utils.dart';
 import 'package:noteapp/utils/storage_utils.dart';
 
 class SelectCountryScreen extends StatefulWidget {
@@ -33,14 +34,6 @@ class SelectCountryScreen extends StatefulWidget {
 
 class _SelectCountryScreenState extends State<SelectCountryScreen> {
   bool flag = false;
-  final List locale = [
-    {'name': 'ENGLISH', 'locale': Locale('en', 'US')},
-    {'name': 'URDU', 'locale': Locale('ur', 'PK')},
-  ];
-  updateLanguage(Locale locale) {
-    Get.back();
-    Get.updateLocale(locale);
-  }
 
   List<Item> listItem = <Item>[
     Item('AUD', 'assets/images/aud.svg'),
@@ -63,20 +56,20 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
     // TODO: implement initState
     super.initState();
 
-    if (widget.isEditing) {
-      SettingsModel settingsModel = StorageUtils.getSettingsItem();
-      // print('${item.name} ${item.iconPath}');
-      // print('${item.name}: ${item.iconPath}');
-      int indexCurrency = listItem.indexWhere(
-          (element) => element.name == settingsModel.currencyItem.name);
-      selectedCurrency = listItem[indexCurrency];
-      int indexCountry = countryListItem.indexWhere(
-          (element) => element.name == settingsModel.countryItem.name);
-      countrySelectedItem = countryListItem[indexCountry];
-    } else {
-      selectedCurrency = listItem.first;
-      countrySelectedItem = countryListItem.first;
-    }
+    // if (widget.isEditing) {
+    SettingsModel settingsModel = StorageUtils.getSettingsItem();
+    // print('${item.name} ${item.iconPath}');
+    // print('${item.name}: ${item.iconPath}');
+    int indexCurrency = listItem.indexWhere(
+        (element) => element.name == settingsModel.currencyItem.name);
+    selectedCurrency = listItem[indexCurrency];
+    int indexCountry = countryListItem.indexWhere(
+        (element) => element.name == settingsModel.countryItem.name);
+    countrySelectedItem = countryListItem[indexCountry];
+    // } else {
+    //   selectedCurrency = listItem.first;
+    //   countrySelectedItem = countryListItem.first;
+    // }
 
     if (ZoomDrawer.of(context) != null) {
       ZoomDrawer.of(context)!.toggle();
@@ -91,8 +84,8 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text(kLanguage),
+          // backgroundColor: Theme.of(context).backgroundColor,
+          title: Text('kLanguage'.tr),
           leading: flag
               ? IconButton(
                   onPressed: () {
@@ -186,7 +179,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                             ),
                             Text(
                               value.name,
-                              style: TextStyle(color: Colors.black),
+                              // style: TextStyle(color: Colors.black),
                             ),
                           ],
                         ),
@@ -215,13 +208,11 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                     value: countrySelectedItem,
                     onChanged: (Item? value) {
                       print(value!.name);
-                      if (value.name == "English") {
-                        countrySelectedItem = value;
-                        updateLanguage(locale[0]['locale']);
-                      }
+                      // if (value.name == "English") {
+                      //   selectedLocale = locale[0]['locale'];
+                      // }else if()
                       setState(() {
                         countrySelectedItem = value;
-                        updateLanguage(locale[1]['locale']);
                       });
                     },
                     items: countryListItem.map((Item value) {
@@ -231,11 +222,11 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                           children: <Widget>[
                             SvgPicture.asset(value.iconPath),
                             SizedBox(
-                              width: 10,
+                              width: 20,
                             ),
                             Text(
                               value.name,
-                              style: TextStyle(color: Colors.black),
+                              // style: TextStyle(color: Colors.black),
                             ),
                           ],
                         ),
@@ -269,6 +260,8 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                               currencyItem: selectedCurrency,
                               countryItem: countrySelectedItem);
                           StorageUtils.saveSettingsItem(settingsModel);
+
+                          LocaleUtils.updateLanguageByItem(countrySelectedItem);
                           if (widget.isEditing) {
                             Get.snackbar('Settings Updated',
                                 'Settings has been updated successfully');
@@ -296,9 +289,8 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                             widget.isEditing ? 'kUpdate'.tr : 'kGetStarted'.tr,
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                              color: context.theme.accentColor,
                             ),
                           ),
                         ),

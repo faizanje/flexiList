@@ -26,8 +26,9 @@ class AddTaskScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('${Get.theme.brightness}');
     final colors = [
-      Colors.white,
+      Theme.of(context).primaryColorDark,
       Colors.yellow,
       Colors.greenAccent,
       Colors.cyan,
@@ -37,14 +38,16 @@ class AddTaskScreen extends StatelessWidget {
       Colors.deepOrangeAccent,
       Colors.white60
     ];
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
     final addTaskController = Get.put(AddTaskController());
     final sideBarController = Get.put(SidebarController());
     final notesListController = Get.find<NotesListController>();
+    print('Add Task Screen Called');
     addTaskController.init(this.homeTaskItemModel);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        resizeToAvoidBottomInset: false,
+        // backgroundColor: Colors.transparent,
         body: Stack(
           children: [
             Obx(
@@ -67,6 +70,7 @@ class AddTaskScreen extends StatelessWidget {
                     },
                     icon: SvgPicture.asset(
                       'assets/icons/bck btn.svg',
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   actions: [
@@ -126,10 +130,12 @@ class AddTaskScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold, fontSize: 30),
                         ),
                         SizedBox(
-                          height: size.height * 0.02,
+                          height: 10,
+                          // height: size.height * 0.02,
                         ),
                         TextField(
                           controller: addTaskController.textEditingController,
+                          // autofocus: false,
                           decoration: InputDecoration(
                             hintText: 'kTitleHere'.tr,
                             contentPadding: EdgeInsets.symmetric(vertical: 5),
@@ -137,7 +143,8 @@ class AddTaskScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.02,
+                          // height: size.height * 0.02,
+                          height: 10,
                         ),
                         Center(
                           child: ElevatedButton.icon(
@@ -149,11 +156,19 @@ class AddTaskScreen extends StatelessWidget {
                               );
                               addTaskController.addTask(taskItem);
                             },
-                            icon: Icon(Icons.add),
-                            label: Text('kAddItem'.tr),
+                            icon: Icon(
+                              Icons.add,
+                              color: context.theme.accentColor,
+                            ),
+                            label: Text(
+                              'kAddItem'.tr,
+                              style: TextStyle(
+                                  color: context.theme.accentColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                           ),
@@ -163,9 +178,6 @@ class AddTaskScreen extends StatelessWidget {
                             builder: (controller) {
                               return GroupedListView<TodoItemModel, String>(
                                 elements: addTaskController.toDoTasksList,
-                                // itemComparator: (element1, element2) => element1
-                                //     .taskName
-                                //     .compareTo(element2.taskName),
                                 groupComparator: (value1, value2) {
                                   print('$value1.comapreTo($value2)');
                                   if (value1 == 'Todo') {
@@ -187,7 +199,7 @@ class AddTaskScreen extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: Theme.of(context).primaryColor,
                                           borderRadius:
-                                              BorderRadius.circular(12),
+                                              BorderRadius.circular(20),
                                         ),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
@@ -195,7 +207,7 @@ class AddTaskScreen extends StatelessWidget {
                                           child: Text(
                                             element.taskStatusStr.tr,
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: context.theme.accentColor,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -226,29 +238,30 @@ class AddTaskScreen extends StatelessWidget {
                                           changed.isChecked = newValue;
                                           addTaskController
                                               .toDoTasksList[index] = changed;
-                                          switch (newValue) {
-                                            case null:
-                                              addTaskController
-                                                      .toDoTasksList[index]
-                                                      .taskStatus =
-                                                  TASK_STATUS.LATER;
-                                              break;
-                                            case true:
-                                              addTaskController
-                                                      .toDoTasksList[index]
-                                                      .taskStatus =
-                                                  TASK_STATUS.DONE;
-                                              break;
-                                            case false:
-                                              addTaskController
-                                                      .toDoTasksList[index]
-                                                      .taskStatus =
-                                                  TASK_STATUS.TODO;
-                                              break;
-                                          }
+                                          updateGroupHeader(newValue,
+                                              addTaskController, index);
                                           addTaskController.update();
                                         },
-                                        onDownloadClicked: () {},
+                                        onDownloadClicked: () {
+                                          final value = addTaskController
+                                              .toDoTasksList[index].isChecked;
+                                          if (value == null) {
+                                            addTaskController
+                                                .toDoTasksList[index]
+                                                .isChecked = false;
+                                          } else {
+                                            addTaskController
+                                                .toDoTasksList[index]
+                                                .isChecked = null;
+                                          }
+                                          updateGroupHeader(
+                                              addTaskController
+                                                  .toDoTasksList[index]
+                                                  .isChecked,
+                                              addTaskController,
+                                              index);
+                                          addTaskController.update();
+                                        },
                                         onDeleteClicked: () {
                                           addTaskController.removeTask(element);
                                         },
@@ -343,12 +356,17 @@ class AddTaskScreen extends StatelessWidget {
                                 Get.back();
                                 Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);
                               },
-                              child: Text(addTaskController.isEditing
-                                  ? 'kEditText'.tr
-                                  : 'kAddTask'.tr),
+                              child: Text(
+                                addTaskController.isEditing
+                                    ? 'kEditText'.tr
+                                    : 'kAddTask'.tr,
+                                style: TextStyle(
+                                    color: context.theme.accentColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 20),
+                                    horizontal: 50, vertical: 15),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
@@ -368,6 +386,21 @@ class AddTaskScreen extends StatelessWidget {
       ),
     );
   }
+
+  void updateGroupHeader(
+      bool? newValue, AddTaskController addTaskController, int index) {
+    switch (newValue) {
+      case null:
+        addTaskController.toDoTasksList[index].taskStatus = TASK_STATUS.LATER;
+        break;
+      case true:
+        addTaskController.toDoTasksList[index].taskStatus = TASK_STATUS.DONE;
+        break;
+      case false:
+        addTaskController.toDoTasksList[index].taskStatus = TASK_STATUS.TODO;
+        break;
+    }
+  }
 }
 
 class SideColorPanel extends StatelessWidget {
@@ -386,8 +419,12 @@ class SideColorPanel extends StatelessWidget {
       () => AnimatedPositioned(
         curve: Curves.bounceOut,
         duration: Duration(milliseconds: 500),
-
-        right: sidebarController.isSlideBarOpen.value ? 0 : -60,
+        left: Directionality.of(context) == TextDirection.rtl
+            ? (sidebarController.isSlideBarOpen.value ? 0 : -60)
+            : null,
+        right: Directionality.of(context) != TextDirection.rtl
+            ? (sidebarController.isSlideBarOpen.value ? 0 : -60)
+            : null,
         bottom: 0,
         top: 0,
         // child: ClipPath(
@@ -395,20 +432,22 @@ class SideColorPanel extends StatelessWidget {
           children: [
             Stack(
               children: [
-                // Transform.rotate(
-                //   angle: 3.14,
-                // transform: Matrix4.rotationX(pi),
-                // child:
-                Container(
-                  height: 250,
-                  child: CustomPaint(
-                    size: Size(64, (64 * 1.5).toDouble()),
-                    painter: RPSCustomPainter(context),
+                Transform.rotate(
+                  angle: Directionality.of(context) == TextDirection.rtl
+                      ? 3.14
+                      : 0,
+                  // transform: Matrix4.rotationX(pi),
+                  child: Container(
+                    height: 250,
+                    child: CustomPaint(
+                      size: Size(64, (64 * 1.5).toDouble()),
+                      painter: RPSCustomPainter(context),
+                    ),
                   ),
                 ),
-                // ),
                 Positioned(
-                  right: 0,
+                  right:
+                      Directionality.of(context) == TextDirection.rtl ? 15 : 0,
                   top: -5,
                   bottom: 0,
                   child: Container(

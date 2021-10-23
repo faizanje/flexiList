@@ -36,10 +36,9 @@ class WidgetButton extends StatelessWidget {
         child: Text(
           kSkip,
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-            fontStyle: FontStyle.italic,
+            // fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: context.theme.accentColor,
           ),
         ),
       ),

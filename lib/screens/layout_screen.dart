@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/menu_screen/currency.dart';
 import 'package:noteapp/menu_screen/language.dart';
 import 'package:noteapp/menu_screen/theme_screen.dart';
@@ -18,6 +19,10 @@ class _LayoutScreenState extends State<LayoutScreen> {
   @override
   Widget build(BuildContext context) {
     return ZoomDrawer(
+      isRtl: Directionality.of(context) == TextDirection.rtl,
+      // isRtl: true,
+      clipMainScreen: true,
+      backgroundColor: Colors.red,
       borderRadius: 50,
       mainScreen: getScreen(),
       menuScreen: SettingScreen(

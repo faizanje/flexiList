@@ -17,7 +17,7 @@ class AddTaskController extends GetxController {
   late HomeTaskItemModel homeTaskItemModel;
   final RxList<TodoItemModel> toDoTasksList = RxList([]);
   final RxBool isCurrencySelected = false.obs;
-  final Rx<Color> color = Rx<Color>(Colors.white);
+  final Rx<Color> color = Rx<Color>(Get.theme.backgroundColor);
   final isSlidePanelOpen = false.obs;
   TextEditingController textEditingController = TextEditingController();
   late Box<HomeTaskItemModel> homeTaskItemBox;
@@ -30,6 +30,7 @@ class AddTaskController extends GetxController {
       this.isCurrencySelected.value = this.homeTaskItemModel.isCurrencySelected;
       this.color.value = Color(this.homeTaskItemModel.colorValue);
       this.isArchived = homeTaskItemModel.isArchived;
+      this.toDoTasksList.clear();
       this.toDoTasksList.addAll(this.homeTaskItemModel.todoItemList);
       print('IsInBox ${this.homeTaskItemModel.isInBox}');
       this.isEditing = true;
