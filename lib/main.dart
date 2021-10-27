@@ -60,7 +60,9 @@ class MyApp extends StatelessWidget {
             // body: ArchiveScreen(),
             // body: BottomNavScreen(),
             // body: OnBordingScreen(),
-            body: BottomNavScreen(),
+            body: StorageUtils.getSettingsItem().hasWatchedTutorial
+                ? BottomNavScreen()
+                : OnBordingScreen(),
             // body: SelectCountryScreen(),
             // body: AddTaskScreen(),
             // body: SideBarLayout(),

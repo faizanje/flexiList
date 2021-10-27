@@ -4,6 +4,7 @@ import 'package:noteapp/constant/constant.dart';
 
 class Themes {
   static final light = ThemeData.light().copyWith(
+    brightness: Brightness.light,
     primaryColor: kPrimaryColor,
     appBarTheme: AppBarTheme(color: kPrimaryColor),
     backgroundColor: Colors.white,
@@ -19,6 +20,7 @@ class Themes {
   );
 
   static final dark = ThemeData.dark().copyWith(
+    brightness: Brightness.dark,
     // cardTheme: CardTheme(color: Colors.redAccent),
     // cardColor: Colors.deepOrange,
     iconTheme: IconThemeData(color: Color(0xFF69F2DD)),

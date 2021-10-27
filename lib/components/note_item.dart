@@ -9,10 +9,11 @@ import 'package:noteapp/screens/add_task_screen.dart';
 class NoteItem extends StatelessWidget {
   final List<Widget> list = [];
   final HomeTaskItemModel homeTaskItemModel;
-
+  final Function(HomeTaskItemModel) onNoteItemClicked;
   NoteItem({
     Key? key,
     required this.homeTaskItemModel,
+    required this.onNoteItemClicked,
   }) : super(key: key);
 
   @override
@@ -26,9 +27,7 @@ class NoteItem extends StatelessWidget {
       color: Color(homeTaskItemModel.colorValue),
       child: InkWell(
         onTap: () {
-          Get.to(() => AddTaskScreen(
-                homeTaskItemModel: homeTaskItemModel,
-              ));
+          onNoteItemClicked(homeTaskItemModel);
         },
         borderRadius: BorderRadius.circular(8),
         child: Padding(

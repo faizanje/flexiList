@@ -6,17 +6,21 @@ class SettingsModel {
   Item currencyItem;
   Item countryItem;
   bool isLightTheme;
+  bool hasWatchedTutorial;
 
-  SettingsModel(
-      {required this.currencyItem,
-      required this.countryItem,
-      this.isLightTheme = true});
+  SettingsModel({
+    required this.currencyItem,
+    required this.countryItem,
+    this.isLightTheme = true,
+    this.hasWatchedTutorial = false,
+  });
 
   Map<String, dynamic> toJson() {
     return {
       "currencyItem": this.currencyItem,
       "countryItem": this.countryItem,
       "isLightTheme": this.isLightTheme,
+      "hasWatchedTutorial": this.hasWatchedTutorial
     };
   }
 
@@ -25,6 +29,7 @@ class SettingsModel {
       currencyItem: Item.fromJson(json["currencyItem"]),
       countryItem: Item.fromJson(json["countryItem"]),
       isLightTheme: json["isLightTheme"],
+      hasWatchedTutorial: json["hasWatchedTutorial"],
     );
   }
 

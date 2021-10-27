@@ -6,6 +6,7 @@ import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/services/theme_service.dart';
 import 'package:noteapp/utils/storage_utils.dart';
+import 'package:noteapp/utils/themes.dart';
 
 class ThemePage extends StatefulWidget {
   @override
@@ -74,10 +75,14 @@ class _ThemePageState extends State<ThemePage> {
               ),
               CupertinoSwitch(
                 value: _switchValue,
-                onChanged: (value) {
+                onChanged: (isLight) {
                   setState(() {
-                    _switchValue = value;
-                    ThemeService().switchTheme(value);
+                    _switchValue = isLight;
+                    Get.changeTheme(isLight ? Themes.light : Themes.dark);
+                    // Get.changeThemeMode(
+                    //     isLight ? ThemeMode.light : ThemeMode.dark);
+                    Theme.of(context).switchTheme;
+                    ThemeService().switchTheme(isLight);
                   });
                 },
               ),

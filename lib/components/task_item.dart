@@ -38,7 +38,7 @@ class TaskCheckItem extends StatelessWidget {
       dense: true,
       contentPadding: EdgeInsets.all(0),
       controlAffinity: ListTileControlAffinity.leading,
-      tristate: true,
+      // tristate: true,
       title: TextField(
         controller: TextEditingController()..text = title,
         onChanged: onTaskTitleChanged,
@@ -66,8 +66,8 @@ class TaskCheckItem extends StatelessWidget {
                     height: kSizeCurrency,
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 5.w),
-                    width: 50.w,
+                    // margin: EdgeInsets.only(left: 5.w),
+                    width: 45.w,
                     height: 35.h,
                     child: Center(
                       child: TextField(
@@ -80,7 +80,7 @@ class TaskCheckItem extends StatelessWidget {
                           }
                         },
                         textAlign: TextAlign.center,
-                        // keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                         ],
@@ -125,20 +125,23 @@ class TaskCheckItem extends StatelessWidget {
               ),
               padding: EdgeInsets.only(left: 6),
             ),
-          IconButton(
-            constraints: BoxConstraints(
-              minWidth: kMinInteractiveDimension - 10,
-            ),
-            padding: EdgeInsets.all(0),
-            onPressed: onDeleteClicked,
-            alignment: Alignment.bottomCenter,
-            icon: SvgPicture.asset(
-              'assets/icons/bx_bxs-trash-alt.svg',
+          Container(
+            margin: EdgeInsets.only(top: 4),
+            child: IconButton(
+              constraints: BoxConstraints(
+                minWidth: kMinInteractiveDimension - 10,
+              ),
+              padding: EdgeInsets.all(0),
+              onPressed: onDeleteClicked,
+              alignment: Alignment.bottomCenter,
+              icon: SvgPicture.asset(
+                'assets/icons/bx_bxs-trash-alt.svg',
+              ),
             ),
           ),
         ],
       ),
-      value: value,
+      value: value != null ? value : false,
       // onChanged: (newValue) {
       //   print(newValue);
       //   onChanged(newValue);

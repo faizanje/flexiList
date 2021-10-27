@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:hive/hive.dart';
 import 'package:noteapp/components/circular_color_container.dart';
+import 'package:noteapp/components/side_color_panel.dart';
 import 'package:noteapp/components/slide_color_panel_design.dart';
 import 'package:noteapp/components/task_item.dart';
 import 'package:noteapp/constant/constant.dart';
@@ -19,6 +20,7 @@ import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/models/todo_item.dart';
 import 'package:noteapp/controllers/sidebar_controller.dart';
+import 'package:noteapp/utils/custom_color_scheme.dart';
 
 class AddTaskScreen extends StatelessWidget {
   final HomeTaskItemModel? homeTaskItemModel;
@@ -27,22 +29,23 @@ class AddTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('${Get.theme.brightness}');
-    final colors = [
-      Theme.of(context).primaryColorDark,
-      Colors.yellow,
-      Colors.greenAccent,
-      Colors.cyan,
-      Colors.redAccent,
-      Colors.deepPurple.shade200,
-      Colors.amber.shade300,
-      Colors.deepOrangeAccent,
-      Colors.white60
-    ];
+
+    // final colors = [
+    //   Theme.of(context).colorScheme.listColor1,
+    //   Colors.yellow,
+    //   Colors.greenAccent,
+    //   Colors.cyan,
+    //   Colors.redAccent,
+    //   Colors.deepPurple.shade200,
+    //   Colors.amber.shade300,
+    //   Colors.deepOrangeAccent,
+    //   Colors.white60
+    // ];
     // final size = MediaQuery.of(context).size;
     final addTaskController = Get.put(AddTaskController());
     final sideBarController = Get.put(SidebarController());
     final notesListController = Get.find<NotesListController>();
-    print('Add Task Screen Called');
+    print('Add Task Screen Called ${Theme.of(context).brightness}');
     addTaskController.init(this.homeTaskItemModel);
     return SafeArea(
       child: Scaffold(
@@ -75,7 +78,6 @@ class AddTaskScreen extends StatelessWidget {
                   ),
                   actions: [
                     IconButton(
-                      color: Colors.redAccent,
                       onPressed: () {
                         addTaskController.isCurrencySelected.toggle();
                       },
@@ -94,12 +96,25 @@ class AddTaskScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    IconButton(
+                      onPressed: () {
+                        sideBarController.isSlideBarOpen.toggle();
+                      },
+                      icon: Image.asset(
+                        'assets/icons/bucket.png',
+                        height: kSizeCurrency - 10,
+                        color: context.theme.primaryColor,
+                      ),
+                    ),
                     if (addTaskController.isEditing)
                       IconButton(
                         onPressed: () {
                           addTaskController.isArchived
-                              ? addTaskController.unArchiveTask()
-                              : addTaskController.archiveTask();
+                              ? notesListController
+                                  .unArchiveNote(homeTaskItemModel!)
+                              : notesListController
+                                  .archiveNote(homeTaskItemModel!);
+
                           notesListController.update();
                           Get.back();
                         },
@@ -218,60 +233,54 @@ class AddTaskScreen extends StatelessWidget {
                                 },
                                 indexedItemBuilder: (context, element, index) {
                                   return Obx(
-                                    () => Container(
-                                      margin: EdgeInsets.only(right: 30),
-                                      child: TaskCheckItem(
-                                        price: addTaskController
-                                            .toDoTasksList[index].price,
-                                        value: addTaskController
-                                            .toDoTasksList[index].isChecked,
-                                        title: addTaskController
-                                            .toDoTasksList[index].taskName,
-                                        onTaskTitleChanged: (newTitle) {
+                                    () => TaskCheckItem(
+                                      price: addTaskController
+                                          .toDoTasksList[index].price,
+                                      value: addTaskController
+                                          .toDoTasksList[index].isChecked,
+                                      title: addTaskController
+                                          .toDoTasksList[index].taskName,
+                                      onTaskTitleChanged: (newTitle) {
+                                        addTaskController.toDoTasksList[index]
+                                            .taskName = newTitle;
+                                      },
+                                      onChanged: (newValue) {
+                                        print(newValue);
+                                        var changed = addTaskController
+                                            .toDoTasksList[index];
+                                        changed.isChecked = newValue;
+                                        addTaskController.toDoTasksList[index] =
+                                            changed;
+                                        updateGroupHeader(
+                                            newValue, addTaskController, index);
+                                        addTaskController.update();
+                                      },
+                                      onDownloadClicked: () {
+                                        final value = addTaskController
+                                            .toDoTasksList[index].isChecked;
+                                        if (value == null) {
                                           addTaskController.toDoTasksList[index]
-                                              .taskName = newTitle;
-                                        },
-                                        onChanged: (newValue) {
-                                          print(newValue);
-                                          var changed = addTaskController
-                                              .toDoTasksList[index];
-                                          changed.isChecked = newValue;
-                                          addTaskController
-                                              .toDoTasksList[index] = changed;
-                                          updateGroupHeader(newValue,
-                                              addTaskController, index);
-                                          addTaskController.update();
-                                        },
-                                        onDownloadClicked: () {
-                                          final value = addTaskController
-                                              .toDoTasksList[index].isChecked;
-                                          if (value == null) {
-                                            addTaskController
-                                                .toDoTasksList[index]
-                                                .isChecked = false;
-                                          } else {
-                                            addTaskController
-                                                .toDoTasksList[index]
-                                                .isChecked = null;
-                                          }
-                                          updateGroupHeader(
-                                              addTaskController
-                                                  .toDoTasksList[index]
-                                                  .isChecked,
-                                              addTaskController,
-                                              index);
-                                          addTaskController.update();
-                                        },
-                                        onDeleteClicked: () {
-                                          addTaskController.removeTask(element);
-                                        },
-                                        isCurrencyToggled: addTaskController
-                                            .isCurrencySelected.value,
-                                        onPriceChanged: (int newPrice) {
+                                              .isChecked = false;
+                                        } else {
                                           addTaskController.toDoTasksList[index]
-                                              .price = newPrice;
-                                        },
-                                      ),
+                                              .isChecked = null;
+                                        }
+                                        updateGroupHeader(
+                                            addTaskController
+                                                .toDoTasksList[index].isChecked,
+                                            addTaskController,
+                                            index);
+                                        addTaskController.update();
+                                      },
+                                      onDeleteClicked: () {
+                                        addTaskController.removeTask(element);
+                                      },
+                                      isCurrencyToggled: addTaskController
+                                          .isCurrencySelected.value,
+                                      onPriceChanged: (int newPrice) {
+                                        addTaskController.toDoTasksList[index]
+                                            .price = newPrice;
+                                      },
                                     ),
                                   );
                                 },
@@ -400,112 +409,5 @@ class AddTaskScreen extends StatelessWidget {
         addTaskController.toDoTasksList[index].taskStatus = TASK_STATUS.TODO;
         break;
     }
-  }
-}
-
-class SideColorPanel extends StatelessWidget {
-  const SideColorPanel({
-    Key? key,
-    required this.colors,
-  }) : super(key: key);
-
-  final List<Color> colors;
-
-  @override
-  Widget build(BuildContext context) {
-    final addTaskController = Get.find<AddTaskController>();
-    final sidebarController = Get.find<SidebarController>();
-    return Obx(
-      () => AnimatedPositioned(
-        curve: Curves.bounceOut,
-        duration: Duration(milliseconds: 500),
-        left: Directionality.of(context) == TextDirection.rtl
-            ? (sidebarController.isSlideBarOpen.value ? 0 : -60)
-            : null,
-        right: Directionality.of(context) != TextDirection.rtl
-            ? (sidebarController.isSlideBarOpen.value ? 0 : -60)
-            : null,
-        bottom: 0,
-        top: 0,
-        // child: ClipPath(
-        child: Row(
-          children: [
-            Stack(
-              children: [
-                Transform.rotate(
-                  angle: Directionality.of(context) == TextDirection.rtl
-                      ? 3.14
-                      : 0,
-                  // transform: Matrix4.rotationX(pi),
-                  child: Container(
-                    height: 250,
-                    child: CustomPaint(
-                      size: Size(64, (64 * 1.5).toDouble()),
-                      painter: RPSCustomPainter(context),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right:
-                      Directionality.of(context) == TextDirection.rtl ? 15 : 0,
-                  top: -5,
-                  bottom: 0,
-                  child: Container(
-                      child: sidebarController.isSlideBarOpen.value
-                          ? IconButton(
-                              onPressed: () {
-                                sidebarController.isSlideBarOpen.toggle();
-                              },
-                              icon: Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: Colors.blue,
-                              ),
-                            )
-                          : IconButton(
-                              onPressed: () {
-                                sidebarController.isSlideBarOpen.toggle();
-                              },
-                              icon: Icon(
-                                Icons.opacity,
-                                color: Colors.blue,
-                                size: 26,
-                              ),
-                            )),
-                )
-              ],
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(30)),
-              ),
-              constraints: BoxConstraints(
-                maxHeight: 500.h,
-              ),
-              width: 60,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40.0),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: 5,
-                  ),
-                  shrinkWrap: true,
-                  itemCount: colors.length,
-                  itemBuilder: (context, index) => Align(
-                    alignment: Alignment.center,
-                    child: CircularColorContainer(
-                      containerColor: colors[index],
-                      onColorChanged: (Color color) {
-                        addTaskController.color.value = color;
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
   }
 }

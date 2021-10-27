@@ -17,7 +17,7 @@ class AddTaskController extends GetxController {
   late HomeTaskItemModel homeTaskItemModel;
   final RxList<TodoItemModel> toDoTasksList = RxList([]);
   final RxBool isCurrencySelected = false.obs;
-  final Rx<Color> color = Rx<Color>(Get.theme.backgroundColor);
+  final Rx<Color> color = Rx<Color>(Get.theme.primaryColorDark);
   final isSlidePanelOpen = false.obs;
   TextEditingController textEditingController = TextEditingController();
   late Box<HomeTaskItemModel> homeTaskItemBox;

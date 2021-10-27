@@ -10,11 +10,11 @@ class LocaleString extends Translations {
           "kTitle": "Title",
           "kTitleHere": "Title Here",
           "kAddItem": "Add Item",
-          "kEditText": "EDIT TASK",
+          "kEditText": "Save",
           "kAddTask": "ADD TASK",
           "kHintText": "Search notes",
           "kTitleNote": "Note",
-          "kTitleReport": "Report",
+          "kTitleReport": "Expense",
           "kTitleArchive": "Archive",
           "kTitleSetting": "Setting",
           "kNext": "Next",
@@ -35,6 +35,7 @@ class LocaleString extends Translations {
           "kUpdate": "UPDATE",
           "kLight": 'Light',
           "kDark": 'Dark',
+          "kNoReportsFound": 'No expenses found'
         },
         //URDU LANGUAGE
         'ur_PK': {
@@ -68,6 +69,7 @@ class LocaleString extends Translations {
           "kUpdate": "اپ ڈیٹ",
           "kLight": 'روشن',
           "kDark": 'سیاہ',
+          'kNoReportsFound': 'کوئی رپورٹ نہیں ملی'
         },
       };
 }

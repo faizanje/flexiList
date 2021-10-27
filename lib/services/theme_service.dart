@@ -7,7 +7,8 @@ import 'package:noteapp/utils/storage_utils.dart';
 class ThemeService {
   switchTheme(bool isLight) {
     // Get.find<AppController>().switchTheme(isLight);
-    Get.changeThemeMode(isLight ? ThemeMode.light : ThemeMode.dark);
+    // Get.changeThemeMode(isLight ? ThemeMode.light : ThemeMode.dark);
+
     SettingsModel settingsModel = StorageUtils.getSettingsItem();
     settingsModel.isLightTheme = isLight;
     StorageUtils.saveSettingsItem(settingsModel);

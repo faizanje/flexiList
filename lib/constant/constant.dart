@@ -15,7 +15,3 @@ final List kMyLocales = [
   {'name': 'ENGLISH', 'locale': Locale('en', 'US')},
   {'name': 'URDU', 'locale': Locale('ur', 'PK')},
 ];
-
-class MyColors {
-  static const navyBlue = Color(0xFF020D46);
-}

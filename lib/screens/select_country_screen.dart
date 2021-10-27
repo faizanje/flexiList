@@ -21,6 +21,7 @@ import 'package:noteapp/utils/storage_utils.dart';
 class SelectCountryScreen extends StatefulWidget {
   final bool isEditing;
   SelectCountryScreen({this.isEditing = false});
+  // SelectCountryScreen({required this.isEditing});
   static const routeName = "/selectLan";
   @override
   _SelectCountryScreenState createState() => _SelectCountryScreenState();
@@ -256,16 +257,18 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                               color: Theme.of(context).primaryColor)),
                       child: InkWell(
                         onTap: () async {
-                          SettingsModel settingsModel = SettingsModel(
-                              currencyItem: selectedCurrency,
-                              countryItem: countrySelectedItem);
-                          StorageUtils.saveSettingsItem(settingsModel);
-
+                          SettingsModel settingsModel =
+                              StorageUtils.getSettingsItem();
+                          settingsModel.countryItem = countrySelectedItem;
+                          settingsModel.currencyItem = selectedCurrency;
                           LocaleUtils.updateLanguageByItem(countrySelectedItem);
                           if (widget.isEditing) {
+                            StorageUtils.saveSettingsItem(settingsModel);
                             Get.snackbar('Settings Updated',
                                 'Settings has been updated successfully');
                           } else {
+                            settingsModel.hasWatchedTutorial = true;
+                            StorageUtils.saveSettingsItem(settingsModel);
                             Get.to(() => BottomNavScreen());
                           }
                           // Navigator.of(context).push(MaterialPageRoute(

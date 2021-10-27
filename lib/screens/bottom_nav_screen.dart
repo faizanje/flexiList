@@ -48,10 +48,12 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         body: _pageOption[selectedPage],
         bottomNavigationBar: ConvexAppBar(
           onTabNotify: (position) {
+            // if (position == 1) {
             if (position == 2) {
               Get.to(() => AddTaskScreen());
               return false;
             }
+            // if (position != 2) {
             if (position != 1) {
               try {
                 Get.delete<ReportsController>();

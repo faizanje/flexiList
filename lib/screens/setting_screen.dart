@@ -7,6 +7,8 @@ import 'bottom_nav_screen.dart';
 class MenuItems {
   // static const dateFormat =
   //     MenuItem(title: "Date Format", icon: Icons.date_range);
+  static const archive = MenuItem(title: 'TitleArchive', icon: Icons.archive);
+  static const settings = MenuItem(title: 'TitleSetting', icon: Icons.settings);
   static const theme = MenuItem(title: 'Theme', icon: Icons.color_lens_rounded);
   // static const currency =
   //     MenuItem(title: "Currency", icon: Icons.monetization_on_outlined);

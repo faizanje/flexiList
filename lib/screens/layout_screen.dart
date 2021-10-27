@@ -55,7 +55,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
       // case MenuItems.language:
       //   return SelectCountryScreen();
       default:
-        return SelectCountryScreen();
+        return SelectCountryScreen(
+          isEditing: true,
+        );
     }
   }
 }

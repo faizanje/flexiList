@@ -2,16 +2,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+// import 'package:multi_select_item/multi_select_item.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
+import 'package:noteapp/utils/multi_select_item.dart';
+import 'package:noteapp/utils/custom_color_scheme.dart';
 
 class NotesListController extends GetxController {
+  final isSelectingList = false.obs;
+  final selectedItemsCount = 0.obs;
   final isGrid = true.obs;
   final isSearching = false.obs;
   final searchController = TextEditingController();
   late Box<HomeTaskItemModel> homeTaskItemBox;
   RxList<HomeTaskItemModel> notesList = RxList([]);
   RxList<HomeTaskItemModel> filteredNotesList = RxList([]);
+  MultiSelectController multiSelectController = new MultiSelectController();
+
+  final colors = [
+    Get.theme.colorScheme.listColor1,
+    Get.theme.colorScheme.listColor2,
+    Get.theme.colorScheme.listColor3,
+    Get.theme.colorScheme.listColor4,
+    Get.theme.colorScheme.listColor5,
+    Get.theme.colorScheme.listColor6,
+    Get.theme.colorScheme.listColor7,
+    Get.theme.colorScheme.listColor8,
+    Get.theme.colorScheme.listColor9,
+  ];
 
   @override
   void onInit() {
@@ -38,16 +56,44 @@ class NotesListController extends GetxController {
 
   initActiveNotes() {}
 
-  List<HomeTaskItemModel> getArchiveNotesList() {
+  List<HomeTaskItemModel> getActiveNotesList() {
     return filteredNotesList.where((element) => !element.isArchived).toList();
   }
 
-  archiveNote(HomeTaskItemModel item) async {
-    item.isArchived = true;
-    await item.save();
-    filteredNotesList.remove(item);
+  List<HomeTaskItemModel> getArchiveNotesList() {
+    return filteredNotesList.where((element) => element.isArchived).toList();
+  }
+
+  setIsSelectingList(bool value) {
+    this.isSelectingList.value = value;
+    this.multiSelectController.isSelecting = value;
+    this.selectedItemsCount.value =
+        this.multiSelectController.selectedIndexes.length;
     update();
-    filteredNotesList.add(item);
+  }
+
+  archiveNote(HomeTaskItemModel item, [bool refresh = true]) async {
+    int index = filteredNotesList.indexOf(item);
+    filteredNotesList[index].isArchived = true;
+    // filteredNotesList.remove(item);
+    if (refresh) {
+      filteredNotesList.refresh();
+      await item.save();
+      update();
+    }
+    // item.isArchived = true;
+    // filteredNotesList.add(item);
+  }
+
+  unArchiveNote(HomeTaskItemModel item, [bool refresh = true]) async {
+    int index = filteredNotesList.indexOf(item);
+    filteredNotesList[index].isArchived = false;
+    await item.save();
+    if (refresh) {
+      filteredNotesList.refresh();
+      update();
+    }
+    // filteredNotesList.add(item);
   }
 
   reorderNote(int newIndex, int oldIndex) async {
@@ -80,12 +126,28 @@ class NotesListController extends GetxController {
     update();
   }
 
-  deleteNote(HomeTaskItemModel item) async {
+  undoNoteDelete(int index, HomeTaskItemModel item) {
+    notesList.insert(index, item);
+    filteredNotesList.insert(index, item);
+    update();
+  }
+
+  deleteNoteFromNotesList(HomeTaskItemModel item) async {
     notesList.remove(item);
     filteredNotesList.remove(item);
+    update();
+  }
+
+  deleteNoteFromDatabase(HomeTaskItemModel item) async {
     await item.delete();
     update();
   }
+  // deleteNote(HomeTaskItemModel item) async {
+  //   notesList.remove(item);
+  //   filteredNotesList.remove(item);
+  //   await item.delete();
+  //   update();
+  // }
 
   updateNote() {}
 
@@ -117,5 +179,26 @@ class NotesListController extends GetxController {
   void toggleIsGrid() {
     isGrid.toggle();
     update();
+  }
+
+  void toggleSelectedIndex(int index) {
+    multiSelectController.toggle(index);
+    multiSelectController.isSelected(index)
+        ? selectedItemsCount.value++
+        : selectedItemsCount.value--;
+    update();
+  }
+
+  void resetSelection() {
+    setIsSelectingList(false);
+    multiSelectController.deselectAll();
+    selectedItemsCount.value = 0;
+  }
+
+  //This will be called whenever item is removed, added or Active/Archive screen is opened
+  void initSelectionSize(int size) {
+    this.multiSelectController.set(size);
+    this.selectedItemsCount.value = 0;
+    this.isSelectingList.value = false;
   }
 }

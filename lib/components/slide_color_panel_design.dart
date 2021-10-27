@@ -10,11 +10,13 @@ class RPSCustomPainter extends CustomPainter {
   RPSCustomPainter(this.context);
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, Size originalSize) {
+    // Size size = Size(originalSize.width + 10, originalSize.height);
+    Size size = Size(originalSize.width, originalSize.height);
     Paint paint_0 = new Paint()
       ..color = Theme.of(this.context).primaryColor
       ..style = PaintingStyle.fill
-      ..strokeWidth = 1.0;
+      ..strokeWidth = 5.0;
 
     Path path_0 = Path();
     path_0.moveTo(size.width * 1.0066000, size.height * 0.1493000);
