@@ -67,6 +67,38 @@ class ArchiveScreen extends StatelessWidget {
                         notesListController.filteredNotesList.refresh();
                         notesListController.update();
                       },
+                      onDeleteClicked: (List<int> selectedIndexes) {
+                        Get.defaultDialog(
+                            title: 'Confirmation',
+                            middleText:
+                                'This cannot be undone. Are you sure to delete all notes?',
+                            confirm: TextButton(
+                              onPressed: () {
+                                List<HomeTaskItemModel> selectedListItems =
+                                    selectedIndexes
+                                        .map((index) => notesListController
+                                            .getArchiveNotesList()[index])
+                                        .toList();
+                                selectedListItems.forEach((element) {
+                                  notesListController.deleteNoteFromNotesList(
+                                      element, false);
+                                  notesListController
+                                      .deleteNoteFromDatabase(element);
+                                  Get.back();
+                                });
+                                notesListController.resetSelection();
+                                notesListController.filteredNotesList.refresh();
+                                notesListController.update();
+                              },
+                              child: Text('Delete'),
+                            ),
+                            cancel: TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text('Cancel'),
+                            ));
+                      },
                     )
                   : AppBarWithSearchAndIcon(
                       showArchiveNotes: true,
@@ -266,9 +298,12 @@ class ArchiveScreen extends StatelessWidget {
                   child: NoteItem(
                     homeTaskItemModel: homeTaskItemModel,
                     onNoteItemClicked: (HomeTaskItemModel homeTaskItemModel) {
-                      Get.to(() => AddTaskScreen(
-                            homeTaskItemModel: homeTaskItemModel,
-                          ));
+                      Get.to(
+                        () => AddTaskScreen(
+                          homeTaskItemModel: homeTaskItemModel,
+                        ),
+                        transition: Transition.zoom,
+                      );
                     },
                   ),
                 );

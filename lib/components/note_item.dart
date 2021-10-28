@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
+import 'package:noteapp/utils/storage_utils.dart';
 
 class NoteItem extends StatelessWidget {
   final List<Widget> list = [];
@@ -50,8 +51,9 @@ class NoteItem extends StatelessWidget {
           child: Text(
             this.homeTaskItemModel.title!.isNotEmpty
                 ? this.homeTaskItemModel.title!
-                : DateFormat.yMd()
-                    .add_jm()
+                : DateFormat(StorageUtils.getSettingsItem().dateFormat)
+                    // : DateFormat.yMd()
+                    //     .add_jm()
                     .format(this.homeTaskItemModel.dateTime),
             maxLines: 1,
             softWrap: true,

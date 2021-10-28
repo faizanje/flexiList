@@ -44,7 +44,7 @@ class TaskCheckItem extends StatelessWidget {
           addTaskController.addEmptyTask();
         },
         textInputAction: TextInputAction.next,
-        autofocus: true,
+        // autofocus: true,
         controller: TextEditingController()..text = title,
         onChanged: onTaskTitleChanged,
         decoration: InputDecoration(

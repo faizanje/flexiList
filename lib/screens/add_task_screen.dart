@@ -361,11 +361,11 @@ class AddTaskScreen extends StatelessWidget {
                                 }
 
                                 notesListController.update();
-                                try {
-                                  Get.find<ReportsController>().initList();
-                                } catch (e) {
-                                  print('Exception $e');
-                                }
+                                // try {
+                                //   Get.find<ReportsController>().initList();
+                                // } catch (e) {
+                                //   print('Exception $e');
+                                // }
 
                                 Get.back();
                                 Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);

@@ -18,7 +18,8 @@ import 'package:noteapp/utils/storage_utils.dart';
 class AddTaskController extends GetxController {
   late HomeTaskItemModel homeTaskItemModel;
   final RxList<TodoItemModel> toDoTasksList = RxList([]);
-  final RxBool isCurrencySelected = false.obs;
+  final RxBool isCurrencySelected =
+      StorageUtils.getSettingsItem().isCurrencyEnableGlobally.obs;
   final RxList<Color> color = RxList<Color>(kColorsList[0]);
   // late NotesListController notesListController;
   // final Rx<Color> color = Rx<Color>(Get.theme.primaryColorDark);

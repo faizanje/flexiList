@@ -7,6 +7,7 @@ import 'package:noteapp/controllers/app_controller.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/controllers/reports_controller.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
+import 'package:noteapp/screens/new_settings_screen.dart';
 import 'package:noteapp/screens/notes_list_screen.dart';
 import 'package:noteapp/screens/archive_screen.dart';
 import 'package:noteapp/screens/layout_screen.dart';
@@ -28,7 +29,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     ReportScreen(),
     Container(),
     ArchiveScreen(),
-    LayoutScreen()
+    NewSettingsScreen()
+    // LayoutScreen()
   ];
 
   @override
@@ -50,7 +52,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           onTabNotify: (position) {
             // if (position == 1) {
             if (position == 2) {
-              Get.to(() => AddTaskScreen());
+              Get.to(
+                () => AddTaskScreen(),
+                // transition: Transition.downToUp,
+                transition: Transition.zoom,
+              );
               return false;
             }
             // if (position != 2) {

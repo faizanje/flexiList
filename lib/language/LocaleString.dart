@@ -35,7 +35,9 @@ class LocaleString extends Translations {
           "kUpdate": "UPDATE",
           "kLight": 'Light',
           "kDark": 'Dark',
-          "kNoReportsFound": 'No expenses found'
+          "kNoReportsFound": 'No expenses found',
+          "kDateFormat": "Date Format",
+          "kChooseDateFormat": "Choose your date format",
         },
         //URDU LANGUAGE
         'ur_PK': {
@@ -69,7 +71,9 @@ class LocaleString extends Translations {
           "kUpdate": "اپ ڈیٹ",
           "kLight": 'روشن',
           "kDark": 'سیاہ',
-          'kNoReportsFound': 'کوئی رپورٹ نہیں ملی'
+          'kNoReportsFound': 'کوئی رپورٹ نہیں ملی',
+          "kDateFormat": "Date Format",
+          "kChooseDateFormat": "Choose your date format"
         },
       };
 }

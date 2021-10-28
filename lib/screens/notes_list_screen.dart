@@ -54,6 +54,39 @@ class NotesListScreen extends StatelessWidget {
                         notesListController.filteredNotesList.refresh();
                         notesListController.update();
                       },
+                      onDeleteClicked: (List<int> selectedIndexes) {
+                        Get.defaultDialog(
+                            radius: 8,
+                            title: 'Confirmation',
+                            middleText:
+                                'This cannot be undone. Are you sure to delete all notes?',
+                            confirm: TextButton(
+                              onPressed: () {
+                                List<HomeTaskItemModel> selectedListItems =
+                                    selectedIndexes
+                                        .map((index) => notesListController
+                                            .getActiveNotesList()[index])
+                                        .toList();
+                                selectedListItems.forEach((element) {
+                                  notesListController.deleteNoteFromNotesList(
+                                      element, false);
+                                  notesListController
+                                      .deleteNoteFromDatabase(element);
+                                });
+                                notesListController.resetSelection();
+                                notesListController.filteredNotesList.refresh();
+                                notesListController.update();
+                                Get.back();
+                              },
+                              child: Text('Delete'),
+                            ),
+                            cancel: TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text('Cancel'),
+                            ));
+                      },
                     )
                   : AppBarWithSearchAndIcon(
                       showArchiveNotes: false,
@@ -213,9 +246,12 @@ class NotesListScreen extends StatelessWidget {
                   child: NoteItem(
                     homeTaskItemModel: homeTaskItemModel,
                     onNoteItemClicked: (HomeTaskItemModel homeTaskItemModel) {
-                      Get.to(() => AddTaskScreen(
-                            homeTaskItemModel: homeTaskItemModel,
-                          ));
+                      Get.to(
+                        () => AddTaskScreen(
+                          homeTaskItemModel: homeTaskItemModel,
+                        ),
+                        transition: Transition.zoom,
+                      );
                     },
                   ),
                 );

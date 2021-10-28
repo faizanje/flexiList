@@ -9,10 +9,13 @@ import 'package:noteapp/controllers/sidebar_controller.dart';
 class AppBarWithMenuOption extends StatelessWidget {
   final bool isArchiveScreen;
   final Function(List<int> selectedIndexes) onArchiveClicked;
+  final Function(List<int> selectedIndexes) onDeleteClicked;
+
   const AppBarWithMenuOption({
     Key? key,
     required this.isArchiveScreen,
     required this.onArchiveClicked,
+    required this.onDeleteClicked,
   }) : super(key: key);
 
   @override
@@ -32,7 +35,7 @@ class AppBarWithMenuOption extends StatelessWidget {
       ),
       title: Obx(() => Text(
             '${notesListController.selectedItemsCount}',
-            style: TextStyle(color: Get.theme.primaryColor),
+            style: TextStyle(color: Get.theme.primaryColor, fontSize: 18),
           )),
       actions: [
         IconButton(
@@ -46,6 +49,18 @@ class AppBarWithMenuOption extends StatelessWidget {
             size: 30,
           ),
         ),
+        IconButton(
+          onPressed: () {
+            onDeleteClicked(
+              notesListController.multiSelectController.selectedIndexes,
+            );
+          },
+          icon: Icon(
+            Icons.delete,
+            color: Theme.of(context).primaryColor,
+            size: 30,
+          ),
+        )
       ],
       // children: <Widget>[
       //   IconButton(

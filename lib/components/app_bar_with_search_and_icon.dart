@@ -19,17 +19,17 @@ class AppBarWithSearchAndIcon extends StatelessWidget {
     final notesListController = Get.find<NotesListController>();
     return Row(
       children: <Widget>[
-        IconButton(
-          onPressed: () {},
-          icon: SvgPicture.asset(
-            'assets/images/menu_icon.svg',
-            color: Theme.of(context).primaryColor,
-          ),
-        ),
+        // IconButton(
+        //   onPressed: () {},
+        //   icon: SvgPicture.asset(
+        //     'assets/images/menu_icon.svg',
+        //     color: Theme.of(context).primaryColor,
+        //   ),
+        // ),
         Container(
-          margin: EdgeInsets.only(top: 5),
+          margin: EdgeInsets.only(top: 5, left: 10),
           alignment: AlignmentDirectional.centerStart,
-          width: 260.w,
+          width: 290.w,
           height: 42.h,
           decoration: BoxDecoration(
             color: Get.theme.primaryColorDark,

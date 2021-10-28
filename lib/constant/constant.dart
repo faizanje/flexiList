@@ -27,3 +27,10 @@ final kColorsList = [
   [Colors.deepOrangeAccent, Color(0xFF393232)],
   [Colors.white60, Color(0x2228a745)],
 ];
+
+const kDefaultDateFormat = 'dd/MM/yyyy';
+final List<String> kDateFormats = [
+  "dd/MM/yyyy",
+  "MM/dd/yyyy",
+  "yyyy/MM/dd",
+];

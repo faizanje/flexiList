@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/models/item_entity.dart';
@@ -18,9 +19,12 @@ import 'package:noteapp/screens/bottom_nav_screen.dart';
 import 'package:noteapp/utils/locale_utils.dart';
 import 'package:noteapp/utils/storage_utils.dart';
 
+enum SETTING_TYPE { LANGUAGE, CURRENCY }
+
 class SelectCountryScreen extends StatefulWidget {
   final bool isEditing;
-  SelectCountryScreen({this.isEditing = false});
+  final SETTING_TYPE? settingType;
+  SelectCountryScreen({this.isEditing = false, this.settingType});
   // SelectCountryScreen({required this.isEditing});
   static const routeName = "/selectLan";
   @override
@@ -86,34 +90,47 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
       child: Scaffold(
         appBar: AppBar(
           // backgroundColor: Theme.of(context).backgroundColor,
-          title: Text('kLanguage'.tr),
-          leading: flag
-              ? IconButton(
-                  onPressed: () {
-                    ZoomDrawer.of(context)!.toggle();
-                    setState(() {
-                      flag = false;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    size: 37,
-                    color: Colors.white,
-                  ),
-                )
-              : IconButton(
-                  onPressed: () {
-                    ZoomDrawer.of(context)!.toggle();
-                    setState(() {
-                      flag = true;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 37,
-                    color: Colors.white,
-                  ),
-                ),
+          title: Text(
+            'kLanguage'.tr,
+            style: Get.theme.appBarTheme.titleTextStyle,
+            // style: GoogleFonts.nunito(),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+          ),
+          // leading: flag
+          //     ? IconButton(
+          //         onPressed: () {
+          //           ZoomDrawer.of(context)!.toggle();
+          //           setState(() {
+          //             flag = false;
+          //           });
+          //         },
+          //         icon: Icon(
+          //           Icons.arrow_back,
+          //           size: 37,
+          //           color: Colors.white,
+          //         ),
+          //       )
+          //     : IconButton(
+          //         onPressed: () {
+          //           ZoomDrawer.of(context)!.toggle();
+          //           setState(() {
+          //             flag = true;
+          //           });
+          //         },
+          //         icon: Icon(
+          //           Icons.arrow_forward_rounded,
+          //           size: 37,
+          //           color: Colors.white,
+          //         ),
+          //       ),
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -269,7 +286,8 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                           } else {
                             settingsModel.hasWatchedTutorial = true;
                             StorageUtils.saveSettingsItem(settingsModel);
-                            Get.to(() => BottomNavScreen());
+                            Get.offAll(() => BottomNavScreen(),
+                                transition: Transition.rightToLeft);
                           }
                           // Navigator.of(context).push(MaterialPageRoute(
                           //     builder: (context) => BottomNavBar()));

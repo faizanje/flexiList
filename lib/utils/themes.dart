@@ -6,7 +6,14 @@ class Themes {
   static final light = ThemeData.light().copyWith(
     brightness: Brightness.light,
     primaryColor: kPrimaryColor,
-    appBarTheme: AppBarTheme(color: kPrimaryColor),
+    appBarTheme: AppBarTheme(
+        color: kPrimaryColor,
+        titleTextStyle: GoogleFonts.nunito().copyWith(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+        textTheme: GoogleFonts.nunitoTextTheme()),
     backgroundColor: Colors.white,
     buttonColor: Colors.blue,
     accentColor: Colors.white,
@@ -25,7 +32,13 @@ class Themes {
     // cardColor: Colors.deepOrange,
     iconTheme: IconThemeData(color: Color(0xFF69F2DD)),
     scaffoldBackgroundColor: Color(0xFF241B35),
-    appBarTheme: AppBarTheme(color: Color(0xFF241B35)),
+    appBarTheme: AppBarTheme(
+        color: Color(0xFF241B35),
+        titleTextStyle: GoogleFonts.nunito().copyWith(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        )),
     primaryColor: Color(0xFF69F2DD),
     primaryColorDark: Color(0xFF413C4E),
     backgroundColor: Color(0xFF241B35),

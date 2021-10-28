@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 // import 'package:multi_select_item/multi_select_item.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/models/filter_date.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/utils/multi_select_item.dart';
 import 'package:noteapp/utils/custom_color_scheme.dart';
@@ -41,10 +42,10 @@ class NotesListController extends GetxController {
     filteredNotesList.addAll(homeTaskItemBox.values);
   }
 
-  List<HomeTaskItemModel> get completedNotes => filteredNotesList
-      .where((element) => element.todoItemList
-          .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
-      .toList();
+  // List<HomeTaskItemModel> get completedNotes => filteredNotesList
+  //     .where((element) => element.todoItemList
+  //         .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
+  //     .toList();
 
   RxList<HomeTaskItemModel> get archivedNotesList =>
       filteredNotesList.where((element) => element.isArchived).toList().obs;
@@ -62,6 +63,27 @@ class NotesListController extends GetxController {
 
   List<HomeTaskItemModel> getArchiveNotesList() {
     return filteredNotesList.where((element) => element.isArchived).toList();
+  }
+
+  List<HomeTaskItemModel> getCompletedNotesList() {
+    return filteredNotesList
+        .where((element) => element.todoItemList
+            .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
+        .toList();
+  }
+
+  List<HomeTaskItemModel> getFilteredCompletedNotesList(FilterDate filterDate) {
+    if (filterDate.fromDate == null && filterDate.toDate == null) {
+      return getCompletedNotesList();
+    }
+    print('Dates are not null');
+    return filteredNotesList
+        .where((element) => element.todoItemList
+            .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
+        .where((element) =>
+            element.dateTime.isAfter(filterDate.fromDate!) &&
+            element.dateTime.isBefore(filterDate.toDate!))
+        .toList();
   }
 
   setIsSelectingList(bool value) {
@@ -132,10 +154,12 @@ class NotesListController extends GetxController {
     update();
   }
 
-  deleteNoteFromNotesList(HomeTaskItemModel item) async {
+  deleteNoteFromNotesList(HomeTaskItemModel item, [bool refresh = true]) async {
     notesList.remove(item);
     filteredNotesList.remove(item);
-    update();
+    if (refresh) {
+      update();
+    }
   }
 
   deleteNoteFromDatabase(HomeTaskItemModel item) async {
