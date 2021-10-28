@@ -111,9 +111,9 @@ class NotesListController extends GetxController {
     // await newItem.delete();
 
     HomeTaskItemModel homeTaskItemModelDummy1 =
-        HomeTaskItemModel(colorValue: 0, todoItemList: []);
+        HomeTaskItemModel(colorValue: [0, 0], todoItemList: []);
     HomeTaskItemModel homeTaskItemModelDummy2 =
-        HomeTaskItemModel(colorValue: 1, todoItemList: []);
+        HomeTaskItemModel(colorValue: [1, 1], todoItemList: []);
 
     //first enter some dummy content
     await homeTaskItemBox.putAt(oldIndex, homeTaskItemModelDummy1);

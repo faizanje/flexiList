@@ -40,6 +40,11 @@ class TaskCheckItem extends StatelessWidget {
       controlAffinity: ListTileControlAffinity.leading,
       // tristate: true,
       title: TextField(
+        onSubmitted: (value) {
+          addTaskController.addEmptyTask();
+        },
+        textInputAction: TextInputAction.next,
+        autofocus: true,
         controller: TextEditingController()..text = title,
         onChanged: onTaskTitleChanged,
         decoration: InputDecoration(

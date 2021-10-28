@@ -24,7 +24,9 @@ class NoteItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      color: Color(homeTaskItemModel.colorValue),
+      color: Color(Get.isDarkMode
+          ? homeTaskItemModel.colorValue[1]
+          : homeTaskItemModel.colorValue[0]),
       child: InkWell(
         onTap: () {
           onNoteItemClicked(homeTaskItemModel);

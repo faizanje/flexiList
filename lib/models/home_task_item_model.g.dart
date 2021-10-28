@@ -19,7 +19,7 @@ class HomeTaskItemModelAdapter extends TypeAdapter<HomeTaskItemModel> {
     return HomeTaskItemModel(
       isArchived: fields[0] as bool,
       isCurrencySelected: fields[1] as bool,
-      colorValue: fields[2] as int,
+      colorValue: (fields[2] as List).cast<int>(),
       todoItemList: (fields[3] as List).cast<TodoItemModel>(),
       title: fields[4] as String?,
     )..dateTime = fields[5] as DateTime;

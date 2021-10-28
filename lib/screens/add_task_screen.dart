@@ -57,7 +57,9 @@ class AddTaskScreen extends StatelessWidget {
               () => Container(
                 height: double.infinity,
                 width: double.infinity,
-                color: addTaskController.color.value,
+                color: Get.isDarkMode
+                    ? addTaskController.color[1]
+                    : addTaskController.color[0],
               ),
             ),
             Column(
@@ -149,6 +151,10 @@ class AddTaskScreen extends StatelessWidget {
                           // height: size.height * 0.02,
                         ),
                         TextField(
+                          onSubmitted: (value) {
+                            addTaskController.addEmptyTask();
+                          },
+                          textInputAction: TextInputAction.next,
                           controller: addTaskController.textEditingController,
                           // autofocus: false,
                           decoration: InputDecoration(
@@ -164,12 +170,7 @@ class AddTaskScreen extends StatelessWidget {
                         Center(
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              TodoItemModel taskItem = TodoItemModel(
-                                taskStatus: TASK_STATUS.TODO,
-                                isChecked: false,
-                                taskName: '',
-                              );
-                              addTaskController.addTask(taskItem);
+                              addTaskController.addEmptyTask();
                             },
                             icon: Icon(
                               Icons.add,
@@ -298,8 +299,10 @@ class AddTaskScreen extends StatelessWidget {
                                   this.homeTaskItemModel!
                                     ..todoItemList =
                                         addTaskController.toDoTasksList
-                                    ..colorValue =
-                                        addTaskController.color.value.value
+                                    ..colorValue = [
+                                      addTaskController.color[0].value,
+                                      addTaskController.color[1].value
+                                    ]
                                     ..isArchived = addTaskController.isArchived
                                     ..isCurrencySelected = addTaskController
                                         .isCurrencySelected.value
@@ -338,8 +341,10 @@ class AddTaskScreen extends StatelessWidget {
                                             .textEditingController.value.text,
                                     todoItemList:
                                         addTaskController.toDoTasksList,
-                                    colorValue:
-                                        addTaskController.color.value.value,
+                                    colorValue: [
+                                      addTaskController.color[0].value,
+                                      addTaskController.color[1].value
+                                    ],
                                     isArchived: addTaskController.isArchived,
                                     isCurrencySelected: addTaskController
                                         .isCurrencySelected.value,
@@ -389,7 +394,7 @@ class AddTaskScreen extends StatelessWidget {
                 )
               ],
             ),
-            SideColorPanel(colors: colors),
+            SideColorPanel(colors: kColorsList),
           ],
         ),
       ),

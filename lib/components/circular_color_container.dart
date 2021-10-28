@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CircularColorContainer extends StatelessWidget {
-  final Color containerColor;
-  final Function(Color) onColorChanged;
+  final List<Color> containerColor;
+  final Function(List<Color>) onColorChanged;
 
   const CircularColorContainer(
       {Key? key, required this.containerColor, required this.onColorChanged})
@@ -22,7 +23,7 @@ class CircularColorContainer extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(100),
           ),
-          color: containerColor,
+          color: Get.isDarkMode ? containerColor[1] : containerColor[0],
         ),
       ),
     );

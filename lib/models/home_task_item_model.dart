@@ -13,7 +13,7 @@ class HomeTaskItemModel extends HiveObject {
   bool isCurrencySelected;
 
   @HiveField(2)
-  int colorValue;
+  List<int> colorValue;
 
   @HiveField(3)
   List<TodoItemModel> todoItemList;

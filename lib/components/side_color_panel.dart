@@ -13,7 +13,8 @@ class SideColorPanel extends StatelessWidget {
     required this.colors,
   }) : super(key: key);
 
-  final List<Color> colors;
+  // final List<Color> colors;
+  final List<List<Color>> colors;
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +101,8 @@ class SideColorPanel extends StatelessWidget {
                     alignment: Alignment.center,
                     child: CircularColorContainer(
                       containerColor: colors[index],
-                      onColorChanged: (Color color) {
-                        addTaskController.color.value = color;
+                      onColorChanged: (List<Color> colors) {
+                        addTaskController.color.value = colors;
                       },
                     ),
                   ),

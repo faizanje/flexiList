@@ -7,6 +7,8 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:noteapp/constant/constant.dart';
+import 'package:noteapp/controllers/notes_list_controller.dart';
+import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/models/item_entity.dart';
 import 'package:noteapp/models/settings_model.dart';
@@ -17,7 +19,9 @@ class AddTaskController extends GetxController {
   late HomeTaskItemModel homeTaskItemModel;
   final RxList<TodoItemModel> toDoTasksList = RxList([]);
   final RxBool isCurrencySelected = false.obs;
-  final Rx<Color> color = Rx<Color>(Get.theme.primaryColorDark);
+  final RxList<Color> color = RxList<Color>(kColorsList[0]);
+  // late NotesListController notesListController;
+  // final Rx<Color> color = Rx<Color>(Get.theme.primaryColorDark);
   final isSlidePanelOpen = false.obs;
   TextEditingController textEditingController = TextEditingController();
   late Box<HomeTaskItemModel> homeTaskItemBox;
@@ -28,7 +32,10 @@ class AddTaskController extends GetxController {
     if (homeTaskItemModel != null) {
       this.homeTaskItemModel = homeTaskItemModel;
       this.isCurrencySelected.value = this.homeTaskItemModel.isCurrencySelected;
-      this.color.value = Color(this.homeTaskItemModel.colorValue);
+      this.color.value = [
+        Color(this.homeTaskItemModel.colorValue[0]),
+        Color(this.homeTaskItemModel.colorValue[1])
+      ];
       this.isArchived = homeTaskItemModel.isArchived;
       this.toDoTasksList.clear();
       this.toDoTasksList.addAll(this.homeTaskItemModel.todoItemList);
@@ -68,10 +75,19 @@ class AddTaskController extends GetxController {
     update();
   }
 
-  randomizeColor() {
-    color.value =
-        Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+  void addEmptyTask() {
+    TodoItemModel taskItem = TodoItemModel(
+      taskStatus: TASK_STATUS.TODO,
+      isChecked: false,
+      taskName: '',
+    );
+    addTask(taskItem);
   }
+
+  // randomizeColor() {
+  //   color.value =
+  //       Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+  // }
 
   removeTask(TodoItemModel taskItem) {
     toDoTasksList.remove(taskItem);
