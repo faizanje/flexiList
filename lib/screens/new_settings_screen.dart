@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:noteapp/models/settings_model.dart';
 import 'package:noteapp/screens/dart_format_screen.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
@@ -89,6 +90,18 @@ class _NewSettingsScreenState extends State<NewSettingsScreen> {
                 Get.to(() => DateFormatScreen(),
                     transition: Transition.rightToLeft);
               },
+            ),
+            ListTile(
+              leading: Icon(Icons.share),
+              title: Text('Share'),
+              onTap: () {
+                LaunchReview.launch(writeReview: false);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.star),
+              title: Text('Rate us'),
+              onTap: () {},
             ),
           ],
         ),
