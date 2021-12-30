@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/controllers/sidebar_controller.dart';
 
@@ -10,13 +11,16 @@ class AppBarWithMenuOption extends StatelessWidget {
   final bool isArchiveScreen;
   final Function(List<int> selectedIndexes) onArchiveClicked;
   final Function(List<int> selectedIndexes) onDeleteClicked;
-  final Function(List<int> selectedIndexes)? onShareClicked;
+  final Function(List<int> selectedIndexes)? onShareClicked,
+      onColorPickerClicked;
+
   const AppBarWithMenuOption({
     Key? key,
     required this.isArchiveScreen,
     required this.onArchiveClicked,
     required this.onDeleteClicked,
     this.onShareClicked,
+    this.onColorPickerClicked,
   }) : super(key: key);
 
   @override
@@ -39,6 +43,18 @@ class AppBarWithMenuOption extends StatelessWidget {
             style: TextStyle(color: Get.theme.primaryColor, fontSize: 18),
           )),
       actions: [
+        IconButton(
+          onPressed: () {
+            if (onColorPickerClicked != null)
+              onColorPickerClicked!(
+                  notesListController.multiSelectController.selectedIndexes);
+          },
+          icon: Image.asset(
+            'assets/icons/bucket.png',
+            height: kSizeCurrency - 10,
+            color: context.theme.primaryColor,
+          ),
+        ),
         Tooltip(
           message: 'Share notes',
           child: IconButton(

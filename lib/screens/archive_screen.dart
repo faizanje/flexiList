@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/components/app_bar_with_menu_option.dart';
 import 'package:noteapp/components/app_bar_with_search_and_icon.dart';
+import 'package:noteapp/components/circular_color_container.dart';
 import 'package:noteapp/components/no_notes_found.dart';
 import 'package:noteapp/components/note_item.dart';
 import 'package:noteapp/constant/constant.dart';
@@ -42,6 +43,50 @@ class ArchiveScreen extends StatelessWidget {
               () => notesListController.isSelectingList.value
                   ? AppBarWithMenuOption(
                       isArchiveScreen: true,
+                      onColorPickerClicked: (List<int> selectedIndexes) {
+                        List<HomeTaskItemModel> selectedListItems =
+                            selectedIndexes
+                                .map((index) => notesListController
+                                    .getActiveNotesList()[index])
+                                .toList();
+
+                        // selectedListItems.forEach((element) {
+                        //   element.colorValue[0] = kColorsList[2][0].value;
+                        //   element.colorValue[1] = kColorsList[2][1].value;
+                        // });
+
+                        Get.defaultDialog(
+                          radius: 8,
+                          title: 'Select color',
+                          barrierDismissible: true,
+                          content: Wrap(
+                            children: [
+                              ...kColorsList
+                                  .map(
+                                    (e) => Container(
+                                      // decoration:
+                                      //     BoxDecoration(border: BorderSide()),
+                                      margin: EdgeInsets.all(2),
+                                      child: CircularColorContainer(
+                                        containerColor: e,
+                                        onColorChanged: (List<Color> colors) {
+                                          selectedListItems.forEach((element) {
+                                            element.colorValue[0] =
+                                                colors[0].value;
+                                            element.colorValue[1] =
+                                                colors[1].value;
+                                            element.save();
+                                          });
+                                          notesListController.update();
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                  .toList()
+                            ],
+                          ),
+                        );
+                      },
                       onShareClicked: (List<int> selectedIndexes) {
                         shareNotes(selectedIndexes, notesListController);
                       },
