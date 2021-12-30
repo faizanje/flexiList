@@ -28,18 +28,12 @@ class NoteItem extends StatelessWidget {
       color: Color(Get.isDarkMode
           ? homeTaskItemModel.colorValue[1]
           : homeTaskItemModel.colorValue[0]),
-      child: InkWell(
-        onTap: () {
-          onNoteItemClicked(homeTaskItemModel);
-        },
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: this.list,
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: this.list,
         ),
       ),
     );

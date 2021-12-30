@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:hive/hive.dart';
 import 'package:noteapp/components/circular_color_container.dart';
 import 'package:noteapp/components/side_color_panel.dart';
@@ -15,25 +16,16 @@ import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/controllers/add_task_controller.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/controllers/reports_controller.dart';
-import 'package:noteapp/models/enums/list_type.dart';
 import 'package:noteapp/models/enums/task_status.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/models/todo_item.dart';
 import 'package:noteapp/controllers/sidebar_controller.dart';
 import 'package:noteapp/utils/custom_color_scheme.dart';
-import 'package:noteapp/utils/grouped_list_view.dart';
 import 'package:noteapp/utils/snack_bar_utils.dart';
 
 class AddTaskScreen extends StatelessWidget {
   final HomeTaskItemModel? homeTaskItemModel;
-
   AddTaskScreen({this.homeTaskItemModel});
-
-  List<dynamic> lists = [
-    {"headerText": 'Todo', "listType": ListType.TodoList},
-    {"headerText": 'Later', "listType": ListType.LaterList},
-    {"headerText": 'Done', "listType": ListType.DoneList}
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +43,6 @@ class AddTaskScreen extends StatelessWidget {
     //   Colors.white60
     // ];
     // final size = MediaQuery.of(context).size;
-
     final addTaskController = Get.put(AddTaskController());
     final sideBarController = Get.put(SidebarController());
     final notesListController = Get.find<NotesListController>();
@@ -59,7 +50,7 @@ class AddTaskScreen extends StatelessWidget {
     addTaskController.init(this.homeTaskItemModel);
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         // backgroundColor: Colors.transparent,
         body: Stack(
           children: [
@@ -201,38 +192,103 @@ class AddTaskScreen extends StatelessWidget {
                         ),
                         Expanded(
                           child: GetBuilder<AddTaskController>(
-                              builder: (controller) {
-                            print('Builder called singleChildScrollView');
-                            return SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ...lists.map(
-                                    (e) {
-                                      List<TodoItemModel> list =
-                                          getListByListType(
-                                              e['listType'], addTaskController);
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ListHeader(
-                                            headerText: e['headerText'],
-                                            isDisabled: list.isEmpty,
+                            builder: (controller) {
+                              return GroupedListView<TodoItemModel, String>(
+                                elements: addTaskController.toDoTasksList,
+                                groupComparator: (value1, value2) {
+                                  print('$value1.comapreTo($value2)');
+                                  if (value1 == 'Todo') {
+                                    return 0;
+                                  } else if (value1 == 'Later' &&
+                                      value2 == 'Done') {
+                                    return 0;
+                                  } else {
+                                    return 1;
+                                  }
+                                },
+                                groupBy: (element) => element.taskStatusStr,
+                                groupHeaderBuilder: (element) {
+                                  print('group header builder called');
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 25, vertical: 8),
+                                          child: Text(
+                                            element.taskStatusStr.tr,
+                                            style: TextStyle(
+                                              color: context.theme.accentColor,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
-                                          ...buildList(
-                                              addTaskController, e['listType']),
-                                          SizedBox(
-                                            height: 2.h,
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ).toList(),
-                                ],
-                              ),
-                            );
-                          }),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                indexedItemBuilder: (context, element, index) {
+                                  return Obx(
+                                    () => TaskCheckItem(
+                                      price: addTaskController
+                                          .toDoTasksList[index].price,
+                                      value: addTaskController
+                                          .toDoTasksList[index].isChecked,
+                                      title: addTaskController
+                                          .toDoTasksList[index].taskName,
+                                      onTaskTitleChanged: (newTitle) {
+                                        addTaskController.toDoTasksList[index]
+                                            .taskName = newTitle;
+                                      },
+                                      onChanged: (newValue) {
+                                        print(newValue);
+                                        var changed = addTaskController
+                                            .toDoTasksList[index];
+                                        changed.isChecked = newValue;
+                                        addTaskController.toDoTasksList[index] =
+                                            changed;
+                                        updateGroupHeader(
+                                            newValue, addTaskController, index);
+                                        addTaskController.update();
+                                      },
+                                      onDownloadClicked: () {
+                                        final value = addTaskController
+                                            .toDoTasksList[index].isChecked;
+                                        if (value == null) {
+                                          addTaskController.toDoTasksList[index]
+                                              .isChecked = false;
+                                        } else {
+                                          addTaskController.toDoTasksList[index]
+                                              .isChecked = null;
+                                        }
+                                        updateGroupHeader(
+                                            addTaskController
+                                                .toDoTasksList[index].isChecked,
+                                            addTaskController,
+                                            index);
+                                        addTaskController.update();
+                                      },
+                                      onDeleteClicked: () {
+                                        addTaskController.removeTask(element);
+                                      },
+                                      isCurrencyToggled: addTaskController
+                                          .isCurrencySelected.value,
+                                      onPriceChanged: (int newPrice) {
+                                        addTaskController.toDoTasksList[index]
+                                            .price = newPrice;
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ),
                         Divider(),
                         Center(
@@ -314,7 +370,6 @@ class AddTaskScreen extends StatelessWidget {
 
                                 Get.back();
                                 // Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);
-                                // Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);
                                 SnackBarUtils.showGetXSnackBar('kTaskAdded'.tr);
                               },
                               child: Text(
@@ -348,127 +403,18 @@ class AddTaskScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> buildList(
-      AddTaskController addTaskController, ListType listType) {
-    List<TodoItemModel> list = getListByListType(listType, addTaskController);
-
-    return list.map((element) {
-      bool isLastElement = list.last == element;
-      bool shouldFocus = (listType == ListType.TodoList) && isLastElement;
-      return buildTaskCheckItem(addTaskController, element, shouldFocus);
-    }).toList();
-  }
-
-  List<TodoItemModel> getListByListType(
-      ListType listType, AddTaskController addTaskController) {
-    late List<TodoItemModel> list;
-    switch (listType) {
-      case ListType.TodoList:
-        list = addTaskController.todoHeaderTasksList;
-        break;
-      case ListType.LaterList:
-        list = addTaskController.laterHeaderTasksList;
-        break;
-      case ListType.DoneList:
-        list = addTaskController.doneHeaderTasksList;
-        break;
-    }
-    return list;
-  }
-
-  TaskCheckItem buildTaskCheckItem(
-      AddTaskController addTaskController, TodoItemModel element,
-      [bool shouldFocus = false]) {
-    print('shouldFocus: $shouldFocus');
-    return TaskCheckItem(
-      price: element.price,
-      value: element.isChecked,
-      title: element.taskName,
-      shouldFocusTextField: shouldFocus,
-      onTaskTitleChanged: (newTitle) {
-        element.taskName = newTitle;
-      },
-      onChanged: (newValue) {
-        print(newValue);
-        var changed = element;
-        changed.isChecked = newValue;
-        element = changed;
-        // updateGroupHeader(newValue, addTaskController, index);
-        updateGroupHeader(newValue, element);
-        addTaskController.shouldFocusKeyboard = false;
-        addTaskController.update();
-      },
-      onDownloadClicked: () {
-        final value = element.isChecked;
-        if (value == null) {
-          element.isChecked = false;
-        } else {
-          element.isChecked = null;
-        }
-        updateGroupHeader(
-            element.isChecked,
-            // addTaskController, index);
-            element);
-        addTaskController.shouldFocusKeyboard = false;
-        addTaskController.update();
-      },
-      onDeleteClicked: () {
-        addTaskController.removeTask(element);
-      },
-      isCurrencyToggled: addTaskController.isCurrencySelected.value,
-      onPriceChanged: (int newPrice) {
-        element.price = newPrice;
-      },
-    );
-  }
-
   void updateGroupHeader(
-      // bool? newValue, AddTaskController addTaskController, int index) {
-      bool? newValue,
-      TodoItemModel element) {
+      bool? newValue, AddTaskController addTaskController, int index) {
     switch (newValue) {
       case null:
-        element.taskStatus = TASK_STATUS.LATER;
+        addTaskController.toDoTasksList[index].taskStatus = TASK_STATUS.LATER;
         break;
       case true:
-        element.taskStatus = TASK_STATUS.DONE;
+        addTaskController.toDoTasksList[index].taskStatus = TASK_STATUS.DONE;
         break;
       case false:
-        element.taskStatus = TASK_STATUS.TODO;
+        addTaskController.toDoTasksList[index].taskStatus = TASK_STATUS.TODO;
         break;
     }
-  }
-}
-
-class ListHeader extends StatelessWidget {
-  const ListHeader({
-    Key? key,
-    required this.headerText,
-    this.isDisabled = true,
-  }) : super(key: key);
-
-  final String headerText;
-  final bool isDisabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDisabled
-            ? Theme.of(context).disabledColor
-            : Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-        child: Text(
-          headerText,
-          style: TextStyle(
-            color: context.theme.accentColor,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
   }
 }

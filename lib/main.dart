@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
         // navigatorKey: Application.materialKey,
         // GlobalKey()
         translations: LocaleString(),
+
         locale: LocaleUtils.getLocaleFromStorage(),
         // locale: Locale('en', 'US'),
         debugShowCheckedModeBanner: false,
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
             body: StorageUtils.getSettingsItem().hasWatchedTutorial
                 ? BottomNavScreen()
                 : OnBordingScreen(),
+
             // body: SelectCountryScreen(),
             // body: AddTaskScreen(),
             // body: SideBarLayout(),

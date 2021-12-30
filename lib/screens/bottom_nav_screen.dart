@@ -1,5 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/constant/strings.dart';
@@ -14,6 +16,7 @@ import 'package:noteapp/screens/layout_screen.dart';
 import 'package:noteapp/screens/report_screen.dart';
 import 'package:noteapp/services/application.dart';
 import 'package:noteapp/services/theme_service.dart';
+import 'package:noteapp/utils/snack_bar_utils.dart';
 
 class BottomNavScreen extends StatefulWidget {
   static const routeName = "/navBar";
@@ -52,6 +55,20 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           onTabNotify: (position) {
             // if (position == 1) {
             if (position == 2) {
+              // SnackBarUtils.showGetXSnackBar('message');
+
+              // Fluttertoast.showToast(
+              //     msg: "This is Center Short Toast",
+              //     toastLength: Toast.LENGTH_SHORT,
+              //     gravity: ToastGravity.SNACKBAR,
+              //
+              //     // timeInSecForIosWeb: 1,
+              //     // backgroundColor: Colors.red,
+              //     textColor: Colors.white,
+              //     fontSize: 16.0);
+
+              // ScaffoldMessenger.of(context)
+              //     .showSnackBar(SnackBar(content: Text('Hello')));
               Get.to(
                 () => AddTaskScreen(),
                 // transition: Transition.downToUp,

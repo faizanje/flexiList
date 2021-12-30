@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 // const kPrimaryColor = Color(0xff020D46);
 const kPrimaryColor = Color(0xFF020D46);
+const kAppName = 'SK Shopping List';
+const kPlaystoreLink = 'https://play.google.com/store/apps/details?id=';
+const kAppstoreLink = 'https://play.google.com/store/apps/details?id=';
+
 const kPrimaryColorDark = Color(0xFF413C4E);
 
 const kBoxTodo = 'box-todos';

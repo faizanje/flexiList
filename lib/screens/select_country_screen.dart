@@ -17,6 +17,7 @@ import 'package:noteapp/models/item_entity.dart';
 import 'package:noteapp/models/settings_model.dart';
 import 'package:noteapp/screens/bottom_nav_screen.dart';
 import 'package:noteapp/utils/locale_utils.dart';
+import 'package:noteapp/utils/snack_bar_utils.dart';
 import 'package:noteapp/utils/storage_utils.dart';
 
 enum SETTING_TYPE { LANGUAGE, CURRENCY }
@@ -281,7 +282,9 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                           LocaleUtils.updateLanguageByItem(countrySelectedItem);
                           if (widget.isEditing) {
                             StorageUtils.saveSettingsItem(settingsModel);
-                            Get.snackbar('Settings Updated',
+                            // Get.snackbar('Settings Updated',
+                            //     'Settings has been updated successfully');
+                            SnackBarUtils.showGetXSnackBar(
                                 'Settings has been updated successfully');
                           } else {
                             settingsModel.hasWatchedTutorial = true;

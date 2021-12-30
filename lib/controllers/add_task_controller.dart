@@ -18,9 +18,24 @@ import 'package:noteapp/utils/storage_utils.dart';
 class AddTaskController extends GetxController {
   late HomeTaskItemModel homeTaskItemModel;
   final RxList<TodoItemModel> toDoTasksList = RxList([]);
+
+  bool shouldFocusKeyboard = false;
+  FocusNode focusNode = FocusNode();
+  List<TodoItemModel> get todoHeaderTasksList => toDoTasksList
+      .where((element) => element.taskStatus == TASK_STATUS.TODO)
+      .toList();
+
+  List<TodoItemModel> get laterHeaderTasksList => toDoTasksList
+      .where((element) => element.taskStatus == TASK_STATUS.LATER)
+      .toList();
+
+  List<TodoItemModel> get doneHeaderTasksList => toDoTasksList
+      .where((element) => element.taskStatus == TASK_STATUS.DONE)
+      .toList();
   final RxBool isCurrencySelected =
       StorageUtils.getSettingsItem().isCurrencyEnableGlobally.obs;
   final RxList<Color> color = RxList<Color>(kColorsList[0]);
+
   // late NotesListController notesListController;
   // final Rx<Color> color = Rx<Color>(Get.theme.primaryColorDark);
   final isSlidePanelOpen = false.obs;
@@ -29,6 +44,7 @@ class AddTaskController extends GetxController {
   bool isEditing = false;
   bool isArchived = false;
   late SettingsModel settingsModel;
+
   init(HomeTaskItemModel? homeTaskItemModel) {
     if (homeTaskItemModel != null) {
       this.homeTaskItemModel = homeTaskItemModel;
@@ -82,7 +98,15 @@ class AddTaskController extends GetxController {
       isChecked: false,
       taskName: '',
     );
+    focusNode.unfocus();
+    WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+    shouldFocusKeyboard = true;
     addTask(taskItem);
+    // shouldFocusKeyboard = false;
+    focusNode.requestFocus();
+
+    // Get.focusScope!.nextFocus();
+    // Get.focusScope!.requestFocus(focusNode);
   }
 
   // randomizeColor() {

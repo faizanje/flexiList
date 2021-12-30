@@ -14,9 +14,7 @@ import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
 import 'package:noteapp/screens/layout_screen.dart';
 import 'package:noteapp/utils/multi_select_item.dart';
-import 'package:noteapp/utils/snack_bar_utils.dart';
-import 'package:reorderableitemsview/reorderableitemsview.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:noteapp/utils/reorderable_items_view.dart';
 
 class NotesListScreen extends StatelessWidget {
   @override
@@ -40,18 +38,54 @@ class NotesListScreen extends StatelessWidget {
               () => notesListController.isSelectingList.value
                   ? AppBarWithMenuOption(
                       isArchiveScreen: false,
-                      onShareClicked: (List<int> selectedIndexes) {
-                        shareNotes(selectedIndexes, notesListController);
-                      },
                       onArchiveClicked: (List<int> selectedIndexes) {
                         // Getting selected list items from selected indexes And creating a copy. Otherwise
                         // getArchivedList will throw outOfBound exception because everytime you archive a
                         // list item, list size changes
-                        archiveNotesList(selectedIndexes, notesListController);
+                        List<HomeTaskItemModel> selectedListItems =
+                            selectedIndexes
+                                .map((index) => notesListController
+                                    .getActiveNotesList()[index])
+                                .toList();
+                        selectedListItems.forEach((element) {
+                          notesListController.archiveNote(element, false);
+                        });
+                        notesListController.resetSelection();
+                        notesListController.filteredNotesList.refresh();
+                        notesListController.update();
                       },
                       onDeleteClicked: (List<int> selectedIndexes) {
-                        showDeleteNotesConfirmation(
-                            selectedIndexes, notesListController);
+                        Get.defaultDialog(
+                            radius: 8,
+                            title: 'Confirmation',
+                            middleText:
+                                'This cannot be undone. Are you sure to delete all notes?',
+                            confirm: TextButton(
+                              onPressed: () {
+                                List<HomeTaskItemModel> selectedListItems =
+                                    selectedIndexes
+                                        .map((index) => notesListController
+                                            .getActiveNotesList()[index])
+                                        .toList();
+                                selectedListItems.forEach((element) {
+                                  notesListController.deleteNoteFromNotesList(
+                                      element, false);
+                                  notesListController
+                                      .deleteNoteFromDatabase(element);
+                                });
+                                notesListController.resetSelection();
+                                notesListController.filteredNotesList.refresh();
+                                notesListController.update();
+                                Get.back();
+                              },
+                              child: Text('Delete'),
+                            ),
+                            cancel: TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text('Cancel'),
+                            ));
                       },
                     )
                   : AppBarWithSearchAndIcon(
@@ -70,13 +104,13 @@ class NotesListScreen extends StatelessWidget {
                 return notesListController.getActiveNotesList().isEmpty
                     ? NoNotesFound()
                     : ReorderableItemsView(
-                        // feedBackWidgetBuilder: (context, index, child) =>
-                        //     Container(
-                        //       // height: 150,
-                        //       // width: 200,
-                        //       color: Colors.deepPurple,
-                        //       child: child,
-                        //     ),
+                        feedBackWidgetBuilder: (context, index, child) =>
+                            Container(
+                              // height: 150,
+                              // width: 200,
+                              color: Colors.deepPurple,
+                              child: child,
+                            ),
                         longPressToDrag: true,
                         mainAxisSpacing: 4,
                         crossAxisSpacing: 4,
@@ -111,74 +145,52 @@ class NotesListScreen extends StatelessWidget {
                         ));
               }),
             ),
+
+            // Card(
+            //   child: Flexible(
+            //     child: ConstrainedBox(
+            //       constraints:
+            //       BoxConstraints(maxHeight: 216.h, minWidth: 142.w),
+            //       child: Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: Column(
+            //           mainAxisSize: MainAxisSize.min,
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             Text(
+            //               'Title',
+            //               style: TextStyle(
+            //                 fontWeight: FontWeight.bold,
+            //                 fontSize: 16.sp,
+            //               ),
+            //             ),
+            //             Container(
+            //               width: MediaQuery.of(context).size.width * 0.5,
+            //               child: CheckboxListTile(
+            //                 activeColor: kPrimaryColor,
+            //                 dense: true,
+            //                 contentPadding: EdgeInsets.all(0),
+            //                 controlAffinity: ListTileControlAffinity.leading,
+            //                 tristate: true,
+            //                 title: Text(
+            //                   'List Item',
+            //                   style: TextStyle(fontSize: 16),
+            //                 ),
+            //                 value: false,
+            //                 onChanged: (bool? value) {},
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // )
+            // _NoNotesFound(),
           ],
         ),
       ),
     );
-  }
-
-  void showDeleteNotesConfirmation(
-      List<int> selectedIndexes, NotesListController notesListController) {
-    Get.defaultDialog(
-      radius: 8,
-      title: 'Confirmation',
-      middleText: 'This cannot be undone. Are you sure to delete all notes?',
-      confirm: TextButton(
-        onPressed: () {
-          List<HomeTaskItemModel> selectedListItems = selectedIndexes
-              .map((index) => notesListController.getActiveNotesList()[index])
-              .toList();
-          selectedListItems.forEach((element) {
-            notesListController.deleteNoteFromNotesList(element, false);
-            notesListController.deleteNoteFromDatabase(element);
-          });
-          notesListController.resetSelection();
-          notesListController.filteredNotesList.refresh();
-          notesListController.update();
-          Get.back();
-        },
-        child: Text('Delete'),
-      ),
-      cancel: TextButton(
-        onPressed: () {
-          Get.back();
-        },
-        child: Text('Cancel'),
-      ),
-    );
-  }
-
-  void shareNotes(
-      List<int> selectedIndexes, NotesListController notesListController) {
-    List<HomeTaskItemModel> selectedListItems = selectedIndexes
-        .map((index) => notesListController.getActiveNotesList()[index])
-        .toList();
-
-    String sharedText = '';
-    sharedText += 'Total notes: ${selectedIndexes.length}\n';
-
-    selectedListItems.asMap().forEach((index, value) {
-      sharedText += '\nNote: ${index + 1}\n';
-      sharedText += '\tTitle: ${value.title}\n';
-      sharedText += '\tItems: ${value.todoItemList.length}\n';
-      value.todoItemList.asMap().forEach((taskItemIndex, taskItem) {
-        sharedText += '\t${taskItem.taskName}: ${taskItem.taskStatusStr}\n';
-      });
-    });
-    Share.share(sharedText, subject: kAppName);
-  }
-
-  void archiveNotesList(
-      List<int> selectedIndexes, NotesListController notesListController) {
-    List<HomeTaskItemModel> selectedListItems = selectedIndexes
-        .map((index) => notesListController.getActiveNotesList()[index])
-        .toList();
-    selectedListItems.forEach((element) {
-      notesListController.archiveNote(element, false);
-    });
-    notesListController.resetSelection();
-    notesListController.filteredNotesList.refresh();
-    notesListController.update();
   }
 
   getNotesList() {
@@ -201,10 +213,10 @@ class NotesListScreen extends StatelessWidget {
         builder: (logic) {
           print(
               'Nested note Item get builder called ${homeTaskItemModel.title}');
-          // return notesListController.multiSelectController.isSelecting
-          return notesListController.isSelectingList.value
+          return notesListController.multiSelectController.isSelecting
               ? MultiSelectItem(
-                  isSelecting: notesListController.isSelectingList.value,
+                  isSelecting:
+                      notesListController.multiSelectController.isSelecting,
                   onSelected: () {
                     print('${homeTaskItemModel.title} selected');
                     notesListController.toggleSelectedIndex(index);
@@ -218,58 +230,29 @@ class NotesListScreen extends StatelessWidget {
                               color: Get.theme.primaryColor,
                               borderRadius: BorderRadius.circular(10))
                           : new BoxDecoration(),
-                      child: InkWell(
-                        onTap: () {},
-                        borderRadius: BorderRadius.circular(8),
-                        child: NoteItem(
-                          homeTaskItemModel: homeTaskItemModel,
-                          onNoteItemClicked:
-                              (HomeTaskItemModel homeTaskItemModel) {},
-                        ),
+                      child: NoteItem(
+                        homeTaskItemModel: homeTaskItemModel,
+                        onNoteItemClicked:
+                            (HomeTaskItemModel homeTaskItemModel) {},
                       ),
                     ),
                   ),
                 )
               : Dismissible(
                   key: Key(homeTaskItemModel.key.toString()),
-                  confirmDismiss: (direction) async {
-                    print('confirm dismiss called');
-                    // return Future.value(false);
-                    bool? result = await showConfirmationDialog(
-                        notesListController, homeTaskItemModel);
-                    if (result != null) {
-                      print('not null');
-                      return Future.value(result);
-                    } else {
-                      print('null');
-                      return Future.value(false);
-                    }
-                  },
-                  // dismissThresholds: {DismissDirection.horizontal: 0.9},
                   onDismissed: (direction) {
-                    // showConfirmationDialog(
-                    //     notesListController, homeTaskItemModel);
-                    // notesListController.archiveNote(homeTaskItemModel);
-                    // print('On dismissed called');
+                    notesListController.archiveNote(homeTaskItemModel);
                   },
-                  child: InkWell(
-                    onLongPress: () {
-                      notesListController.setIsSelectingList(true);
-                      notesListController.toggleSelectedIndex(index);
-                    },
-                    onTap: () {
+                  child: NoteItem(
+                    homeTaskItemModel: homeTaskItemModel,
+                    onNoteItemClicked: (HomeTaskItemModel homeTaskItemModel) {
                       Get.to(
-                        () =>
-                            AddTaskScreen(homeTaskItemModel: homeTaskItemModel),
+                        () => AddTaskScreen(
+                          homeTaskItemModel: homeTaskItemModel,
+                        ),
                         transition: Transition.zoom,
                       );
                     },
-                    borderRadius: BorderRadius.circular(8),
-                    child: NoteItem(
-                      homeTaskItemModel: homeTaskItemModel,
-                      onNoteItemClicked:
-                          (HomeTaskItemModel homeTaskItemModel) {},
-                    ),
                   ),
                 );
         },
@@ -309,53 +292,5 @@ class NotesListScreen extends StatelessWidget {
       // }
     });
     return list;
-  }
-
-  Future<bool?> showConfirmationDialog(NotesListController notesListController,
-      HomeTaskItemModel homeTaskItemModel) async {
-    return Get.defaultDialog(
-      radius: 8,
-      title: 'Confirmation',
-      middleText: 'This cannot be undone. Select an action for this note',
-      barrierDismissible: false,
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.back(result: true);
-            notesListController.deleteNoteFromNotesList(
-                homeTaskItemModel, false);
-            notesListController.deleteNoteFromDatabase(homeTaskItemModel);
-            SnackBarUtils.showGetXSnackBar('Note deleted',
-                addBottomSpace: true);
-          },
-          child: Text('Delete'),
-        ),
-        TextButton(
-          onPressed: () {
-            notesListController.archiveNote(homeTaskItemModel);
-            Get.back(result: true);
-            SnackBarUtils.showGetXSnackBar(
-              'Note archived',
-              addBottomSpace: true,
-            );
-          },
-          child: Text('Archive'),
-        ),
-        TextButton(
-          onPressed: () {
-            Get.back(result: false);
-          },
-          child: Text('Cancel'),
-        ),
-      ],
-      // cancel: TextButton(
-      //   onPressed: () {
-      //     notesListController.archiveNote(homeTaskItemModel);
-      //     SnackBarUtils.showGetXSnackBar('Note archived');
-      //     Get.back();
-      //   },
-      //   child: Text('Archive'),
-      // ),
-    );
   }
 }

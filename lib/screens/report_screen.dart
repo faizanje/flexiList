@@ -37,228 +37,282 @@ class ReportScreen extends StatelessWidget {
           //   color: Colors.white,
           // ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showFilterDialog(context);
-            },
-            icon: Icon(Icons.filter_alt),
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       showFilterDialog(context);
+        //     },
+        //     icon: Icon(Icons.filter_alt),
+        //   )
+        // ],
       ),
       // backgroundColor: Color(0xffF9F9F9),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: GetX<NotesListController>(
-          initState: (state) {
-            print('Inited');
-          },
-          init: NotesListController(),
-          builder: (notesListController) {
-            print('Build list called');
-            final completedList = notesListController
-                .getFilteredCompletedNotesList(reportsController.datesForFilter[
-                    reportsController.selectedDateFilterIndex.value]);
-            return completedList.isEmpty
-                ? NoReportsFound()
-                : ListView.builder(
-                    itemCount: completedList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      // return Container();
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
-                          color: Colors.deepPurple,
-                          child: ExpansionPanelList(
-                            expandedHeaderPadding: EdgeInsets.all(0),
-                            animationDuration: Duration(milliseconds: 500),
-                            // dividerColor:
-                            //     Theme.of(context).primaryColor.withOpacity(0.5),
-                            elevation: 1,
-                            children: [
-                              ExpansionPanel(
-                                canTapOnHeader: true,
-                                body: Container(
-                                  alignment: AlignmentDirectional.centerStart,
-                                  padding: EdgeInsets.all(10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      WidgetButtonDone(),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: completedList[index]
-                                            .todoItemList
-                                            .map((element) => IgnorePointer(
-                                                  ignoring: true,
-                                                  child: CheckboxListTile(
-                                                    // tileColor: Colors.black,
-                                                    activeColor:
-                                                        Theme.of(context)
-                                                            .primaryColor,
-                                                    checkColor:
-                                                        Theme.of(context)
-                                                            .accentColor,
-                                                    dense: true,
-                                                    isThreeLine: false,
-                                                    contentPadding:
-                                                        EdgeInsets.all(0),
-                                                    controlAffinity:
-                                                        ListTileControlAffinity
-                                                            .leading,
-                                                    tristate: true,
-                                                    title: Text(
-                                                      '${element.taskName}',
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    secondary: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        if (completedList[index]
-                                                            .isCurrencySelected)
-                                                          Flexible(
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: [
-                                                                SvgPicture
-                                                                    .asset(
-                                                                  StorageUtils
-                                                                          .getSettingsItem()
-                                                                      .currencyItem
-                                                                      .iconPath,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                                  height:
-                                                                      kSizeCurrency,
-                                                                ),
-                                                                Container(
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          left:
-                                                                              5.w),
-                                                                  width: 50.w,
-                                                                  height: 35.h,
-                                                                  child: Center(
-                                                                    child:
-                                                                        TextField(
-                                                                      controller: TextEditingController()
-                                                                        ..text = element
-                                                                            .price
-                                                                            .toString(),
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            12.sp,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: InkWell(
+              onTap: () {
+                showFilterDialog(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(8),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Filter',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.sp),
+                      ),
+                      Icon(
+                        Icons.filter_alt,
+                        // color: Colors.black,
+                      )
+                      // IconButton(
+                      //   onPressed: () {
+                      //     showFilterDialog(context);
+                      //   },
+                      //   icon: Icon(
+                      //     Icons.filter_alt,
+                      //     color: Colors.black,
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: GetX<NotesListController>(
+                initState: (state) {
+                  print('Inited');
+                },
+                init: NotesListController(),
+                builder: (notesListController) {
+                  print('Build list called');
+                  final completedList =
+                      notesListController.getFilteredCompletedNotesList(
+                          reportsController.datesForFilter[
+                              reportsController.selectedDateFilterIndex.value]);
+                  return completedList.isEmpty
+                      ? NoReportsFound()
+                      : ListView.builder(
+                          itemCount: completedList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            // return Container();
+                            return Container(
+                              margin: EdgeInsets.symmetric(vertical: 8),
+                              child: Container(
+                                color: Colors.deepPurple,
+                                child: ExpansionPanelList(
+                                  expandedHeaderPadding: EdgeInsets.all(0),
+                                  animationDuration:
+                                      Duration(milliseconds: 500),
+                                  // dividerColor:
+                                  //     Theme.of(context).primaryColor.withOpacity(0.5),
+                                  elevation: 1,
+                                  children: [
+                                    ExpansionPanel(
+                                      canTapOnHeader: true,
+                                      body: Container(
+                                        alignment:
+                                            AlignmentDirectional.centerStart,
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            WidgetButtonDone(),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: completedList[index]
+                                                  .todoItemList
+                                                  .map((element) =>
+                                                      IgnorePointer(
+                                                        ignoring: true,
+                                                        child: CheckboxListTile(
+                                                          // tileColor: Colors.black,
+                                                          activeColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          checkColor:
+                                                              Theme.of(context)
+                                                                  .accentColor,
+                                                          dense: true,
+                                                          isThreeLine: false,
+                                                          contentPadding:
+                                                              EdgeInsets.all(0),
+                                                          controlAffinity:
+                                                              ListTileControlAffinity
+                                                                  .leading,
+                                                          tristate: true,
+                                                          title: Text(
+                                                            '${element.taskName}',
+                                                            style: TextStyle(
+                                                                fontSize: 16),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                          secondary: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              if (completedList[
+                                                                      index]
+                                                                  .isCurrencySelected)
+                                                                Flexible(
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: [
+                                                                      SvgPicture
+                                                                          .asset(
+                                                                        StorageUtils.getSettingsItem()
+                                                                            .currencyItem
+                                                                            .iconPath,
+                                                                        color: Theme.of(context)
+                                                                            .primaryColor,
+                                                                        height:
+                                                                            kSizeCurrency,
                                                                       ),
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        contentPadding:
-                                                                            EdgeInsets.symmetric(vertical: 5),
-                                                                        isDense:
-                                                                            true,
-                                                                        border:
-                                                                            OutlineInputBorder(),
+                                                                      Container(
+                                                                        margin: EdgeInsets.only(
+                                                                            left:
+                                                                                5.w),
+                                                                        width:
+                                                                            50.w,
+                                                                        height:
+                                                                            35.h,
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              TextField(
+                                                                            controller: TextEditingController()
+                                                                              ..text = element.price.toString(),
+                                                                            maxLines:
+                                                                                1,
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 12.sp,
+                                                                            ),
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              contentPadding: EdgeInsets.symmetric(vertical: 5),
+                                                                              isDense: true,
+                                                                              border: OutlineInputBorder(),
+                                                                            ),
+                                                                          ),
+                                                                        ),
                                                                       ),
-                                                                    ),
+                                                                    ],
                                                                   ),
                                                                 ),
-                                                              ],
-                                                            ),
+                                                            ],
                                                           ),
-                                                      ],
-                                                    ),
-                                                    value: element.isChecked,
-                                                    onChanged: (bool? value) {},
+                                                          value:
+                                                              element.isChecked,
+                                                          onChanged:
+                                                              (bool? value) {},
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            if (completedList[index]
+                                                .isCurrencySelected)
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'Total ',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
-                                                ))
-                                            .toList(),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      if (completedList[index]
-                                          .isCurrencySelected)
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Total ',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SvgPicture.asset(
-                                              StorageUtils.getSettingsItem()
-                                                  .currencyItem
-                                                  .iconPath,
-                                              color: Get.theme.primaryColor,
-                                              height: kSizeCurrency - 5,
-                                            ),
-                                            Text(
-                                              '${completedList[index].todoItemList.fold(0, (int previousValue, element) => element.price + previousValue)}',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
+                                                  SvgPicture.asset(
+                                                    StorageUtils
+                                                            .getSettingsItem()
+                                                        .currencyItem
+                                                        .iconPath,
+                                                    color:
+                                                        Get.theme.primaryColor,
+                                                    height: kSizeCurrency - 5,
+                                                  ),
+                                                  Text(
+                                                    '${completedList[index].todoItemList.fold(0, (int previousValue, element) => element.price + previousValue)}',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              )
                                           ],
-                                        )
-                                    ],
-                                  ),
+                                        ),
+                                      ),
+                                      headerBuilder: (BuildContext context,
+                                          bool isExpanded) {
+                                        return Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          child: Text(
+                                            completedList[index]
+                                                    .title!
+                                                    .isNotEmpty
+                                                ? completedList[index].title!
+                                                : DateFormat(StorageUtils
+                                                            .getSettingsItem()
+                                                        .dateFormat)
+                                                    // DateFormat.yMd().add_jm()
+                                                    .format(completedList[index]
+                                                        .dateTime),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        );
+                                      },
+                                      isExpanded:
+                                          completedList[index].isExpanded,
+                                    )
+                                  ],
+                                  expansionCallback: (int item, bool status) {
+                                    completedList[index].isExpanded =
+                                        !completedList[index].isExpanded;
+                                    notesListController.filteredNotesList
+                                        .refresh();
+                                    print('toggled $item $status');
+                                  },
                                 ),
-                                headerBuilder:
-                                    (BuildContext context, bool isExpanded) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 10),
-                                    child: Text(
-                                      completedList[index].title!.isNotEmpty
-                                          ? completedList[index].title!
-                                          : DateFormat(
-                                                  StorageUtils.getSettingsItem()
-                                                      .dateFormat)
-                                              // DateFormat.yMd().add_jm()
-                                              .format(completedList[index]
-                                                  .dateTime),
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  );
-                                },
-                                isExpanded: completedList[index].isExpanded,
-                              )
-                            ],
-                            expansionCallback: (int item, bool status) {
-                              completedList[index].isExpanded =
-                                  !completedList[index].isExpanded;
-                              notesListController.filteredNotesList.refresh();
-                              print('toggled $item $status');
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  );
-          },
-        ),
+                              ),
+                            );
+                          },
+                        );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

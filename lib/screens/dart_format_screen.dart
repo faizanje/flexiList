@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/models/settings_model.dart';
+import 'package:noteapp/utils/snack_bar_utils.dart';
 import 'package:noteapp/utils/storage_utils.dart';
 
 class DateFormatScreen extends StatefulWidget {
@@ -137,7 +138,9 @@ class _DateFormatScreenState extends State<DateFormatScreen> {
                               StorageUtils.getSettingsItem();
                           settingsModel.dateFormat = selectedDateFormat;
                           StorageUtils.saveSettingsItem(settingsModel);
-                          Get.snackbar('Date Format',
+                          // Get.snackbar('Date Format',
+                          //     'Date format has been updated successfully');
+                          SnackBarUtils.showGetXSnackBar(
                               'Date format has been updated successfully');
                         },
                         child: Container(

@@ -10,12 +10,13 @@ class AppBarWithMenuOption extends StatelessWidget {
   final bool isArchiveScreen;
   final Function(List<int> selectedIndexes) onArchiveClicked;
   final Function(List<int> selectedIndexes) onDeleteClicked;
-
+  final Function(List<int> selectedIndexes)? onShareClicked;
   const AppBarWithMenuOption({
     Key? key,
     required this.isArchiveScreen,
     required this.onArchiveClicked,
     required this.onDeleteClicked,
+    this.onShareClicked,
   }) : super(key: key);
 
   @override
@@ -38,27 +39,47 @@ class AppBarWithMenuOption extends StatelessWidget {
             style: TextStyle(color: Get.theme.primaryColor, fontSize: 18),
           )),
       actions: [
-        IconButton(
-          onPressed: () {
-            onArchiveClicked(
-                notesListController.multiSelectController.selectedIndexes);
-          },
-          icon: Icon(
-            this.isArchiveScreen ? Icons.unarchive : Icons.archive,
-            color: Theme.of(context).primaryColor,
-            size: 30,
+        Tooltip(
+          message: 'Share notes',
+          child: IconButton(
+            onPressed: () {
+              if (onShareClicked != null)
+                onShareClicked!(
+                    notesListController.multiSelectController.selectedIndexes);
+            },
+            icon: Icon(
+              Icons.send,
+              color: context.theme.primaryColor,
+            ),
           ),
         ),
-        IconButton(
-          onPressed: () {
-            onDeleteClicked(
-              notesListController.multiSelectController.selectedIndexes,
-            );
-          },
-          icon: Icon(
-            Icons.delete,
-            color: Theme.of(context).primaryColor,
-            size: 30,
+        Tooltip(
+          message: this.isArchiveScreen ? 'Unarchive' : 'Archive',
+          child: IconButton(
+            onPressed: () {
+              onArchiveClicked(
+                  notesListController.multiSelectController.selectedIndexes);
+            },
+            icon: Icon(
+              this.isArchiveScreen ? Icons.unarchive : Icons.archive,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+          ),
+        ),
+        Tooltip(
+          message: 'Delete',
+          child: IconButton(
+            onPressed: () {
+              onDeleteClicked(
+                notesListController.multiSelectController.selectedIndexes,
+              );
+            },
+            icon: Icon(
+              Icons.delete,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
           ),
         )
       ],

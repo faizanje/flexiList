@@ -100,9 +100,9 @@ class _MultiSelectItemState extends State<MultiSelectItem> {
   @override
   Widget build(BuildContext context) {
     return new GestureDetector(
-      onLongPress: () {
-        widget.onSelected();
-      },
+      // onLongPress: () {
+      //   widget.onSelected();
+      // },
       onTap: () {
         widget.onSelected();
       },

@@ -17,22 +17,28 @@ class TaskCheckItem extends StatelessWidget {
   final void Function(int) onPriceChanged;
   final void Function(String) onTaskTitleChanged;
   final isCurrencyToggled;
+  final bool shouldFocusTextField;
+  final FocusNode? focusNode;
 
-  TaskCheckItem(
-      {required this.value,
-      required this.title,
-      required this.onChanged,
-      required this.onDownloadClicked,
-      required this.onDeleteClicked,
-      required this.isCurrencyToggled,
-      required this.onPriceChanged,
-      this.price = 0,
-      required this.onTaskTitleChanged});
+  TaskCheckItem({
+    required this.value,
+    required this.title,
+    required this.onChanged,
+    required this.onDownloadClicked,
+    required this.onDeleteClicked,
+    required this.isCurrencyToggled,
+    required this.onPriceChanged,
+    this.price = 0,
+    required this.onTaskTitleChanged,
+    this.shouldFocusTextField = false,
+    this.focusNode,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // print('Building task item ${}')
     final addTaskController = Get.find<AddTaskController>();
-    return CheckboxListTile(
+    CheckboxListTile checkboxListTile = CheckboxListTile(
       activeColor: Theme.of(context).primaryColor,
       checkColor: Theme.of(context).accentColor,
       dense: true,
@@ -43,8 +49,13 @@ class TaskCheckItem extends StatelessWidget {
         onSubmitted: (value) {
           addTaskController.addEmptyTask();
         },
+        // focusNode:
+        // (shouldFocusTextField && addTaskController.shouldFocusKeyboard)
+        // /*?*/ addTaskController.focusNode,
+        // : FocusNode(),
         textInputAction: TextInputAction.next,
-        // autofocus: true,
+        autofocus:
+            shouldFocusTextField && addTaskController.shouldFocusKeyboard,
         controller: TextEditingController()..text = title,
         onChanged: onTaskTitleChanged,
         decoration: InputDecoration(
@@ -155,5 +166,8 @@ class TaskCheckItem extends StatelessWidget {
         onChanged(newValue);
       },
     );
+
+    TextField textField = checkboxListTile.title as TextField;
+    return checkboxListTile;
   }
 }

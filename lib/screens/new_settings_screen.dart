@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:noteapp/constant/constant.dart';
 import 'package:noteapp/models/settings_model.dart';
 import 'package:noteapp/screens/dart_format_screen.dart';
 import 'package:noteapp/screens/select_country_screen.dart';
 import 'package:noteapp/services/theme_service.dart';
 import 'package:noteapp/utils/storage_utils.dart';
 import 'package:noteapp/utils/themes.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NewSettingsScreen extends StatefulWidget {
   const NewSettingsScreen({Key? key}) : super(key: key);
@@ -95,13 +97,17 @@ class _NewSettingsScreenState extends State<NewSettingsScreen> {
               leading: Icon(Icons.share),
               title: Text('Share'),
               onTap: () {
-                LaunchReview.launch(writeReview: false);
+                Share.share(
+                    GetPlatform.isAndroid ? kPlaystoreLink : kAppstoreLink,
+                    subject: kAppName);
               },
             ),
             ListTile(
               leading: Icon(Icons.star),
               title: Text('Rate us'),
-              onTap: () {},
+              onTap: () {
+                LaunchReview.launch(writeReview: true);
+              },
             ),
           ],
         ),

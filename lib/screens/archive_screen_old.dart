@@ -18,7 +18,6 @@ import 'package:noteapp/screens/layout_screen.dart';
 import 'package:noteapp/utils/multi_select_item.dart';
 import 'package:noteapp/utils/snack_bar_utils.dart';
 import 'package:reorderableitemsview/reorderableitemsview.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ArchiveScreen extends StatelessWidget {
   @override
@@ -42,9 +41,6 @@ class ArchiveScreen extends StatelessWidget {
               () => notesListController.isSelectingList.value
                   ? AppBarWithMenuOption(
                       isArchiveScreen: true,
-                      onShareClicked: (List<int> selectedIndexes) {
-                        shareNotes(selectedIndexes, notesListController);
-                      },
                       onArchiveClicked: (List<int> selectedIndexes) {
                         // Getting selected list items from selected indexes And creating a copy. Otherwise
                         // getArchivedList will throw outOfBound exception because everytime you archive a
@@ -202,26 +198,6 @@ class ArchiveScreen extends StatelessWidget {
     );
   }
 
-  void shareNotes(
-      List<int> selectedIndexes, NotesListController notesListController) {
-    List<HomeTaskItemModel> selectedListItems = selectedIndexes
-        .map((index) => notesListController.getActiveNotesList()[index])
-        .toList();
-
-    String sharedText = '';
-    sharedText += 'Total notes: ${selectedIndexes.length}\n';
-
-    selectedListItems.asMap().forEach((index, value) {
-      sharedText += '\nNote: ${index + 1}\n';
-      sharedText += '\tTitle: ${value.title}\n';
-      sharedText += '\tItems: ${value.todoItemList.length}\n';
-      value.todoItemList.asMap().forEach((taskItemIndex, taskItem) {
-        sharedText += '\t${taskItem.taskName}: ${taskItem.taskStatusStr}\n';
-      });
-    });
-    Share.share(sharedText, subject: kAppName);
-  }
-
   getNotesList() {
     print('Setting notes list');
     // activeNotes.clear();
@@ -292,73 +268,46 @@ class ArchiveScreen extends StatelessWidget {
                 )
               : Dismissible(
                   key: Key(homeTaskItemModel.key.toString()),
-                  confirmDismiss: (direction) async {
-                    print('confirm dismiss called');
-                    // return Future.value(false);
-                    bool? result = await showConfirmationDialog(
-                        notesListController, homeTaskItemModel);
-                    if (result != null) {
-                      print('not null');
-                      return Future.value(result);
-                    } else {
-                      print('null');
-                      return Future.value(false);
-                    }
-                  },
                   onDismissed: (direction) {
-                    // int oldIndex = index;
-                    // HomeTaskItemModel item = homeTaskItemModel;
-                    // notesListController
-                    //     .deleteNoteFromNotesList(homeTaskItemModel);
-                    //
-                    // //Delete from database after 3 seconds if user doesn't press undo
-                    // Timer t = Timer(Duration(seconds: 3), () {
-                    //   print('Time ran for ${item.title}');
-                    //   notesListController.deleteNoteFromDatabase(item);
-                    // });
-                    //
-                    // // SnackBarUtils.showGetXSnackBar(
-                    // //     '${item.title} has been archived');
-                    // Get.snackbar(
-                    //   'Note Archived',
-                    //   '${item.title} has been archived',
-                    //   mainButton: TextButton(
-                    //     onPressed: () {
-                    //       //Cancel the timer. So it doesn't delete from database. Avoiding un-necessary write operations
-                    //       t.cancel();
-                    //       notesListController.undoNoteDelete(oldIndex, item);
-                    //     },
-                    //     child: Text('UNDO'),
-                    //   ),
-                    //   backgroundColor: Get.theme.accentColor,
-                    //   isDismissible: false,
-                    //   snackStyle: SnackStyle.FLOATING,
-                    // );
+                    int oldIndex = index;
+                    HomeTaskItemModel item = homeTaskItemModel;
+                    notesListController
+                        .deleteNoteFromNotesList(homeTaskItemModel);
+
+                    //Delete from database after 3 seconds if user doesn't press undo
+                    Timer t = Timer(Duration(seconds: 3), () {
+                      print('Time ran for ${item.title}');
+                      notesListController.deleteNoteFromDatabase(item);
+                    });
+
+                    // SnackBarUtils.showGetXSnackBar(
+                    //     '${item.title} has been archived');
+                    Get.snackbar(
+                      'Note Archived',
+                      '${item.title} has been archived',
+                      mainButton: TextButton(
+                        onPressed: () {
+                          //Cancel the timer. So it doesn't delete from database. Avoiding un-necessary write operations
+                          t.cancel();
+                          notesListController.undoNoteDelete(oldIndex, item);
+                        },
+                        child: Text('UNDO'),
+                      ),
+                      backgroundColor: Get.theme.accentColor,
+                      isDismissible: false,
+                      snackStyle: SnackStyle.FLOATING,
+                    );
                   },
-                  child: InkWell(
-                    onLongPress: () {
-                      notesListController.setIsSelectingList(true);
-                      notesListController.toggleSelectedIndex(index);
-                    },
-                    onTap: () {
+                  child: NoteItem(
+                    homeTaskItemModel: homeTaskItemModel,
+                    onNoteItemClicked: (HomeTaskItemModel homeTaskItemModel) {
                       Get.to(
-                        () =>
-                            AddTaskScreen(homeTaskItemModel: homeTaskItemModel),
+                        () => AddTaskScreen(
+                          homeTaskItemModel: homeTaskItemModel,
+                        ),
                         transition: Transition.zoom,
                       );
                     },
-                    borderRadius: BorderRadius.circular(8),
-                    child: NoteItem(
-                      homeTaskItemModel: homeTaskItemModel,
-                      onNoteItemClicked: (HomeTaskItemModel homeTaskItemModel) {
-                        Get.to(
-                          () => AddTaskScreen(
-                            homeTaskItemModel: homeTaskItemModel,
-                          ),
-                          transition: Transition.zoom,
-                        );
-                      },
-                    ),
                   ),
                 );
         },
@@ -425,54 +374,6 @@ class ArchiveScreen extends StatelessWidget {
       // }
     });
     return list;
-  }
-
-  Future<bool?> showConfirmationDialog(NotesListController notesListController,
-      HomeTaskItemModel homeTaskItemModel) async {
-    return Get.defaultDialog(
-      radius: 8,
-      title: 'Confirmation',
-      middleText: 'This cannot be undone. Select an action for this note',
-      barrierDismissible: false,
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.back(result: true);
-            notesListController.deleteNoteFromNotesList(
-                homeTaskItemModel, false);
-            notesListController.deleteNoteFromDatabase(homeTaskItemModel);
-            SnackBarUtils.showGetXSnackBar('Note deleted',
-                addBottomSpace: true);
-          },
-          child: Text('Delete'),
-        ),
-        // TextButton(
-        //   onPressed: () {
-        //     notesListController.archiveNote(homeTaskItemModel);
-        //     Get.back(result: true);
-        //     SnackBarUtils.showGetXSnackBar(
-        //       'Note archived',
-        //       addBottomSpace: true,
-        //     );
-        //   },
-        //   child: Text('Archive'),
-        // ),
-        TextButton(
-          onPressed: () {
-            Get.back(result: false);
-          },
-          child: Text('Cancel'),
-        ),
-      ],
-      // cancel: TextButton(
-      //   onPressed: () {
-      //     notesListController.archiveNote(homeTaskItemModel);
-      //     SnackBarUtils.showGetXSnackBar('Note archived');
-      //     Get.back();
-      //   },
-      //   child: Text('Archive'),
-      // ),
-    );
   }
 
 /*
