@@ -19,7 +19,7 @@ class NotesListController extends GetxController {
   RxList<HomeTaskItemModel> notesList = RxList([]);
   RxList<HomeTaskItemModel> filteredNotesList = RxList([]);
   MultiSelectController multiSelectController = new MultiSelectController();
-
+  ScrollController scrollController = ScrollController();
   final colors = [
     Get.theme.colorScheme.listColor1,
     Get.theme.colorScheme.listColor2,
@@ -67,8 +67,9 @@ class NotesListController extends GetxController {
 
   List<HomeTaskItemModel> getCompletedNotesList() {
     return filteredNotesList
-        .where((element) => element.todoItemList
-            .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
+        .where((p0) => p0.isCurrencySelected)
+        // .where((element) => element.todoItemList
+        //     .every((todo) => todo.isChecked != null ? todo.isChecked! : false))
         .toList();
   }
 

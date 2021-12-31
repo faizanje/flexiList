@@ -15,8 +15,8 @@ import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
 import 'package:noteapp/screens/layout_screen.dart';
 import 'package:noteapp/utils/multi_select_item.dart';
+import 'package:noteapp/utils/reorderable_items_view.dart';
 import 'package:noteapp/utils/snack_bar_utils.dart';
-import 'package:reorderableitemsview/reorderableitemsview.dart';
 import 'package:share_plus/share_plus.dart';
 
 class NotesListScreen extends StatelessWidget {
@@ -115,13 +115,7 @@ class NotesListScreen extends StatelessWidget {
                 return notesListController.getActiveNotesList().isEmpty
                     ? NoNotesFound()
                     : ReorderableItemsView(
-                        // feedBackWidgetBuilder: (context, index, child) =>
-                        //     Container(
-                        //       // height: 150,
-                        //       // width: 200,
-                        //       color: Colors.deepPurple,
-                        //       child: child,
-                        //     ),
+                        scrollController: notesListController.scrollController,
                         longPressToDrag: true,
                         mainAxisSpacing: 4,
                         crossAxisSpacing: 4,
@@ -153,7 +147,8 @@ class NotesListScreen extends StatelessWidget {
                                           2
                                       ? 1.15.h
                                       : 1.h),
-                        ));
+                        ),
+                      );
               }),
             ),
           ],

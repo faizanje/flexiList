@@ -315,7 +315,8 @@ class AddTaskScreen extends StatelessWidget {
                                 Get.back();
                                 // Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);
                                 // Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);
-                                SnackBarUtils.showGetXSnackBar('kTaskAdded'.tr);
+                                SnackBarUtils.showGetXSnackBar('kTaskAdded'.tr,
+                                    addBottomSpace: true);
                               },
                               child: Text(
                                 addTaskController.isEditing
@@ -376,49 +377,51 @@ class AddTaskScreen extends StatelessWidget {
     return list;
   }
 
-  TaskCheckItem buildTaskCheckItem(
+  Widget buildTaskCheckItem(
       AddTaskController addTaskController, TodoItemModel element,
       [bool shouldFocus = false]) {
     print('shouldFocus: $shouldFocus');
-    return TaskCheckItem(
-      price: element.price,
-      value: element.isChecked,
-      title: element.taskName,
-      shouldFocusTextField: shouldFocus,
-      onTaskTitleChanged: (newTitle) {
-        element.taskName = newTitle;
-      },
-      onChanged: (newValue) {
-        print(newValue);
-        var changed = element;
-        changed.isChecked = newValue;
-        element = changed;
-        // updateGroupHeader(newValue, addTaskController, index);
-        updateGroupHeader(newValue, element);
-        addTaskController.shouldFocusKeyboard = false;
-        addTaskController.update();
-      },
-      onDownloadClicked: () {
-        final value = element.isChecked;
-        if (value == null) {
-          element.isChecked = false;
-        } else {
-          element.isChecked = null;
-        }
-        updateGroupHeader(
-            element.isChecked,
-            // addTaskController, index);
-            element);
-        addTaskController.shouldFocusKeyboard = false;
-        addTaskController.update();
-      },
-      onDeleteClicked: () {
-        addTaskController.removeTask(element);
-      },
-      isCurrencyToggled: addTaskController.isCurrencySelected.value,
-      onPriceChanged: (int newPrice) {
-        element.price = newPrice;
-      },
+    return Obx(
+      () => TaskCheckItem(
+        price: element.price,
+        value: element.isChecked,
+        title: element.taskName,
+        shouldFocusTextField: shouldFocus,
+        onTaskTitleChanged: (newTitle) {
+          element.taskName = newTitle;
+        },
+        onChanged: (newValue) {
+          print(newValue);
+          var changed = element;
+          changed.isChecked = newValue;
+          element = changed;
+          // updateGroupHeader(newValue, addTaskController, index);
+          updateGroupHeader(newValue, element);
+          addTaskController.shouldFocusKeyboard = false;
+          addTaskController.update();
+        },
+        onDownloadClicked: () {
+          final value = element.isChecked;
+          if (value == null) {
+            element.isChecked = false;
+          } else {
+            element.isChecked = null;
+          }
+          updateGroupHeader(
+              element.isChecked,
+              // addTaskController, index);
+              element);
+          addTaskController.shouldFocusKeyboard = false;
+          addTaskController.update();
+        },
+        onDeleteClicked: () {
+          addTaskController.removeTask(element);
+        },
+        isCurrencyToggled: addTaskController.isCurrencySelected.value,
+        onPriceChanged: (int newPrice) {
+          element.price = newPrice;
+        },
+      ),
     );
   }
 

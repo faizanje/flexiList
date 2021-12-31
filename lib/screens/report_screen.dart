@@ -50,41 +50,69 @@ class ReportScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: InkWell(
-              onTap: () {
-                showFilterDialog(context);
-              },
-              child: Container(
-                margin: EdgeInsets.all(8),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Filter',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16.sp),
+          Container(
+            margin: EdgeInsets.only(left: 8.w, right: 8.w, top: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        showFilterDialog(context);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Filter',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.sp),
+                              ),
+                              Icon(
+                                Icons.filter_alt,
+                                // color: Colors.black,
+                              )
+                              // IconButton(
+                              //   onPressed: () {
+                              //     showFilterDialog(context);
+                              //   },
+                              //   icon: Icon(
+                              //     Icons.filter_alt,
+                              //     color: Colors.black,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ),
                       ),
-                      Icon(
-                        Icons.filter_alt,
-                        // color: Colors.black,
-                      )
-                      // IconButton(
-                      //   onPressed: () {
-                      //     showFilterDialog(context);
-                      //   },
-                      //   icon: Icon(
-                      //     Icons.filter_alt,
-                      //     color: Colors.black,
-                      //   ),
-                      // ),
-                    ],
-                  ),
+                    ),
+                    Obx(() {
+                      FilterDate selectedFilterDate =
+                          reportsController.datesForFilter[
+                              reportsController.selectedDateFilterIndex.value];
+                      return ChoiceChip(
+                          label: Text(
+                            selectedFilterDate.placeholder,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.sp,
+                              color: Get.theme.textTheme.bodyText1!.color,
+                            ),
+                          ),
+                          selected: true);
+                    }),
+                  ],
                 ),
-              ),
+                CustomFilterSelectedDateRange(
+                    reportsController: reportsController)
+              ],
             ),
           ),
           Expanded(
@@ -136,6 +164,10 @@ class ReportScreen extends StatelessWidget {
                                               mainAxisSize: MainAxisSize.min,
                                               children: completedList[index]
                                                   .todoItemList
+                                                  .where((todo) =>
+                                                      todo.isChecked != null
+                                                          ? todo.isChecked!
+                                                          : false)
                                                   .map((element) =>
                                                       IgnorePointer(
                                                         ignoring: true,
@@ -366,61 +398,9 @@ class ReportScreen extends StatelessWidget {
               spacing: 10,
               children: getFilterList(),
             ),
-            GetX<ReportsController>(
-              init: ReportsController(),
-              builder: (controller) {
-                print('From to date builder called');
-                FilterDate customFilterDate =
-                    reportsController.datesForFilter.last;
-                String fromDateStr =
-                    DateFormat(StorageUtils.getSettingsItem().dateFormat)
-                        .format(customFilterDate.fromDate!);
-                String toDateStr =
-                    DateFormat(StorageUtils.getSettingsItem().dateFormat)
-                        .format(customFilterDate.toDate!);
-                return Visibility(
-                  visible: reportsController.isCustomSelected.value,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Get.theme.primaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          '$fromDateStr',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                      Text(
-                        ' to ',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Get.theme.primaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          '$toDateStr',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
+            CustomFilterSelectedDateRange(
+              reportsController: reportsController,
+            )
           ],
         ),
         cancel: TextButton(
@@ -499,5 +479,68 @@ class ReportScreen extends StatelessWidget {
       );
     });
     return widgets;
+  }
+}
+
+class CustomFilterSelectedDateRange extends StatelessWidget {
+  const CustomFilterSelectedDateRange({
+    Key? key,
+    required this.reportsController,
+  }) : super(key: key);
+
+  final ReportsController reportsController;
+
+  @override
+  Widget build(BuildContext context) {
+    return GetX<ReportsController>(
+      init: ReportsController(),
+      builder: (controller) {
+        print('From to date builder called');
+        FilterDate customFilterDate = reportsController.datesForFilter.last;
+        String fromDateStr =
+            DateFormat(StorageUtils.getSettingsItem().dateFormat)
+                .format(customFilterDate.fromDate!);
+        String toDateStr = DateFormat(StorageUtils.getSettingsItem().dateFormat)
+            .format(customFilterDate.toDate!);
+        return Visibility(
+          visible: reportsController.isCustomSelected.value,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Get.theme.primaryColor,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '$fromDateStr',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              Text(
+                ' to ',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Get.theme.primaryColor,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  '$toDateStr',
+                  style: TextStyle(fontSize: 14),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 }
