@@ -28,130 +28,142 @@ class NotesListScreen extends StatelessWidget {
     // Get.changeTheme(ThemeData.dark());
     // Get.find();
     List<Widget> notesList = <Widget>[];
-    return SafeArea(
-      child: Container(
-        margin: EdgeInsets.only(bottom: 40),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 4.h,
-            ),
-            // buildAppBar(context),
-            Obx(
-              () => notesListController.isSelectingList.value
-                  ? AppBarWithMenuOption(
-                      isArchiveScreen: false,
-                      onColorPickerClicked: (List<int> selectedIndexes) {
-                        List<HomeTaskItemModel> selectedListItems =
-                            selectedIndexes
-                                .map((index) => notesListController
-                                    .getActiveNotesList()[index])
-                                .toList();
+    return WillPopScope(
+      onWillPop: () {
+        if (notesListController.isSelectingList.value) {
+          notesListController.resetSelection();
+          return Future.value(false);
+        }
+        return Future.value(true);
+      },
+      child: SafeArea(
+        child: Container(
+          margin: EdgeInsets.only(bottom: 40),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 4.h,
+              ),
+              // buildAppBar(context),
+              Obx(
+                () => notesListController.isSelectingList.value
+                    ? AppBarWithMenuOption(
+                        isArchiveScreen: false,
+                        onColorPickerClicked: (List<int> selectedIndexes) {
+                          List<HomeTaskItemModel> selectedListItems =
+                              selectedIndexes
+                                  .map((index) => notesListController
+                                      .getActiveNotesList()[index])
+                                  .toList();
 
-                        // selectedListItems.forEach((element) {
-                        //   element.colorValue[0] = kColorsList[2][0].value;
-                        //   element.colorValue[1] = kColorsList[2][1].value;
-                        // });
+                          // selectedListItems.forEach((element) {
+                          //   element.colorValue[0] = kColorsList[2][0].value;
+                          //   element.colorValue[1] = kColorsList[2][1].value;
+                          // });
 
-                        Get.defaultDialog(
-                          radius: 8,
-                          title: 'Select color',
-                          barrierDismissible: true,
-                          content: Wrap(
-                            children: [
-                              ...kColorsList
-                                  .map(
-                                    (e) => Container(
-                                      // decoration:
-                                      //     BoxDecoration(border: BorderSide()),
-                                      margin: EdgeInsets.all(2),
-                                      child: CircularColorContainer(
-                                        containerColor: e,
-                                        onColorChanged: (List<Color> colors) {
-                                          selectedListItems.forEach((element) {
-                                            element.colorValue[0] =
-                                                colors[0].value;
-                                            element.colorValue[1] =
-                                                colors[1].value;
-                                            element.save();
-                                          });
-                                          notesListController.update();
-                                        },
+                          Get.defaultDialog(
+                            radius: 8,
+                            title: 'Select color',
+                            barrierDismissible: true,
+                            content: Wrap(
+                              children: [
+                                ...kColorsList
+                                    .map(
+                                      (e) => Container(
+                                        // decoration:
+                                        //     BoxDecoration(border: BorderSide()),
+                                        margin: EdgeInsets.all(2),
+                                        child: CircularColorContainer(
+                                          containerColor: e,
+                                          onColorChanged: (List<Color> colors) {
+                                            selectedListItems
+                                                .forEach((element) {
+                                              element.colorValue[0] =
+                                                  colors[0].value;
+                                              element.colorValue[1] =
+                                                  colors[1].value;
+                                              element.save();
+                                            });
+                                            notesListController.update();
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                  .toList()
-                            ],
+                                    )
+                                    .toList()
+                              ],
+                            ),
+                          );
+                        },
+                        onShareClicked: (List<int> selectedIndexes) {
+                          shareNotes(selectedIndexes, notesListController);
+                        },
+                        onArchiveClicked: (List<int> selectedIndexes) {
+                          // Getting selected list items from selected indexes And creating a copy. Otherwise
+                          // getArchivedList will throw outOfBound exception because everytime you archive a
+                          // list item, list size changes
+                          archiveNotesList(
+                              selectedIndexes, notesListController);
+                        },
+                        onDeleteClicked: (List<int> selectedIndexes) {
+                          showDeleteNotesConfirmation(
+                              selectedIndexes, notesListController);
+                        },
+                      )
+                    : AppBarWithSearchAndIcon(
+                        showArchiveNotes: false,
+                      ),
+              ),
+              SizedBox(
+                height: 12.h,
+              ),
+              Flexible(
+                child: GetX<NotesListController>(initState: (_) {
+                  print(_);
+                  print('Notes list getX Init triggered');
+                }, builder: (controller) {
+                  print('Notes list builder called');
+                  return notesListController.getActiveNotesList().isEmpty
+                      ? NoNotesFound()
+                      : ReorderableItemsView(
+                          scrollController:
+                              notesListController.scrollController,
+                          longPressToDrag: true,
+                          mainAxisSpacing: 4,
+                          crossAxisSpacing: 4,
+                          children: getNotesList(),
+                          onReorder: (oldIndex, newIndex) {
+                            int realOldIndex = notesListController
+                                .filteredNotesList
+                                .indexOf(notesListController
+                                    .getActiveNotesList()[oldIndex]);
+                            int realNewIndex = notesListController
+                                .getActiveNotesList()
+                                .indexOf(notesListController
+                                    .getActiveNotesList()[newIndex]);
+                            notesListController.reorderNote(
+                                realNewIndex, realOldIndex);
+                          },
+                          isGrid: notesListController.isGrid.value,
+                          crossAxisCount: 2,
+                          staggeredTiles: List.generate(
+                            notesListController.getActiveNotesList().length,
+                            (index) =>
+                                // StaggeredTile.fit(1)
+                                StaggeredTileExtended.count(
+                                    1,
+                                    notesListController
+                                                .getActiveNotesList()[index]
+                                                .todoItemList
+                                                .length >
+                                            2
+                                        ? 1.15.h
+                                        : 1.h),
                           ),
                         );
-                      },
-                      onShareClicked: (List<int> selectedIndexes) {
-                        shareNotes(selectedIndexes, notesListController);
-                      },
-                      onArchiveClicked: (List<int> selectedIndexes) {
-                        // Getting selected list items from selected indexes And creating a copy. Otherwise
-                        // getArchivedList will throw outOfBound exception because everytime you archive a
-                        // list item, list size changes
-                        archiveNotesList(selectedIndexes, notesListController);
-                      },
-                      onDeleteClicked: (List<int> selectedIndexes) {
-                        showDeleteNotesConfirmation(
-                            selectedIndexes, notesListController);
-                      },
-                    )
-                  : AppBarWithSearchAndIcon(
-                      showArchiveNotes: false,
-                    ),
-            ),
-            SizedBox(
-              height: 12.h,
-            ),
-            Flexible(
-              child: GetX<NotesListController>(initState: (_) {
-                print(_);
-                print('Notes list getX Init triggered');
-              }, builder: (controller) {
-                print('Notes list builder called');
-                return notesListController.getActiveNotesList().isEmpty
-                    ? NoNotesFound()
-                    : ReorderableItemsView(
-                        scrollController: notesListController.scrollController,
-                        longPressToDrag: true,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        children: getNotesList(),
-                        onReorder: (oldIndex, newIndex) {
-                          int realOldIndex = notesListController
-                              .filteredNotesList
-                              .indexOf(notesListController
-                                  .getActiveNotesList()[oldIndex]);
-                          int realNewIndex = notesListController
-                              .getActiveNotesList()
-                              .indexOf(notesListController
-                                  .getActiveNotesList()[newIndex]);
-                          notesListController.reorderNote(
-                              realNewIndex, realOldIndex);
-                        },
-                        isGrid: notesListController.isGrid.value,
-                        crossAxisCount: 2,
-                        staggeredTiles: List.generate(
-                          notesListController.getActiveNotesList().length,
-                          (index) =>
-                              // StaggeredTile.fit(1)
-                              StaggeredTileExtended.count(
-                                  1,
-                                  notesListController
-                                              .getActiveNotesList()[index]
-                                              .todoItemList
-                                              .length >
-                                          2
-                                      ? 1.15.h
-                                      : 1.h),
-                        ),
-                      );
-              }),
-            ),
-          ],
+                }),
+              ),
+            ],
+          ),
         ),
       ),
     );
