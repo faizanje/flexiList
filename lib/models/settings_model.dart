@@ -10,14 +10,17 @@ class SettingsModel {
   bool hasWatchedTutorial;
   String dateFormat;
   bool isCurrencyEnableGlobally;
+  bool autoSave;
 
-  SettingsModel(
-      {required this.currencyItem,
-      required this.countryItem,
-      this.isLightTheme = true,
-      this.hasWatchedTutorial = false,
-      this.isCurrencyEnableGlobally = true,
-      this.dateFormat = 'dd/MM/yyyy'});
+  SettingsModel({
+    required this.currencyItem,
+    required this.countryItem,
+    this.isLightTheme = true,
+    this.hasWatchedTutorial = false,
+    this.isCurrencyEnableGlobally = true,
+    this.dateFormat = 'dd/MM/yyyy',
+    this.autoSave = false,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -26,7 +29,8 @@ class SettingsModel {
       "isLightTheme": this.isLightTheme,
       "hasWatchedTutorial": this.hasWatchedTutorial,
       "dateFormat": this.dateFormat,
-      "isCurrencyEnableGlobally": this.isCurrencyEnableGlobally
+      "isCurrencyEnableGlobally": this.isCurrencyEnableGlobally,
+      "autoSave": this.autoSave,
     };
   }
 
@@ -38,6 +42,7 @@ class SettingsModel {
       hasWatchedTutorial: json["hasWatchedTutorial"],
       dateFormat: json["dateFormat"],
       isCurrencyEnableGlobally: json["isCurrencyEnableGlobally"],
+      autoSave: json["autoSave"],
     );
   }
 

@@ -21,13 +21,14 @@ class TodoItemModelAdapter extends TypeAdapter<TodoItemModel> {
       isChecked: fields[1] as bool?,
       taskStatus: fields[3] as TASK_STATUS,
       price: fields[2] as int,
+      isPinned: fields[4] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, TodoItemModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.taskName)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class TodoItemModelAdapter extends TypeAdapter<TodoItemModel> {
       ..writeByte(2)
       ..write(obj.price)
       ..writeByte(3)
-      ..write(obj.taskStatus);
+      ..write(obj.taskStatus)
+      ..writeByte(4)
+      ..write(obj.isPinned);
   }
 
   @override

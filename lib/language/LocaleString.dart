@@ -28,7 +28,8 @@ class LocaleString extends Translations {
           "kDone": "Done",
           "kAddYourFirstNote": "Add Your First Note",
           "kSkip": "SKIP",
-          "kTaskAdded": "Task has been Added",
+          "kTaskAdded": "Task has been added",
+          "kTaskEdited": "Task has been edited",
           'onBoardTitle': "Story Title",
           "onBoardDescription":
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc cursus suspendisse urna lorem lobortis in feugiat nisl. Interdum habitant mollis maecenas praesent nunc. Sed mauris tristique dui ante amet tempus magna sed.",

@@ -20,6 +20,7 @@ class NewSettingsScreen extends StatefulWidget {
 
 class _NewSettingsScreenState extends State<NewSettingsScreen> {
   bool _switchValue = true;
+  bool _autoSaveValue = true;
   bool _currencyswitchValue = true;
 
   @override
@@ -27,6 +28,7 @@ class _NewSettingsScreenState extends State<NewSettingsScreen> {
     // TODO: implement initState
     super.initState();
     _switchValue = StorageUtils.getSettingsItem().isLightTheme;
+    _autoSaveValue = StorageUtils.getSettingsItem().autoSave;
     _currencyswitchValue =
         StorageUtils.getSettingsItem().isCurrencyEnableGlobally;
   }
@@ -63,6 +65,19 @@ class _NewSettingsScreenState extends State<NewSettingsScreen> {
                 });
               },
               title: Text('Light Mode'),
+            ),
+            SwitchListTile.adaptive(
+              secondary: Icon(Icons.autorenew),
+              value: _autoSaveValue,
+              onChanged: (newAutoSaveValue) {
+                setState(() {
+                  _autoSaveValue = newAutoSaveValue;
+                  SettingsModel settingsModel = StorageUtils.getSettingsItem();
+                  settingsModel.autoSave = newAutoSaveValue;
+                  StorageUtils.saveSettingsItem(settingsModel);
+                });
+              },
+              title: Text('Auto save'),
             ),
             SwitchListTile.adaptive(
               secondary: Icon(Icons.paid),

@@ -23,6 +23,7 @@ import 'package:noteapp/controllers/sidebar_controller.dart';
 import 'package:noteapp/utils/custom_color_scheme.dart';
 import 'package:noteapp/utils/grouped_list_view.dart';
 import 'package:noteapp/utils/snack_bar_utils.dart';
+import 'package:noteapp/utils/storage_utils.dart';
 
 class AddTaskScreen extends StatelessWidget {
   final HomeTaskItemModel? homeTaskItemModel;
@@ -57,7 +58,14 @@ class AddTaskScreen extends StatelessWidget {
     final notesListController = Get.find<NotesListController>();
     print('Add Task Screen Called ${Theme.of(context).brightness}');
     addTaskController.init(this.homeTaskItemModel);
-    return SafeArea(
+    return WillPopScope(
+      onWillPop: () async {
+        if (StorageUtils.getSettingsItem().autoSave) {
+          await saveNote(addTaskController, notesListController);
+          notesListController.update();
+        }
+        return true;
+      },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         // backgroundColor: Colors.transparent,
@@ -79,8 +87,12 @@ class AddTaskScreen extends StatelessWidget {
                   elevation: 0.0,
                   backgroundColor: Colors.transparent,
                   leading: IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       Get.back();
+                      if (StorageUtils.getSettingsItem().autoSave) {
+                        await saveNote(addTaskController, notesListController);
+                        notesListController.update();
+                      }
                       // Navigator.pop(context);
                     },
                     icon: SvgPicture.asset(
@@ -240,83 +252,10 @@ class AddTaskScreen extends StatelessWidget {
                             margin: EdgeInsets.all(8),
                             child: ElevatedButton(
                               onPressed: () async {
-                                if (addTaskController.isEditing) {
-                                  this.homeTaskItemModel!
-                                    ..todoItemList =
-                                        addTaskController.toDoTasksList
-                                    ..colorValue = [
-                                      addTaskController.color[0].value,
-                                      addTaskController.color[1].value
-                                    ]
-                                    ..isArchived = addTaskController.isArchived
-                                    ..isCurrencySelected = addTaskController
-                                        .isCurrencySelected.value
-                                    ..title =
-                                        /*addTaskController
-                                            .textEditingController
-                                            .value
-                                            .text
-                                            .isEmpty
-                                        ? DateTime.now()
-                                            .toLocal()
-                                            .toIso8601String()
-                                        : */
-                                        addTaskController
-                                            .textEditingController.value.text;
-
-                                  try {
-                                    await homeTaskItemModel!.save();
-                                  } catch (e) {
-                                    print('Exception ${e.toString()}');
-                                  }
-                                } else {
-                                  HomeTaskItemModel homeTaskItemModel =
-                                      HomeTaskItemModel(
-                                    title:
-                                        /*addTaskController
-                                            .textEditingController
-                                            .value
-                                            .text
-                                            .isEmpty
-                                        ? DateTime.now()
-                                            .toLocal()
-                                            .toIso8601String()
-                                        :*/
-                                        addTaskController
-                                            .textEditingController.value.text,
-                                    todoItemList:
-                                        addTaskController.toDoTasksList,
-                                    colorValue: [
-                                      addTaskController.color[0].value,
-                                      addTaskController.color[1].value
-                                    ],
-                                    isArchived: addTaskController.isArchived,
-                                    isCurrencySelected: addTaskController
-                                        .isCurrencySelected.value,
-                                  );
-                                  // homeTaskItemModel.order =
-                                  //     homeTaskItemModel.key;
-                                  notesListController.notesList
-                                      .add(homeTaskItemModel);
-                                  notesListController.filteredNotesList
-                                      .add(homeTaskItemModel);
-
-                                  await notesListController.homeTaskItemBox
-                                      .add(homeTaskItemModel);
-                                }
-
-                                notesListController.update();
-                                // try {
-                                //   Get.find<ReportsController>().initList();
-                                // } catch (e) {
-                                //   print('Exception $e');
-                                // }
-
                                 Get.back();
-                                // Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);
-                                // Get.snackbar('kTaskAdded'.tr, 'kTaskAdded'.tr);
-                                SnackBarUtils.showGetXSnackBar('kTaskAdded'.tr,
-                                    addBottomSpace: true);
+                                await saveNote(
+                                    addTaskController, notesListController);
+                                notesListController.update();
                               },
                               child: Text(
                                 addTaskController.isEditing
@@ -347,6 +286,75 @@ class AddTaskScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> saveNote(AddTaskController addTaskController,
+      NotesListController notesListController) async {
+    if (addTaskController.isEditing) {
+      await editNote(addTaskController);
+      SnackBarUtils.showGetXSnackBar('kTaskEdited'.tr, addBottomSpace: true);
+    } else {
+      await addNote(addTaskController, notesListController);
+      SnackBarUtils.showGetXSnackBar('kTaskAdded'.tr, addBottomSpace: true);
+    }
+  }
+
+  Future<void> addNote(AddTaskController addTaskController,
+      NotesListController notesListController) async {
+    HomeTaskItemModel homeTaskItemModel = HomeTaskItemModel(
+      title:
+          /*addTaskController
+              .textEditingController
+              .value
+              .text
+              .isEmpty
+          ? DateTime.now()
+              .toLocal()
+              .toIso8601String()
+          :*/
+          addTaskController.textEditingController.value.text,
+      todoItemList: addTaskController.toDoTasksList,
+      colorValue: [
+        addTaskController.color[0].value,
+        addTaskController.color[1].value
+      ],
+      isArchived: addTaskController.isArchived,
+      isCurrencySelected: addTaskController.isCurrencySelected.value,
+    );
+    // homeTaskItemModel.order =
+    //     homeTaskItemModel.key;
+    notesListController.notesList.add(homeTaskItemModel);
+    notesListController.filteredNotesList.add(homeTaskItemModel);
+
+    await notesListController.homeTaskItemBox.add(homeTaskItemModel);
+  }
+
+  Future<void> editNote(AddTaskController addTaskController) async {
+    this.homeTaskItemModel!
+      ..todoItemList = addTaskController.toDoTasksList
+      ..colorValue = [
+        addTaskController.color[0].value,
+        addTaskController.color[1].value
+      ]
+      ..isArchived = addTaskController.isArchived
+      ..isCurrencySelected = addTaskController.isCurrencySelected.value
+      ..title =
+          /*addTaskController
+              .textEditingController
+              .value
+              .text
+              .isEmpty
+          ? DateTime.now()
+              .toLocal()
+              .toIso8601String()
+          : */
+          addTaskController.textEditingController.value.text;
+
+    try {
+      await homeTaskItemModel!.save();
+    } catch (e) {
+      print('Exception ${e.toString()}');
+    }
   }
 
   List<Widget> buildList(

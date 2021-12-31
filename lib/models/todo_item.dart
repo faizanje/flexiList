@@ -19,6 +19,9 @@ class TodoItemModel extends HiveObject {
   @HiveField(3)
   TASK_STATUS taskStatus;
 
+  @HiveField(4)
+  bool isPinned;
+
   String get taskStatusStr {
     switch (taskStatus) {
       case TASK_STATUS.LATER:
@@ -30,9 +33,11 @@ class TodoItemModel extends HiveObject {
     }
   }
 
-  TodoItemModel(
-      {required this.taskName,
-      this.isChecked,
-      this.taskStatus = TASK_STATUS.TODO,
-      this.price = 0});
+  TodoItemModel({
+    required this.taskName,
+    this.isChecked,
+    this.taskStatus = TASK_STATUS.TODO,
+    this.price = 0,
+    this.isPinned = false,
+  });
 }
