@@ -250,7 +250,7 @@ class ArchiveScreen extends StatelessWidget {
   void shareNotes(
       List<int> selectedIndexes, NotesListController notesListController) {
     List<HomeTaskItemModel> selectedListItems = selectedIndexes
-        .map((index) => notesListController.getActiveNotesList()[index])
+        .map((index) => notesListController.getArchiveNotesList()[index])
         .toList();
 
     String sharedText = '';
