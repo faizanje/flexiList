@@ -20,6 +20,7 @@ final List kMyLocales = [
   {'name': 'URDU', 'locale': Locale('ur', 'PK')},
 ];
 
+const k12HoursTimeFormat = 'hh:mm a';
 final kColorsList = [
   [Colors.white, Colors.white30],
   [Colors.yellow, Color(0xFF3E065F)],

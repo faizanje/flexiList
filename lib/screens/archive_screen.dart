@@ -15,7 +15,6 @@ import 'package:noteapp/constant/strings.dart';
 import 'package:noteapp/controllers/notes_list_controller.dart';
 import 'package:noteapp/models/home_task_item_model.dart';
 import 'package:noteapp/screens/add_task_screen.dart';
-import 'package:noteapp/screens/layout_screen.dart';
 import 'package:noteapp/utils/multi_select_item.dart';
 import 'package:noteapp/utils/snack_bar_utils.dart';
 import 'package:reorderableitemsview/reorderableitemsview.dart';

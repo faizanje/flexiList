@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-typedef ReorderCallback = void Function(int oldIndex, int newIndex);
+typedef MyReorderCallback = void Function(int oldIndex, int newIndex);
 
 typedef IndexedFeedBackWidgetBuilder = Widget Function(
     BuildContext context, int index, Widget child);
@@ -90,7 +90,7 @@ class ReorderableItemsView extends StatefulWidget {
   ///
   /// This [ReorderableItemsView] calls [onReorder] after a list child is dropped
   /// into a new position.
-  final ReorderCallback onReorder;
+  final MyReorderCallback onReorder;
 
   /// Used when we are building a GridView
   final List<StaggeredTile>? staggeredTiles;
@@ -192,7 +192,7 @@ class _ReorderableListContent extends StatefulWidget {
   final ScrollController? scrollController;
   final Axis scrollDirection;
   final EdgeInsets? padding;
-  final ReorderCallback onReorder;
+  final MyReorderCallback onReorder;
   final bool reverse;
   final List<StaggeredTile>? staggeredTiles;
   final int crossAxisCount;

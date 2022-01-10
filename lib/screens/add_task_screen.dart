@@ -247,34 +247,35 @@ class AddTaskScreen extends StatelessWidget {
                           }),
                         ),
                         Divider(),
-                        Center(
-                          child: Container(
-                            margin: EdgeInsets.all(8),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                Get.back();
-                                await saveNote(
-                                    addTaskController, notesListController);
-                                notesListController.update();
-                              },
-                              child: Text(
-                                addTaskController.isEditing
-                                    ? 'kEditText'.tr
-                                    : 'kAddTask'.tr,
-                                style: TextStyle(
-                                    color: context.theme.accentColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 15),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
+                        if (!StorageUtils.getSettingsItem().autoSave)
+                          Center(
+                            child: Container(
+                              margin: EdgeInsets.all(8),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  Get.back();
+                                  await saveNote(
+                                      addTaskController, notesListController);
+                                  notesListController.update();
+                                },
+                                child: Text(
+                                  addTaskController.isEditing
+                                      ? 'kEditText'.tr
+                                      : 'kAddTask'.tr,
+                                  style: TextStyle(
+                                      color: context.theme.accentColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 15),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),

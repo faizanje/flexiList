@@ -12,7 +12,6 @@ import 'package:noteapp/screens/add_task_screen.dart';
 import 'package:noteapp/screens/new_settings_screen.dart';
 import 'package:noteapp/screens/notes_list_screen.dart';
 import 'package:noteapp/screens/archive_screen.dart';
-import 'package:noteapp/screens/layout_screen.dart';
 import 'package:noteapp/screens/report_screen.dart';
 import 'package:noteapp/services/application.dart';
 import 'package:noteapp/services/theme_service.dart';

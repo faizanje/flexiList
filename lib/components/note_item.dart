@@ -20,6 +20,7 @@ class NoteItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     addTitleToList();
+    addDateOrTimeToList();
     addCheckboxListTilesToList(context);
     return Card(
       shape: RoundedRectangleBorder(
@@ -48,6 +49,26 @@ class NoteItem extends StatelessWidget {
                 : DateFormat(StorageUtils.getSettingsItem().dateFormat)
                     // : DateFormat.yMd()
                     //     .add_jm()
+                    .format(this.homeTaskItemModel.dateTime),
+            maxLines: 1,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ));
+  }
+
+  void addDateOrTimeToList() {
+    this.list.add(Container(
+          margin: EdgeInsets.only(left: 10),
+          child: Text(
+            this.homeTaskItemModel.title!.isNotEmpty
+                ? DateFormat(StorageUtils.getSettingsItem().dateFormat)
+                    .format(this.homeTaskItemModel.dateTime)
+                : DateFormat(k12HoursTimeFormat)
                     .format(this.homeTaskItemModel.dateTime),
             maxLines: 1,
             softWrap: true,
